@@ -196,74 +196,32 @@ Table 2-1 Built-In Data Type Summary
 
 Code | Data Type | Description  
 ---|---|---  
-1 |  `VARCHAR2`(`size` [`BYTE` | `CHAR`])  |  Variable-length character string having maximum length `size` bytes or characters. You must specify `size` for `VARCHAR2`. Minimum `size` is 1 byte or 1 character. Maximum size is: 
-
-  * 32767 bytes or characters if `MAX_STRING_SIZE` `=` `EXTENDED`
-  * 4000 bytes or characters if `MAX_STRING_SIZE` `=` `STANDARD`
-
-Refer to [Extended Data Types](Data-
-Types.md#GUID-8EFA29E9-E8D8-40A6-A43E-954908C954A4) for more information on
-the `MAX_STRING_SIZE` initialization parameter.  `BYTE` indicates that the
-column will have byte length semantics. `CHAR` indicates that the column will
-have character semantics.  
-1 |  `NVARCHAR2`(`size`)  |  Variable-length Unicode character string having maximum length `size` characters. You must specify `size` for `NVARCHAR2`. The number of bytes can be up to two times `size` for `AL16UTF16` encoding and three times `size` for `UTF8` encoding. Maximum `size` is determined by the national character set definition, with an upper limit of: 
-
-  * 32767 bytes if `MAX_STRING_SIZE` `=` `EXTENDED`
-  * 4000 bytes if `MAX_STRING_SIZE` `=` `STANDARD`
-
-Refer to [Extended Data Types](Data-
-Types.md#GUID-8EFA29E9-E8D8-40A6-A43E-954908C954A4) for more information on
-the `MAX_STRING_SIZE` initialization parameter.  
-2 |  `NUMBER `[ (`p` [, `s`]) ]  |  Number having precision `p` and scale `s`. The precision `p` can range from 1 to 38. The scale `s` can range from -84 to 127. Both precision and scale are in decimal digits. A `NUMBER` value requires from 1 to 22 bytes.   
-2 |  `FLOAT` [(`p`)]  |  A subtype of the `NUMBER` data type having precision `p`. A `FLOAT` value is represented internally as `NUMBER`. The precision `p` can range from 1 to 126 binary digits. A `FLOAT` value requires from 1 to 22 bytes.   
-8 |  `LONG` |  Character data of variable length up to 2 gigabytes, or 231 -1 bytes. Provided for backward compatibility.   
-12 |  `DATE` |  Valid date range from January 1, 4712 BC, to December 31, 9999 AD. The default format is determined explicitly by the `NLS_DATE_FORMAT` parameter or implicitly by the `NLS_TERRITORY` parameter. The size is fixed at 7 bytes. This data type contains the datetime fields `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, and `SECOND`. It does not have fractional seconds or a time zone.   
-100 |  `BINARY_FLOAT` |  32-bit floating point number. This data type requires 4 bytes.  
-101 |  `BINARY_DOUBLE` |  64-bit floating point number. This data type requires 8 bytes.  
-180 |  `TIMESTAMP` [(`fractional_seconds_precision`)]  |  Year, month, and day values of date, as well as hour, minute, and second values of time, where `fractional_seconds_precision` is the number of digits in the fractional part of the `SECOND` datetime field. Accepted values of `fractional_seconds_precision` are 0 to 9. The default is 6. The default format is determined explicitly by the `NLS_TIMESTAMP_FORMAT` parameter or implicitly by the `NLS_TERRITORY` parameter. The size is 7 or 11 bytes, depending on the precision. This data type contains the datetime fields `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, and `SECOND`. It contains fractional seconds but does not have a time zone.   
-181 |  `TIMESTAMP` [(`fractional_seconds_precision`)] `WITH` `TIME` `ZONE` |  All values of `TIMESTAMP` as well as time zone displacement value, where `fractional_seconds_precision` is the number of digits in the fractional part of the `SECOND` datetime field. Accepted values are 0 to 9. The default is 6. The default date format for the `TIMESTAMP WITH TIME ZONE` data type is determined by the `NLS_TIMESTAMP_TZ_FORMAT` initialization parameter. The size is fixed at 13 bytes. This data type contains the datetime fields `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECOND`, `TIMEZONE_HOUR`, and `TIMEZONE_MINUTE`. It has fractional seconds and an explicit time zone.   
-231 |  `TIMESTAMP` [(`fractional_seconds_precision`)] `WITH` `LOCAL` `TIME` `ZONE` |  All values of `TIMESTAMP` `WITH` `TIME` `ZONE`, with the following exceptions: 
-
-  * Data is normalized to the database time zone when it is stored in the database.
-  * When the data is retrieved, users see the data in the session time zone.
-
-The default format is determined explicitly by the `NLS_TIMESTAMP_FORMAT`
-parameter or implicitly by the `NLS_TERRITORY` parameter. The size is 7 or 11
-bytes, depending on the precision.  
-182 |  `INTERVAL` `YEAR` [(`year_precision`)] `TO` `MONTH` |  Stores a period of time in years and months, where `year_precision` is the number of digits in the `YEAR` datetime field. Accepted values are 0 to 9. The default is 2. The size is fixed at 5 bytes.   
-183 |  `INTERVAL` `DAY` [(`day_precision`)] `TO` `SECOND` [(`fractional_seconds_precision`)]  |  Stores a period of time in days, hours, minutes, and seconds, where
-
-  * `day_precision` is the maximum number of digits in the `DAY` datetime field. Accepted values are 0 to 9. The default is 2. 
-  * `fractional_seconds_precision` is the number of digits in the fractional part of the `SECOND` field. Accepted values are 0 to 9. The default is 6. 
-
-The size is fixed at 11 bytes.  
-23 |  `RAW`(`size`)  |  Raw binary data of length `size` bytes. You must specify `size `for a `RAW` value. Maximum `size` is: 
-
-  * 32767 bytes if `MAX_STRING_SIZE` `=` `EXTENDED`
-  * 2000 bytes if `MAX_STRING_SIZE` `=` `STANDARD`
-
-Refer to [Extended Data Types](Data-
-Types.md#GUID-8EFA29E9-E8D8-40A6-A43E-954908C954A4) for more information on
-the `MAX_STRING_SIZE` initialization parameter.  
-24 |  `LONG RAW` |  Raw binary data of variable length up to 2 gigabytes.  
-69 |  `ROWID` |  Base 64 string representing the unique address of a row in its table. This data type is primarily for values returned by the `ROWID` pseudocolumn.   
-208 |  `UROWID` [(`size`)]  |  Base 64 string representing the logical address of a row of an index-organized table. The optional `size` is the size of a column of type `UROWID`. The maximum size and default is 4000 bytes.   
-96 |  `CHAR` [(`size` [`BYTE` | `CHAR`])]  |  Fixed-length character data of length `size` bytes or characters. Maximum `size` is 2000 bytes or characters. Default and minimum `size` is 1 byte.  `BYTE` and `CHAR` have the same semantics as for `VARCHAR2`.   
-96 |  `NCHAR`[(`size`)]  |  Fixed-length character data of length `size` characters. The number of bytes can be up to two times `size` for `AL16UTF16` encoding and three times `size` for `UTF8` encoding. Maximum `size` is determined by the national character set definition, with an upper limit of 2000 bytes. Default and minimum `size` is 1 character.   
-112 |  `CLOB` |  A character large object containing single-byte or multibyte characters. Both fixed-width and variable-width character sets are supported, both using the database character set. Maximum size is (4 gigabytes - 1) * (database block size).   
-112 |  `NCLOB` |  A character large object containing Unicode characters. Both fixed-width and variable-width character sets are supported, both using the database national character set. Maximum size is (4 gigabytes - 1) * (database block size). Stores national character set data.  
-113 |  `BLOB` |  A binary large object. Maximum size is (4 gigabytes - 1) * (database block size).   
-114 |  `BFILE` |  Contains a locator to a large binary file stored outside the database. Enables byte stream I/O access to external LOBs residing on the database server. Maximum size is 4 gigabytes.  
-119 |  `JSON` |  Maximum size is 32 megabytes.  
-252 |  `BOOLEAN` |  The `BOOLEAN` data type comprises the distinct truth values True and False. Unless prohibited by a `NOT NULL` constraint, the boolean data type also supports the truth value UNKOWN as the null value.   
-127 |  `VECTOR` |  The `VECTOR` data type represents a vector as a series of numbers stored in one of the following formats: 
-
-  * `INT8` (8-bit integers) 
-  * `FLOAT32` (32-bit floating-point numbers) 
-  * `FLOAT64` (64-bit floating-point numbers) 
-
-`FLOAT32` and `FLOAT64` are IEEE standards. Oracle Database automatically
-casts the values as needed.  
+1 | VARCHAR2(size [BYTE \| CHAR]) | Variable-length character string having maximum length size bytes or characters. You must specify size for VARCHAR2. Minimum size is 1 byte or 1 character. Maximum size is: 32767 bytes or characters if MAX_STRING_SIZE = EXTENDED 4000 bytes or characters if MAX_STRING_SIZE = STANDARD Refer to Extended Data Types for more information on the MAX_STRING_SIZE initialization parameter. BYTE indicates that the column will have byte length semantics. CHAR indicates that the column will have character semantics.  
+1 | NVARCHAR2(size) | Variable-length Unicode character string having maximum length size characters. You must specify size for NVARCHAR2. The number of bytes can be up to two times size for AL16UTF16 encoding and three times size for UTF8 encoding. Maximum size is determined by the national character set definition, with an upper limit of: 32767 bytes if MAX_STRING_SIZE = EXTENDED 4000 bytes if MAX_STRING_SIZE = STANDARD Refer to Extended Data Types for more information on the MAX_STRING_SIZE initialization parameter.  
+2 | NUMBER [ (p [, s]) ] | Number having precision p and scale s. The precision p can range from 1 to 38. The scale s can range from -84 to 127. Both precision and scale are in decimal digits. A NUMBER value requires from 1 to 22 bytes.  
+2 | FLOAT [(p)] | A subtype of the NUMBER data type having precision p. A FLOAT value is represented internally as NUMBER. The precision p can range from 1 to 126 binary digits. A FLOAT value requires from 1 to 22 bytes.  
+8 | LONG | Character data of variable length up to 2 gigabytes, or 231 -1 bytes. Provided for backward compatibility.  
+12 | DATE | Valid date range from January 1, 4712 BC, to December 31, 9999 AD. The default format is determined explicitly by the NLS_DATE_FORMAT parameter or implicitly by the NLS_TERRITORY parameter. The size is fixed at 7 bytes. This data type contains the datetime fields YEAR, MONTH, DAY, HOUR, MINUTE, and SECOND. It does not have fractional seconds or a time zone.  
+100 | BINARY_FLOAT | 32-bit floating point number. This data type requires 4 bytes.  
+101 | BINARY_DOUBLE | 64-bit floating point number. This data type requires 8 bytes.  
+180 | TIMESTAMP [(fractional_seconds_precision)] | Year, month, and day values of date, as well as hour, minute, and second values of time, where fractional_seconds_precision is the number of digits in the fractional part of the SECOND datetime field. Accepted values of fractional_seconds_precision are 0 to 9. The default is 6. The default format is determined explicitly by the NLS_TIMESTAMP_FORMAT parameter or implicitly by the NLS_TERRITORY parameter. The size is 7 or 11 bytes, depending on the precision. This data type contains the datetime fields YEAR, MONTH, DAY, HOUR, MINUTE, and SECOND. It contains fractional seconds but does not have a time zone.  
+181 | TIMESTAMP [(fractional_seconds_precision)] WITH TIME ZONE | All values of TIMESTAMP as well as time zone displacement value, where fractional_seconds_precision is the number of digits in the fractional part of the SECOND datetime field. Accepted values are 0 to 9. The default is 6. The default date format for the TIMESTAMP WITH TIME ZONE data type is determined by the NLS_TIMESTAMP_TZ_FORMAT initialization parameter. The size is fixed at 13 bytes. This data type contains the datetime fields YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, TIMEZONE_HOUR, and TIMEZONE_MINUTE. It has fractional seconds and an explicit time zone.  
+231 | TIMESTAMP [(fractional_seconds_precision)] WITH LOCAL TIME ZONE | All values of TIMESTAMP WITH TIME ZONE, with the following exceptions: Data is normalized to the database time zone when it is stored in the database. When the data is retrieved, users see the data in the session time zone. The default format is determined explicitly by the NLS_TIMESTAMP_FORMAT parameter or implicitly by the NLS_TERRITORY parameter. The size is 7 or 11 bytes, depending on the precision.  
+182 | INTERVAL YEAR [(year_precision)] TO MONTH | Stores a period of time in years and months, where year_precision is the number of digits in the YEAR datetime field. Accepted values are 0 to 9. The default is 2. The size is fixed at 5 bytes.  
+183 | INTERVAL DAY [(day_precision)] TO SECOND [(fractional_seconds_precision)] | Stores a period of time in days, hours, minutes, and seconds, where day_precision is the maximum number of digits in the DAY datetime field. Accepted values are 0 to 9. The default is 2. fractional_seconds_precision is the number of digits in the fractional part of the SECOND field. Accepted values are 0 to 9. The default is 6. The size is fixed at 11 bytes.  
+23 | RAW(size) | Raw binary data of length size bytes. You must specify size for a RAW value. Maximum size is: 32767 bytes if MAX_STRING_SIZE = EXTENDED 2000 bytes if MAX_STRING_SIZE = STANDARD Refer to Extended Data Types for more information on the MAX_STRING_SIZE initialization parameter.  
+24 | LONG RAW | Raw binary data of variable length up to 2 gigabytes.  
+69 | ROWID | Base 64 string representing the unique address of a row in its table. This data type is primarily for values returned by the ROWID pseudocolumn.  
+208 | UROWID [(size)] | Base 64 string representing the logical address of a row of an index-organized table. The optional size is the size of a column of type UROWID. The maximum size and default is 4000 bytes.  
+96 | CHAR [(size [BYTE \| CHAR])] | Fixed-length character data of length size bytes or characters. Maximum size is 2000 bytes or characters. Default and minimum size is 1 byte. BYTE and CHAR have the same semantics as for VARCHAR2.  
+96 | NCHAR[(size)] | Fixed-length character data of length size characters. The number of bytes can be up to two times size for AL16UTF16 encoding and three times size for UTF8 encoding. Maximum size is determined by the national character set definition, with an upper limit of 2000 bytes. Default and minimum size is 1 character.  
+112 | CLOB | A character large object containing single-byte or multibyte characters. Both fixed-width and variable-width character sets are supported, both using the database character set. Maximum size is (4 gigabytes - 1) * (database block size).  
+112 | NCLOB | A character large object containing Unicode characters. Both fixed-width and variable-width character sets are supported, both using the database national character set. Maximum size is (4 gigabytes - 1) * (database block size). Stores national character set data.  
+113 | BLOB | A binary large object. Maximum size is (4 gigabytes - 1) * (database block size).  
+114 | BFILE | Contains a locator to a large binary file stored outside the database. Enables byte stream I/O access to external LOBs residing on the database server. Maximum size is 4 gigabytes.  
+119 | JSON | Maximum size is 32 megabytes.  
+252 | BOOLEAN | The BOOLEAN data type comprises the distinct truth values True and False. Unless prohibited by a NOT NULL constraint, the boolean data type also supports the truth value UNKOWN as the null value.  
+127 | VECTOR | The VECTOR data type represents a vector as a series of numbers stored in one of the following formats: INT8 (8-bit integers) FLOAT32 (32-bit floating-point numbers) FLOAT64 (64-bit floating-point numbers) FLOAT32 and FLOAT64 are IEEE standards. Oracle Database automatically casts the values as needed.  
   
 The sections that follow describe the Oracle data types as they are stored in
 Oracle Database. For information on specifying these data types as literals,
@@ -624,20 +582,20 @@ Table 2-2 Storage of Scale and Precision
 
 Actual Data | Specified As | Stored As  
 ---|---|---  
-123.89 |  `NUMBER` |  123.89  
-123.89 |  `NUMBER(3)` |  124  
-123.89 |  `NUMBER(3,2)` |  exceeds precision  
-123.89 |  `NUMBER(4,2)` |  exceeds precision  
-123.89 |  `NUMBER(5,2)` |  123.89  
-123.89 |  `NUMBER(6,1)` |  123.9  
-123.89 |  `NUMBER(6,-2)` |  100  
-.01234 |  `NUMBER(4,5)` |  .01234  
-.00012 |  `NUMBER(4,5)` |  .00012  
-.000127 |  `NUMBER(4,5)` |  .00013  
-.0000012 |  `NUMBER(2,7)` |  .0000012  
-.00000123 |  `NUMBER(2,7)` |  .0000012  
-1.2e-4 |  `NUMBER(2,5)` |  0.00012  
-1.2e-5 |  `NUMBER(2,5)` |  0.00001  
+123.89 | NUMBER | 123.89  
+123.89 | NUMBER(3) | 124  
+123.89 | NUMBER(3,2) | exceeds precision  
+123.89 | NUMBER(4,2) | exceeds precision  
+123.89 | NUMBER(5,2) | 123.89  
+123.89 | NUMBER(6,1) | 123.9  
+123.89 | NUMBER(6,-2) | 100  
+.01234 | NUMBER(4,5) | .01234  
+.00012 | NUMBER(4,5) | .00012  
+.000127 | NUMBER(4,5) | .00013  
+.0000012 | NUMBER(2,7) | .0000012  
+.00000123 | NUMBER(2,7) | .0000012  
+1.2e-4 | NUMBER(2,5) | 0.00012  
+1.2e-5 | NUMBER(2,5) | 0.00001  
   
 ##### FLOAT Data Type
 
@@ -736,8 +694,8 @@ Table 2-3 Floating Point Number Limits
 
 Value | BINARY_FLOAT | BINARY_DOUBLE  
 ---|---|---  
-Maximum positive finite value |  3.40282E+38F |  1.79769313486231E+308  
-Minimum positive finite value |  1.17549E-38F |  2.22507485850720E-308  
+Maximum positive finite value | 3.40282E+38F | 1.79769313486231E+308  
+Minimum positive finite value | 1.17549E-38F | 2.22507485850720E-308  
   
 ###### IEEE754 Conformance
 
@@ -933,16 +891,16 @@ Table 2-4 Datetime Fields and Values
 
 Datetime Field | Valid Values for Datetime | Valid Values for INTERVAL  
 ---|---|---  
-`YEAR` |  -4712 to 9999 (excluding year 0) |  Any positive or negative integer   
-`MONTH` |  01 to 12 |  0 to 11   
-`DAY` |  01 to 31 (limited by the values of `MONTH` and `YEAR`, according to the rules of the current NLS calendar parameter)  |  Any positive or negative integer  
-`HOUR` |  00 to 23 |  0 to 23   
-`MINUTE` |  00 to 59 |  0 to 59   
-`SECOND` |  00 to 59.9(n), where 9(n) is the precision of time fractional seconds. The 9(n) portion is not applicable for `DATE`.  |  0 to 59.9(n), where 9(n) is the precision of interval fractional seconds  
-`TIMEZONE_HOUR` |  -12 to 14 (This range accommodates daylight saving time changes.) Not applicable for `DATE` or `TIMESTAMP`.  |  Not applicable  
-`TIMEZONE_MINUTE` (See note at end of table) |  00 to 59. Not applicable for `DATE` or `TIMESTAMP`.  |  Not applicable  
-`TIMEZONE_REGION` |  Query the `TZNAME` column of the `V$TIMEZONE_NAMES` data dictionary view. Not applicable for `DATE` or `TIMESTAMP`. For a complete listing of all time zone region names, refer to [Oracle Database Globalization Support Guide](/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG004).  |  Not applicable  
-`TIMEZONE_ABBR` |  Query the `TZABBREV` column of the `V$TIMEZONE_NAMES` data dictionary view. Not applicable for `DATE` or `TIMESTAMP`.  |  Not applicable  
+YEAR | -4712 to 9999 (excluding year 0) | Any positive or negative integer  
+MONTH | 01 to 12 | 0 to 11  
+DAY | 01 to 31 (limited by the values of MONTH and YEAR, according to the rules of the current NLS calendar parameter) | Any positive or negative integer  
+HOUR | 00 to 23 | 0 to 23  
+MINUTE | 00 to 59 | 0 to 59  
+SECOND | 00 to 59.9(n), where 9(n) is the precision of time fractional seconds. The 9(n) portion is not applicable for DATE. | 0 to 59.9(n), where 9(n) is the precision of interval fractional seconds  
+TIMEZONE_HOUR | -12 to 14 (This range accommodates daylight saving time changes.) Not applicable for DATE or TIMESTAMP. | Not applicable  
+TIMEZONE_MINUTE (See note at end of table) | 00 to 59. Not applicable for DATE or TIMESTAMP. | Not applicable  
+TIMEZONE_REGION | Query the TZNAME column of the V$TIMEZONE_NAMES data dictionary view. Not applicable for DATE or TIMESTAMP. For a complete listing of all time zone region names, refer to Oracle Database Globalization Support Guide. | Not applicable  
+TIMEZONE_ABBR | Query the TZABBREV column of the V$TIMEZONE_NAMES data dictionary view. Not applicable for DATE or TIMESTAMP. | Not applicable  
   
 Note:
 
@@ -1228,26 +1186,26 @@ Table 2-5 Matrix of Datetime Arithmetic
 
 Operand & Operator | DATE | TIMESTAMP | INTERVAL | Numeric  
 ---|---|---|---|---  
-`DATE` |  |  |  |   
-`+ ` |  `â` |  `â` |  `DATE` |  `DATE`  
-`- ` |  `NUMBER` |  `INTERVAL` |  `DATE` |  `DATE`  
-`* ` |  `â` |  `â` |  `â` |  `â`  
-`/ ` |  `â` |  `â` |  `â` |  `â`  
-`TIMESTAMP` |  |  |  |   
-`+ ` |  `â` |  `â` |  `TIMESTAMP` |  `DATE`  
-`- ` |  `INTERVAL` |  `INTERVAL` |  `TIMESTAMP` |  `DATE`  
-`* ` |  `â` |  `â` |  `â` |  `â`  
-`/ ` |  `â` |  `â` |  `â` |  `â`  
-`INTERVAL` |  |  |  |   
-`+ ` |  `DATE` |  `TIMESTAMP` |  `INTERVAL` |  `â`  
-`- ` |  `â` |  `â` |  `INTERVAL` |  `â`  
-`* ` |  `â` |  `â` |  `â` |  `INTERVAL`  
-`/ ` |  `â` |  `â` |  `â` |  `INTERVAL`  
-`Numeric` |  |  |  |   
-`+ ` |  `DATE` |  `DATE` |  `â` |  `NA`  
-`- ` |  `â` |  `â` |  `â` |  `NA`  
-`* ` |  `â` |  `â` |  `INTERVAL` |  `NA`  
-`/ ` |  `â` |  `â` |  `â` |  `NA`  
+DATE |  |  |  |   
++ | â | â | DATE | DATE  
+- | NUMBER | INTERVAL | DATE | DATE  
+* | â | â | â | â  
+/ | â | â | â | â  
+TIMESTAMP |  |  |  |   
++ | â | â | TIMESTAMP | DATE  
+- | INTERVAL | INTERVAL | TIMESTAMP | DATE  
+* | â | â | â | â  
+/ | â | â | â | â  
+INTERVAL |  |  |  |   
++ | DATE | TIMESTAMP | INTERVAL | â  
+- | â | â | INTERVAL | â  
+* | â | â | â | INTERVAL  
+/ | â | â | â | INTERVAL  
+Numeric |  |  |  |   
++ | DATE | DATE | â | NA  
+- | â | â | â | NA  
+* | â | â | INTERVAL | NA  
+/ | â | â | â | NA  
   
 Examples
 
@@ -1794,12 +1752,12 @@ Table 2-6 String Literals To Represent "TRUE" and "FALSE"
 
 STATE | TRUE | FALSE  
 ---|---|---  
-- |  'true' |  'false'  
-- |  'yes' |  'no'  
-- |  'on' |  'off'  
-- |  '1' |  '0'  
-- |  't' |  'f'  
-- |  'y' |  'n'  
+- | 'true' | 'false'  
+- | 'yes' | 'no'  
+- | 'on' | 'off'  
+- | '1' | '0'  
+- | 't' | 'f'  
+- | 'y' | 'n'  
   
 Note that numbers are translated into boolean as follows:
 
@@ -2112,10 +2070,10 @@ type:
 
 Possible Declaration Format | Explanation  
 ---|---  
-`VECTOR` |  Vectors can have an arbitrary number of dimensions and formats.  
-`VECTOR(*, *)` |  Vectors can have an arbitrary number of dimensions and formats. `VECTOR` and `VECTOR(*,*)` are equivalent.   
-`VECTOR`(number_of_dimensions, *)  equivalent to  `VECTOR`(number_of_dimensions)  |  Vectors must all have the specified number of dimensions or an error is thrown. Every vector will have its dimensions stored without format modification.  
-`VECTOR`(*, dimension_element_format)  |  Vectors can have an arbitrary number of dimensions, but their format will be up-converted or down-converted to the specified dimension element format (`INT8`, `FLOAT32`, or `FLOAT64`).   
+VECTOR | Vectors can have an arbitrary number of dimensions and formats.  
+VECTOR(*, *) | Vectors can have an arbitrary number of dimensions and formats. VECTOR and VECTOR(*,*) are equivalent.  
+VECTOR(number_of_dimensions, *) equivalent to VECTOR(number_of_dimensions) | Vectors must all have the specified number of dimensions or an error is thrown. Every vector will have its dimensions stored without format modification.  
+VECTOR(*, dimension_element_format) | Vectors can have an arbitrary number of dimensions, but their format will be up-converted or down-converted to the specified dimension element format (INT8, FLOAT32, or FLOAT64).  
   
 A vector can be `NULL` but its dimensions cannot (for example, you cannot have
 a `VECTOR` with a `NULL` dimension such as `[1.1, NULL, 2.2]`).
@@ -2296,13 +2254,13 @@ Table 2-7 ANSI Data Types Converted to Oracle Data Types
 
 ANSI SQL Data Type | Oracle Data Type  
 ---|---  
-`CHARACTER(n)` `CHAR(n)` |  `CHAR(n)`  
-`CHARACTER VARYING(n)` `CHAR VARYING(n)` |  `VARCHAR2(n)`  
-`NATIONAL CHARACTER(n)` `NATIONAL CHAR(n)` `NCHAR(n)` |  `NCHAR(n)`  
-`NATIONAL CHARACTER VARYING(n)` `NATIONAL CHAR VARYING(n)` `NCHAR VARYING(n)` |  `NVARCHAR2(n)`  
-`NUMERIC[(p,s)]` `DECIMAL[(p,s)]` (Note 1)  |  `NUMBER(p,s)`  
-`INTEGER` `INT` `SMALLINT` |  `NUMBER(38)`  
-`FLOAT` (Note 2)  `DOUBLE PRECISION` (Note 3)  `REAL` (Note 4)  |  `FLOAT(126)` `FLOAT(126)` `FLOAT(63)`  
+CHARACTER(n) CHAR(n) | CHAR(n)  
+CHARACTER VARYING(n) CHAR VARYING(n) | VARCHAR2(n)  
+NATIONAL CHARACTER(n) NATIONAL CHAR(n) NCHAR(n) | NCHAR(n)  
+NATIONAL CHARACTER VARYING(n) NATIONAL CHAR VARYING(n) NCHAR VARYING(n) | NVARCHAR2(n)  
+NUMERIC[(p,s)] DECIMAL[(p,s)] (Note 1) | NUMBER(p,s)  
+INTEGER INT SMALLINT | NUMBER(38)  
+FLOAT (Note 2) DOUBLE PRECISION (Note 3) REAL (Note 4) | FLOAT(126) FLOAT(126) FLOAT(63)  
   
 Notes:
 
@@ -2336,12 +2294,12 @@ Table 2-8 SQL/DS and DB2 Data Types Converted to Oracle Data Types
 
 SQL/DS or DB2 Data Type | Oracle Data Type  
 ---|---  
-`CHARACTER(n)` |  `CHAR(n)`  
-`VARCHAR(n)` |  `VARCHAR(n)`  
-`LONG VARCHAR` |  `LONG`  
-`DECIMAL(p,s)` (Note 1)  |  `NUMBER(p,s)`  
-`INTEGER` `SMALLINT` |  `NUMBER(p,0)`  
-`FLOAT` (Note 2)  |  `NUMBER`  
+CHARACTER(n) | CHAR(n)  
+VARCHAR(n) | VARCHAR(n)  
+LONG VARCHAR | LONG  
+DECIMAL(p,s) (Note 1) | NUMBER(p,s)  
+INTEGER SMALLINT | NUMBER(p,0)  
+FLOAT (Note 2) | NUMBER  
   
 Notes:
 
@@ -2709,6 +2667,6 @@ database/23/sqlrf&id=GEORS200) for information on the full implementation of
 the spatial data types and guidelines for using them
 
 
-[← Previous](Data-Types.md)
+[← Previous](Basic-Elements-of-Oracle-SQL.md)
 
-[Next →](Data-Type-Comparison-Rules.md)
+[Next →](Data-Types.md)
