@@ -24,11 +24,13 @@ Syntax
 
 alter_session::= 
 
-![Description of alter_session.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_session.gif)[Description of the illustration alter_session.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_session.html)
+![Description of alter_session.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_session.gif)
+[Description of the illustration alter_session.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_session.html)
 
 alter_session_set_clause::= 
 
-![Description of alter_session_set_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_session_set_clause.gif)[Description of the illustration alter_session_set_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_session_set_clause.html)
+![Description of alter_session_set_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_session_set_clause.gif)
+[Description of the illustration alter_session_set_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_session_set_clause.html)
 
 Semantics
 
