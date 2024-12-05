@@ -1,0 +1,36 @@
+[Previous](DROP-EDITION.html) [Next](DROP-FUNCTION.html) JavaScript must be enabled to correctly display this content 
+
+  1. [SQL Language Reference ](index.html)2. [ SQL Statements: DROP CONTEXT to DROP JAVA](SQL-Statements-DROP-CONTEXT-to-DROP-JAVA.html)
+  3. DROP FLASHBACK ARCHIVE 
+
+
+
+## DROP FLASHBACK ARCHIVE 
+
+Purpose
+
+Use the `DROP` `FLASHBACK` `ARCHIVE` clause to remove a flashback archive from the system. This statement removes the flashback archive and all the historical data in it, but does not drop the tablespaces that were used by the flashback archive. 
+
+Prerequisites 
+
+You must have the `FLASHBACK` `ARCHIVE` `ADMINISTER` system privilege to drop a flashback archive. 
+
+Syntax 
+
+drop_flashback_archive::= 
+
+![Description of drop_flashback_archive.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_flashback_archive.gif)[Descriptionof the illustration drop_flashback_archive.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_flashback_archive.md)
+
+Semantics
+
+flashback_archive
+
+Specify the name of the flashback archive you want to drop.
+
+See Also:
+
+[CREATE FLASHBACK ARCHIVE](CREATE-FLASHBACK-ARCHIVE.html#GUID-9E821EC5-8350-4729-85FE-2188EBB4139B) for information on creating flashback archives and for some simple examples of using flashback archives 
+
+[← Previous](DROP-EDITION.md)
+
+[Next →](DROP-FUNCTION.md)
