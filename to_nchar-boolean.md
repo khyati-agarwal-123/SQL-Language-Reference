@@ -1,0 +1,36 @@
+[Previous](TO_MULTI_BYTE.html) [Next](TO_NCHAR-character.html) JavaScript must be enabled to correctly display this content 
+
+  1. [SQL Language Reference ](index.html)
+  2. [Functions](Functions.html)
+  3. TO_NCHAR (boolean)
+
+
+
+## TO_NCHAR (boolean)
+
+Syntax
+
+  
+
+
+![Description of to_nchar_boolean.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_nchar_boolean.gif)[Description of the illustration to_nchar_boolean.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_nchar_boolean.html)
+
+  
+
+
+Purpose
+
+Use `TO_NCHAR(boolean)` to explicitly convert a boolean value to a character value of `'TRUE'` or `'FALSE'`. 
+
+See Also:
+
+  * [CAST](CAST.html#GUID-5A70235E-1209-4281-8521-B94497AAEF75) for conversion rules. 
+
+  * [Boolean Data Type](Data-Types.html#GUID-285FFCA8-390D-4FA9-9A51-47B84EF5F83A) for more details on the built-in boolean data type. 
+
+
+
+
+[← Previous](TO_MULTI_BYTE.md)
+
+[Next →](TO_NCHAR-character.md)

@@ -1,0 +1,25 @@
+[Previous](Pattern-matching-Conditions.html) [Next](XML-Conditions.html) JavaScript must be enabled to correctly display this content 
+
+  1. [SQL Language Reference ](index.html)
+  2. [ Conditions](Conditions.html)
+  3. Null Conditions 
+
+
+
+## Null Conditions 
+
+A `NULL` condition tests for nulls. This is the only condition that you should use to test for nulls. 
+
+null_condition::= 
+
+![Description of null_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/null_condition.gif)[Description of the illustration null_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/null_condition.html)[Table 6-9](Null-Conditions.html#GUID-657F2BA6-5687-4A00-8C2F-57515FD2DAEB__CJAFCIGE "The first column shows the null conditions, the second describes their operation, and the third provides an example.") lists the null conditions. 
+
+Table 6-9 Null Condition ``
+
+Type of Condition | Operation | Example  
+---|---|---  
+IS [NOT] NULL | Tests for nulls. See Also: Nulls | SELECT last_name FROM employees WHERE commission_pct IS NULL ORDER BY last_name;
+
+[← Previous](Pattern-matching-Conditions.md)
+
+[Next →](XML-Conditions.md)
