@@ -1,52 +1,42 @@
-[Previous](XMLISVALID.html) [Next](XMLPATCH.html) JavaScript must be enabled to correctly display this content 
+##  XMLPARSE {#GUID-39A93E58-F06E-4633-A7BF-6CF27A53D9B6} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. XMLPARSE 
+Syntax 
 
+![Description of xmlparse.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/xmlparse.gif)[ Description of the illustration xmlparse.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/xmlparse.md)
 
+Purpose 
 
-## XMLPARSE 
+` XMLParse ` parses and generates an XML instance from the evaluated result of *value_expr* . The *value_expr* must resolve to a string. If *value_expr* resolves to null, then the function returns null. 
 
-Syntax
+  * If you specify ` DOCUMENT ` , then *value_expr* must resolve to a singly rooted XML document. 
 
-![Description of xmlparse.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/xmlparse.gif)[Description of the illustration xmlparse.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/xmlparse.html)
+  * If you specify ` CONTENT ` , then *value_expr* must resolve to a valid XML value. 
 
-Purpose
-
-`XMLParse` parses and generates an XML instance from the evaluated result of `value_expr`. The `value_expr` must resolve to a string. If `value_expr` resolves to null, then the function returns null. 
-
-  * If you specify `DOCUMENT`, then `value_expr` must resolve to a singly rooted XML document. 
-
-  * If you specify `CONTENT`, then `value_expr` must resolve to a valid XML value. 
-
-  * When you specify `WELLFORMED`, you are guaranteeing that `value_expr` resolves to a well-formed XML document, so the database does not perform validity checks to ensure that the input is well formed. 
+  * When you specify ` WELLFORMED ` , you are guaranteeing that *value_expr* resolves to a well-formed XML document, so the database does not perform validity checks to ensure that the input is well formed. 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle XML DB Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDB1620) for more information on this function 
+[ *Oracle XML DB Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDB1620) for more information on this function 
 
-Examples
+Examples 
 
-The following example uses the `DUAL` table to illustrate the syntax of `XMLParse`: 
+The following example uses the ` DUAL ` table to illustrate the syntax of ` XMLParse ` : 
     
     
-    SELECT XMLPARSE(CONTENT '124 <purchaseOrder poNo="12435"> 
-       <customerName> Acme Enterprises</customerName>
-       <itemNo>32987457</itemNo>
-       </purchaseOrder>' 
+    ```
+    SELECT XMLPARSE(CONTENT '124  
+        Acme Enterprises
+       32987457
+       ' 
     WELLFORMED) AS PO FROM DUAL;
      
     PO
     -----------------------------------------------------------------
-    124 <purchaseOrder poNo="12435">
-       <customerName> Acme Enterprises</customerName>
-       <itemNo>32987457</itemNo>
-       </purchaseOrder>
-
-[← Previous](XMLISVALID.md)
-
-[Next →](XMLPATCH.md)
+    124 
+        Acme Enterprises
+       32987457
+       
+    ```

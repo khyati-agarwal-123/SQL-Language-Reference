@@ -1,63 +1,58 @@
-[Previous](COVAR_SAMP.html) [Next](CUME_DIST.html) JavaScript must be enabled to correctly display this content 
+##  CUBE_TABLE {#GUID-55CDE2F2-14ED-4F8F-B5BF-1566C0E18727} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. CUBE_TABLE
+Syntax 
 
+![Description of cube_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cube_table.gif)[ Description of the illustration cube_table.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cube_table.md)
 
+Purpose 
 
-## CUBE_TABLE
+` CUBE_TABLE ` extracts data from a cube or dimension and returns it in the two-dimensional format of a relational table, which can be used by SQL-based applications. 
 
-Syntax
-
-![Description of cube_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cube_table.gif)[Description of the illustration cube_table.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cube_table.html)
-
-Purpose
-
-`CUBE_TABLE` extracts data from a cube or dimension and returns it in the two-dimensional format of a relational table, which can be used by SQL-based applications. 
-
-The function takes a single `VARCHAR2` argument. The optional hierarchy clause enables you to specify a dimension hierarchy. A cube can have multiple hierarchy clauses, one for each dimension. 
+The function takes a single ` VARCHAR2 ` argument. The optional hierarchy clause enables you to specify a dimension hierarchy. A cube can have multiple hierarchy clauses, one for each dimension. 
 
 You can generate these different types of tables: 
 
-  * A cube table contains a key column for each dimension and a column for each measure and calculated measure in the cube. To create a cube table, you can specify the cube with or without a cube hierarchy clause. For a dimension with multiple hierarchies, this clause limits the return values to the dimension members and levels in the specified hierarchy. Without a hierarchy clause, all dimension members and all levels are included.
+  * A cube table contains a key column for each dimension and a column for each measure and calculated measure in the cube. To create a cube table, you can specify the cube with or without a cube hierarchy clause. For a dimension with multiple hierarchies, this clause limits the return values to the dimension members and levels in the specified hierarchy. Without a hierarchy clause, all dimension members and all levels are included. 
 
-  * A dimension table contains a key column, and a column for each level and each attribute. It also contains a `MEMBER_TYPE` column, which identifies each member with one of the following codes: 
+  * A dimension table contains a key column, and a column for each level and each attribute. It also contains a ` MEMBER_TYPE ` column, which identifies each member with one of the following codes: 
 
-    * `L` \- Loaded from a table, view, or synonym 
+    * ` L ` \- Loaded from a table, view, or synonym 
 
-    * `A` \- Loaded member and the single root of all hierarchies in the dimension, that is, the "all" aggregate member 
+    * ` A ` \- Loaded member and the single root of all hierarchies in the dimension, that is, the "all" aggregate member 
 
-    * `C` \- Calculated member 
+    * ` C ` \- Calculated member 
 
-All dimension members and all levels are included in the table. To create a dimension table, specify the dimension without a dimension hierarchy clause. 
+All dimension members and all levels are included in the table. To create a dimension table, specify the dimension  without  a dimension hierarchy clause. 
 
-  * A hierarchy table contains all the columns of a dimension table plus a column for the parent member and a column for each source level. It also contains a `MEMBER_TYPE` column, as described for dimension tables. Any dimension members and levels that are not part of the named hierarchy are excluded from the table. To create a hierarchy table, specify the dimension with a dimension hierarchy clause. 
-
-
+  * A hierarchy table contains all the columns of a dimension table plus a column for the parent member and a column for each source level. It also contains a ` MEMBER_TYPE ` column, as described for dimension tables. Any dimension members and levels that are not part of the named hierarchy are excluded from the table. To create a hierarchy table, specify the dimension  with  a dimension hierarchy clause. 
 
 
-`CUBE_TABLE` is a table function and is always used in the context of a `SELECT` statement with this syntax: 
+
+
+` CUBE_TABLE ` is a table function and is always used in the context of a ` SELECT ` statement with this syntax: 
     
     
+    ```
     SELECT ... FROM TABLE(CUBE_TABLE('arg'));
+    ```
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle OLAP Userâs Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=OLAUG400) for information about dimensional objects and about the tables generated by `CUBE_TABLE`. 
+  * [ *Oracle OLAP User’s Guide*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=OLAUG400) for information about dimensional objects and about the tables generated by ` CUBE_TABLE ` . 
 
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to each character data type column in the table generated by `CUBE_TABLE`
-
-
+  * Appendix C in [ *Oracle Database Globalization Support Guide*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to each character data type column in the table generated by ` CUBE_TABLE `
 
 
-Examples
 
-The following examples require Oracle Database with the OLAP option and the `GLOBAL` sample schema. Refer to [Oracle OLAP Userâs Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=OLAUG9117) for information on downloading and installing the `GLOBAL` sample schema. 
 
-The following `SELECT` statement generates a dimension table of `CHANNEL` in the `GLOBAL` schema. 
+Examples 
+
+The following examples require Oracle Database with the OLAP option and the ` GLOBAL ` sample schema. Refer to [ *Oracle OLAP User’s Guide*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=OLAUG9117) for information on downloading and installing the ` GLOBAL ` sample schema. 
+
+The following ` SELECT ` statement generates a dimension table of ` CHANNEL ` in the ` GLOBAL ` schema. 
     
     
+    ```
     SELECT dim_key, level_name, long_description, channel_total_id tot_id,
            channel_channel_id chan_id, channel_long_description chan_desc,
            total_long_description tot_desc
@@ -70,10 +65,12 @@ The following `SELECT` statement generates a dimension table of `CHANNEL` in the
     CHANNEL_INT  CHANNEL    Internet         TOTAL  INT     Internet     Total Channel
     TOTAL_TOTAL  TOTAL      Total Channel    TOTAL                       Total Channel
     
+    ```
 
-The next statement generates a cube table of `UNITS_CUBE`. It restricts the table to the `MARKET` and `CALENDAR` hierarchies. 
+The next statement generates a cube table of ` UNITS_CUBE ` . It restricts the table to the ` MARKET ` and ` CALENDAR ` hierarchies. 
     
     
+    ```
     SELECT sales, units, cost, time, customer, product, channel
       FROM TABLE(CUBE_TABLE('global.units_cube HIERARCHY customer market HIERARCHY time calendar'))
       WHERE rownum < 20;
@@ -86,7 +83,4 @@ The next statement generates a cube table of `UNITS_CUBE`. It restricts the tabl
       26258474      66122 24391020.6 CALENDAR_QUARTER_CY1998.Q4 TOTAL_TOTAL    TOTAL_TOTAL TOTAL_TOTAL
       32785170      77589 30607218.1 CALENDAR_QUARTER_CY1999.Q1 TOTAL_TOTAL    TOTAL_TOTAL TOTAL_TOTAL
     . . .
-
-[← Previous](COVAR_SAMP.md)
-
-[Next →](CUME_DIST.md)
+    ```

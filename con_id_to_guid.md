@@ -1,34 +1,27 @@
-[Previous](con_id_to_dbid.html) [Next](con_id_to_uid.html) JavaScript must be enabled to correctly display this content 
+##  CON_ID_TO_GUID {#GUID-2B5AB386-2254-46A6-83B6-ED0504008F03} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. CON_ID_TO_GUID
-
-
-
-## CON_ID_TO_GUID
-
-Syntax
+Syntax 
 
   
 
 
-![Description of con_id_to_guid.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/con_id_to_guid.gif)[Description of the illustration con_id_to_guid.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/con_id_to_guid.html)
+![Description of con_id_to_guid.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/con_id_to_guid.gif)[ Description of the illustration con_id_to_guid.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/con_id_to_guid.md)
 
   
 
 
-Purpose
+Purpose 
 
-`CON_ID_TO_GUID` takes as an argument a container `CON_ID` and returns the container's `GLOBAL UNIQUE ID` ( `GUID`). For `CON_ID` you must specify a number or an expression that resolves to a number. The function returns a `NUMBER` value. 
+` CON_ID_TO_GUID ` takes as an argument a container ` CON_ID ` and returns the container's ` GLOBAL UNIQUE ID ` ( ` GUID ` ). For ` CON_ID ` you must specify a number or an expression that resolves to a number. The function returns a ` NUMBER ` value. 
 
 This function is useful in a multitentant container database (CDB). 
 
-Example
+Example 
 
-The following query displays the `CON_ID`, `NAME` and `GUID` for all containers in a CDB: 
+The following query displays the ` CON_ID ` , ` NAME ` and ` GUID ` for all containers in a CDB: 
     
     
+    ```
     SELECT CON_ID, NAME, GUID FROM V$CONTAINERS;
     
     CON_ID      NAME           GUID
@@ -38,16 +31,15 @@ The following query displays the `CON_ID`, `NAME` and `GUID` for all containers 
        3        CDB1_PDB1      A8DA63CEAD385A5BE053C4E15A0A774A
        4        SALESPDB       A8DA9AB18CE85BD0E053C4E15A0AE2C3
      
+    ```
 
-The following statement returns the container `GUID` given the container `CON_ID` 4: 
+The following statement returns the container ` GUID ` given the container ` CON_ID ` 4: 
     
     
+    ```
     SELECT CON_ID_TO_GUID(4) "CON_GUID" FROM DUAL;
         CON_GUID
         –----------------
         A8DA9AB18CE85BD0E053C4E15A0AE2C3 
         
-
-[← Previous](con_id_to_dbid.md)
-
-[Next →](con_id_to_uid.md)
+    ```

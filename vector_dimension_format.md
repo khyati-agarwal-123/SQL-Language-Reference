@@ -1,33 +1,27 @@
-[Previous](vector_dimension_count.html) [Next](vector_embedding.html) JavaScript must be enabled to correctly display this content 
+##  VECTOR_DIMENSION_FORMAT {#GUID-354ACE80-7120-4D45-B2B0-AB1D86E3D37D} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. VECTOR_DIMENSION_FORMAT
+` VECTOR_DIMENSION_FORMAT ` returns the storage format of the vector. It returns a ` VARCHAR2 ` , which can be one of the following values: ` INT8 ` , ` FLOAT32 ` , ` FLOAT64 ` , or ` BINARY ` . 
 
-
-
-## VECTOR_DIMENSION_FORMAT
-
-`VECTOR_DIMENSION_FORMAT` returns the storage format of the vector. It returns a `VARCHAR2`, which can be one of the following values: `INT8`, `FLOAT32`, `FLOAT64`, or `BINARY`. 
-
-Syntax
+Syntax 
 
   
 
 
-![Description of vector_dimension_format.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/vector_dimension_format.gif)[Description of the illustration vector_dimension_format.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/vector_dimension_format.html)
+![Description of vector_dimension_format.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/vector_dimension_format.gif)[ Description of the illustration vector_dimension_format.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/vector_dimension_format.md)
 
   
 
 
-Parameters
+Parameters 
 
-`expr` must evaluate to a vector. 
+*expr* must evaluate to a vector. 
 
-If `expr` is NULL, NULL is returned. 
+If *expr* is NULL, NULL is returned. 
 
-Examples
+Examples 
     
+    
+    ```
     
     SELECT VECTOR_DIMENSION_FORMAT(TO_VECTOR('[34.6, 77.8]', 2, FLOAT64));
     
@@ -64,7 +58,4 @@ Examples
     ERROR at line 1:
     ORA-51803: Vector dimension count must match the dimension count specified in
     the column definition (expected 3 dimensions, specified 4 dimensions).
-
-[← Previous](vector_dimension_count.md)
-
-[Next →](vector_embedding.md)
+    ```

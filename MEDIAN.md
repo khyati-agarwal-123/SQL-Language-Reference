@@ -1,59 +1,54 @@
-[Previous](MAX.html) [Next](MIN.html) JavaScript must be enabled to correctly display this content 
+##  MEDIAN {#GUID-DE15705A-AC18-4416-8487-B9E1D70CE01A} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. MEDIAN 
+Syntax 
 
+![Description of median.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/median.gif)[ Description of the illustration median.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/median.md)
 
+> **note:** See Also: 
 
-## MEDIAN 
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of median.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/median.gif)[Description of the illustration median.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/median.html)
+` MEDIAN ` is an inverse distribution function that assumes a continuous distribution model. It takes a numeric or datetime value and returns the middle value or an interpolated value that would be the middle value once the values are sorted. Nulls are ignored in the calculation. 
 
-See Also:
+This function takes as arguments any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. If you specify only *expr* , then the function returns the same data type as the numeric data type of the argument. If you specify the ` OVER ` clause, then Oracle Database determines the argument with the highest numeric precedence, implicitly converts the remaining arguments to that data type, and returns that data type. 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions 
+> **note:** See Also: 
 
-Purpose
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion and  " [ Numeric Precedence ](Data-Types.md#GUID-4C0B65DB-E751-4957-A1ED-5044BAFA7812) "  for information on numeric precedence 
 
-`MEDIAN` is an inverse distribution function that assumes a continuous distribution model. It takes a numeric or datetime value and returns the middle value or an interpolated value that would be the middle value once the values are sorted. Nulls are ignored in the calculation. 
+The result of ` MEDIAN ` is computed by first ordering the rows. Using ` N ` as the number of rows in the group, Oracle calculates the row number ( ` RN ` ) of interest with the formula ` RN ` = ( ` 1 ` \+ (0. ` 5 ` *( ` N ` \- ` 1 ` )). The final result of the aggregate function is computed by linear interpolation between the values from rows at row numbers ` CRN ` = ` CEILING ` ( ` RN ` ) and ` FRN ` = ` FLOOR ` ( ` RN ` ). 
 
-This function takes as arguments any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. If you specify only `expr`, then the function returns the same data type as the numeric data type of the argument. If you specify the `OVER` clause, then Oracle Database determines the argument with the highest numeric precedence, implicitly converts the remaining arguments to that data type, and returns that data type. 
-
-See Also:
-
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion and "[Numeric Precedence](Data-Types.html#GUID-4C0B65DB-E751-4957-A1ED-5044BAFA7812)" for information on numeric precedence 
-
-The result of `MEDIAN` is computed by first ordering the rows. Using `N` as the number of rows in the group, Oracle calculates the row number (`RN`) of interest with the formula `RN` = (`1` \+ (0.`5`*(`N`-`1`)). The final result of the aggregate function is computed by linear interpolation between the values from rows at row numbers `CRN` = `CEILING`(`RN`) and `FRN` = `FLOOR`(`RN`). 
-
-The final result will be:
+The final result will be: 
     
     
+    ```
        if (CRN = FRN = RN) then
           (value of expression from row at RN)
        else
           (CRN - RN) * (value of expression for row at FRN) +
           (RN - FRN) * (value of expression for row at CRN)
     
+    ```
 
-You can use `MEDIAN` as an analytic function. You can specify only the `query_partition_clause` in its `OVER` clause. It returns, for each row, the value that would fall in the middle among a set of values within each partition. 
+You can use ` MEDIAN ` as an analytic function. You can specify only the *query_partition_clause* in its ` OVER ` clause. It returns, for each row, the value that would fall in the middle among a set of values within each partition. 
 
-Compare this function with these functions:
+Compare this function with these functions: 
 
-  * [PERCENTILE_CONT](PERCENTILE_CONT.html#GUID-CA259452-A565-41B3-A4F4-DD74B66CEDE0), which returns, for a given percentile, the value that corresponds to that percentile by way of interpolation. `MEDIAN` is the specific case of `PERCENTILE_CONT` where the percentile value defaults to 0.5. 
+  * [ PERCENTILE_CONT ](PERCENTILE_CONT.md#GUID-CA259452-A565-41B3-A4F4-DD74B66CEDE0) , which returns, for a given percentile, the value that corresponds to that percentile by way of interpolation. ` MEDIAN ` is the specific case of ` PERCENTILE_CONT ` where the percentile value defaults to 0.5. 
 
-  * [PERCENTILE_DISC](PERCENTILE_DISC.html#GUID-7C34FDDA-C241-474F-8C5C-50CC0182E005), which is useful for finding values for a given percentile without interpolation. 
-
-
+  * [ PERCENTILE_DISC ](PERCENTILE_DISC.md#GUID-7C34FDDA-C241-474F-8C5C-50CC0182E005) , which is useful for finding values for a given percentile without interpolation. 
 
 
-Aggregate Example
 
-The following query returns the median salary for each department in the `hr.employees` table: 
+
+Aggregate Example 
+
+The following query returns the median salary for each department in the ` hr.employees ` table: 
     
     
+    ```
     SELECT department_id, MEDIAN(salary)
       FROM employees
       GROUP BY department_id
@@ -73,12 +68,14 @@ The following query returns the median salary for each department in the `hr.emp
               100           8000
               110          10154
                             7000
+    ```
 
-Analytic Example
+Analytic Example 
 
-The following query returns the median salary for each manager in a subset of departments in the `hr.employees` table: 
+The following query returns the median salary for each manager in a subset of departments in the ` hr.employees ` table: 
     
     
+    ```
     SELECT manager_id, employee_id, salary,
            MEDIAN(salary) OVER (PARTITION BY manager_id) "Median by Mgr"
       FROM employees
@@ -106,7 +103,4 @@ The following query returns the median salary for each manager in a subset of de
            145         151       9500          8500
            145         152       9000          8500
     . . .
-
-[← Previous](MAX.md)
-
-[Next →](MIN.md)
+    ```

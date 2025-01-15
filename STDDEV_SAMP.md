@@ -1,51 +1,44 @@
-[Previous](STDDEV_POP.html) [Next](SUBSTR.html) JavaScript must be enabled to correctly display this content 
+##  STDDEV_SAMP {#GUID-7B2A708E-E73A-4CFE-978E-3F9C4BD37467} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. STDDEV_SAMP 
+Syntax 
 
+![Description of stddev_samp.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/stddev_samp.gif)[ Description of the illustration stddev_samp.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/stddev_samp.md)
 
+> **note:** See Also: 
 
-## STDDEV_SAMP 
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of stddev_samp.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/stddev_samp.gif)[Description of the illustration stddev_samp.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/stddev_samp.html)
+` STDDEV_SAMP ` computes the cumulative sample standard deviation and returns the square root of the sample variance. You can use it as both an aggregate and analytic function. 
 
-See Also:
+This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument. 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions 
+> **note:** See Also: 
 
-Purpose
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion 
 
-`STDDEV_SAMP` computes the cumulative sample standard deviation and returns the square root of the sample variance. You can use it as both an aggregate and analytic function. 
+This function is same as the square root of the ` VAR_SAMP ` function. When ` VAR_SAMP ` returns null, this function returns null. 
 
-This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument.
+> **note:** See Also: 
 
-See Also:
+  * " [ Aggregate Functions ](Aggregate-Functions.md#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848) "  and [ VAR_SAMP ](VAR_SAMP.md#GUID-314D5831-0E26-4ABF-9F46-35F78F97DA52)
 
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion 
-
-This function is same as the square root of the `VAR_SAMP` function. When `VAR_SAMP` returns null, this function returns null. 
-
-See Also:
-
-  * "[Aggregate Functions](Aggregate-Functions.html#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)" and [VAR_SAMP](VAR_SAMP.html#GUID-314D5831-0E26-4ABF-9F46-35F78F97DA52)
-
-  * "[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" for information on valid forms of `expr`
+  * " [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  for information on valid forms of *expr* 
 
 
 
 
-Aggregate Example
+Aggregate Example 
 
-Refer to the aggregate example for [STDDEV_POP](STDDEV_POP.html#GUID-4F804DE5-7E20-4E08-A1BA-32DBB167B34B). 
+Refer to the aggregate example for [ STDDEV_POP ](STDDEV_POP.md#GUID-4F804DE5-7E20-4E08-A1BA-32DBB167B34B) . 
 
-Analytic Example
+Analytic Example 
 
-The following example returns the sample standard deviation of salaries in the `employees` table by department: 
+The following example returns the sample standard deviation of salaries in the ` employees ` table by department: 
     
     
+    ```
     SELECT department_id, last_name, hire_date, salary, 
        STDDEV_SAMP(salary) OVER (PARTITION BY department_id 
           ORDER BY hire_date 
@@ -71,7 +64,4 @@ The following example returns the sample standard deviation of salaries in the `
               110 Gietz           07-JUN-02       8300 2621.95194
               110 Higgins         07-JUN-02      12008
                   Grant           24-MAY-07       7000
-
-[← Previous](STDDEV_POP.md)
-
-[Next →](SUBSTR.md)
+    ```

@@ -1,41 +1,35 @@
-[Previous](TO_TIMESTAMP.html) [Next](TO_UTC_TIMESTAMP_TZ.html) JavaScript must be enabled to correctly display this content 
+##  TO_TIMESTAMP_TZ {#GUID-3999303B-89CA-4AA3-9817-458F36ADC9DC} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. TO_TIMESTAMP_TZ 
+Syntax 
 
+![Description of to_timestamp_tz.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_timestamp_tz.gif)[ Description of the illustration to_timestamp_tz.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_timestamp_tz.md)
 
+Purpose 
 
-## TO_TIMESTAMP_TZ 
+` TO_TIMESTAMP_TZ ` converts *char* to a value of ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` data type. 
 
-Syntax
+For *char* , you can specify any expression that evaluates to a character string of ` CHAR ` , ` VARCHAR2 ` , ` NCHAR ` , or ` NVARCHAR2 ` data type. 
 
-![Description of to_timestamp_tz.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_timestamp_tz.gif)[Description of the illustration to_timestamp_tz.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_timestamp_tz.html)
+> **note:** 
 
-Purpose
+This function does not convert character strings to ` TIMESTAMP ` ` WITH ` ` LOCAL ` ` TIME ` ` ZONE ` . To do this, use a ` CAST ` function, as shown in [ CAST ](CAST.md#GUID-5A70235E-1209-4281-8521-B94497AAEF75) . 
 
-`TO_TIMESTAMP_TZ` converts `char` to a value of `TIMESTAMP` `WITH` `TIME` `ZONE` data type. 
+The optional ` DEFAULT ` *return_value* ` ON ` ` CONVERSION ` ` ERROR ` clause allows you to specify the value this function returns if an error occurs while converting *char* to ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` . This clause has no effect if an error occurs while evaluating *char* . The *return_value* can be an expression or a bind variable, and it must evaluate to a character string of ` CHAR ` , ` VARCHAR2 ` , ` NCHAR ` , or ` NVARCHAR2 ` data type, or null. The function converts *return_value* to ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` using the same method it uses to convert *char* to ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` . If *return_value* cannot be converted to ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` , then the function returns an error. 
 
-For `char`, you can specify any expression that evaluates to a character string of `CHAR`, `VARCHAR2`, `NCHAR`, or `NVARCHAR2` data type. 
+The optional *fmt* specifies the format of *char* . If you omit *fmt* , then *char* must be in the default format of the ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` data type. The optional *'nlsparam'* has the same purpose in this function as in the ` TO_CHAR ` function for date conversion. 
 
-Note:
+> **note:** Caution: 
 
-This function does not convert character strings to `TIMESTAMP` `WITH` `LOCAL` `TIME` `ZONE`. To do this, use a `CAST` function, as shown in [CAST](CAST.html#GUID-5A70235E-1209-4281-8521-B94497AAEF75). 
+It is good practice always to specify a format mask ( ` fmt  ` ) with ` TO_TIMESTAMP_TZ ` , as shown in the examples in the section that follow, if *char* is a literal or an expression that evaluates to a known, fixed format, independent of the locale (NLS) configuration of the session. When ` TO_TIMESTAMP_TZ ` is used without a format mask, the function is valid only if *char* uses the same format as is determined by the ` NLS_TERRITORY ` and ` NLS_TIMESTAMP_TZ_FORMAT ` parameters. 
 
-The optional `DEFAULT` `return_value` `ON` `CONVERSION` `ERROR` clause allows you to specify the value this function returns if an error occurs while converting `char` to `TIMESTAMP` `WITH` `TIME` `ZONE`. This clause has no effect if an error occurs while evaluating `char`. The `return_value` can be an expression or a bind variable, and it must evaluate to a character string of `CHAR`, `VARCHAR2`, `NCHAR`, or `NVARCHAR2` data type, or null. The function converts `return_value` to `TIMESTAMP` `WITH` `TIME` `ZONE` using the same method it uses to convert `char` to `TIMESTAMP` `WITH` `TIME` `ZONE`. If `return_value` cannot be converted to `TIMESTAMP` `WITH` `TIME` `ZONE`, then the function returns an error. 
-
-The optional `fmt` specifies the format of `char`. If you omit `fmt`, then `char` must be in the default format of the `TIMESTAMP` `WITH` `TIME` `ZONE` data type. The optional `'nlsparam'` has the same purpose in this function as in the `TO_CHAR` function for date conversion. 
-
-Caution:
-
-It is good practice always to specify a format mask (`fmt`) with `TO_TIMESTAMP_TZ`, as shown in the examples in the section that follow, if `char` is a literal or an expression that evaluates to a known, fixed format, independent of the locale (NLS) configuration of the session. When `TO_TIMESTAMP_TZ` is used without a format mask, the function is valid only if `char` uses the same format as is determined by the `NLS_TERRITORY` and `NLS_TIMESTAMP_TZ_FORMAT` parameters. 
-
-However, if `char` corresponds to user input provided by an application, for example, in a bind variable, and the user input is expected to follow the locale (NLS) conventions set for the session provided in the `NLS_TIMESTAMP_TZ_FORMAT` parameter, then the format mask should not be specified. 
+However, if *char* corresponds to user input provided by an application, for example, in a bind variable, and the user input is expected to follow the locale (NLS) conventions set for the session provided in the ` NLS_TIMESTAMP_TZ_FORMAT ` parameter, then the format mask should not be specified. 
 
 Examples 
 
-The following example converts a character string to a value of `TIMESTAMP` `WITH` `TIME` `ZONE`: 
+The following example converts a character string to a value of ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` : 
     
+    
+    ```
     
     SELECT TO_TIMESTAMP_TZ('1999-12-01 11:00:00 -8:00',
       'YYYY-MM-DD HH:MI:SS TZH:TZM') FROM DUAL;
@@ -44,9 +38,12 @@ The following example converts a character string to a value of `TIMESTAMP` `WIT
     --------------------------------------------------------------------
     01-DEC-99 11.00.00.000000000 AM -08:00
     
+    ```
 
-The following example casts a null column in a `UNION` operation as `TIMESTAMP` `WITH` `LOCAL` `TIME` `ZONE` using the sample tables `oe.order_items` and `oe.orders`: 
+The following example casts a null column in a ` UNION ` operation as ` TIMESTAMP ` ` WITH ` ` LOCAL ` ` TIME ` ` ZONE ` using the sample tables ` oe.order_items ` and ` oe.orders ` : 
     
+    
+    ```
     
     SELECT order_id, line_item_id,
       CAST(NULL AS TIMESTAMP WITH LOCAL TIME ZONE) order_date
@@ -74,15 +71,15 @@ The following example casts a null column in a `UNION` operation as `TIMESTAMP` 
           2355            1
           2355            2
     . . .
+    ```
 
-The following example returns the default value of NULL because the specified expression cannot be converted to a `TIMESTAMP` `WITH` `TIME` `ZONE` value, due to an invalid month specification: 
+The following example returns the default value of NULL because the specified expression cannot be converted to a ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` value, due to an invalid month specification: 
     
+    
+    ```
     
     SELECT TO_TIMESTAMP_TZ('1999-13-01 11:00:00 -8:00'
       DEFAULT NULL ON CONVERSION ERROR,
       'YYYY-MM-DD HH:MI:SS TZH:TZM') "Value"
       FROM DUAL;
-
-[← Previous](TO_TIMESTAMP.md)
-
-[Next →](TO_UTC_TIMESTAMP_TZ.md)
+    ```

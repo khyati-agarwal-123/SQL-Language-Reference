@@ -1,28 +1,21 @@
-[Previous](GROUP_ID.html) [Next](GROUPING_ID.html) JavaScript must be enabled to correctly display this content 
+##  GROUPING {#GUID-82E6084A-0BDF-4587-A40E-36899783F073} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. GROUPING 
+Syntax 
 
+![Description of grouping.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/grouping.gif)[ Description of the illustration grouping.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/grouping.md)
 
+Purpose 
 
-## GROUPING 
+` GROUPING ` distinguishes superaggregate rows from regular grouped rows. ` GROUP ` ` BY ` extensions such as ` ROLLUP ` and ` CUBE ` produce superaggregate rows where the set of all values is represented by null. Using the ` GROUPING ` function, you can distinguish a null representing the set of all values in a superaggregate row from a null in a regular row. 
 
-Syntax
+The *expr* in the ` GROUPING ` function must match one of the expressions in the ` GROUP ` ` BY ` clause. The function returns a value of 1 if the value of *expr* in the row is a null representing the set of all values. Otherwise, it returns zero. The data type of the value returned by the ` GROUPING ` function is Oracle ` NUMBER ` . Refer to the ` SELECT ` *group_by_clause* for a discussion of these terms. 
 
-![Description of grouping.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/grouping.gif)[Description of the illustration grouping.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/grouping.html)
+Examples 
 
-Purpose
-
-`GROUPING` distinguishes superaggregate rows from regular grouped rows. `GROUP` `BY` extensions such as `ROLLUP` and `CUBE` produce superaggregate rows where the set of all values is represented by null. Using the `GROUPING` function, you can distinguish a null representing the set of all values in a superaggregate row from a null in a regular row. 
-
-The `expr` in the `GROUPING` function must match one of the expressions in the `GROUP` `BY` clause. The function returns a value of 1 if the value of `expr` in the row is a null representing the set of all values. Otherwise, it returns zero. The data type of the value returned by the `GROUPING` function is Oracle `NUMBER`. Refer to the `SELECT` [group_by_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2182483) for a discussion of these terms. 
-
-Examples
-
-In the following example, which uses the sample tables `hr.departments` and `hr.employees`, if the `GROUPING` function returns 1 (indicating a superaggregate row rather than a regular row from the table), then the string "All Jobs" appears in the "JOB" column instead of the null that would otherwise appear: 
+In the following example, which uses the sample tables ` hr.departments ` and ` hr.employees ` , if the ` GROUPING ` function returns 1 (indicating a superaggregate row rather than a regular row from the table), then the string "All Jobs" appears in the "JOB" column instead of the null that would otherwise appear: 
     
     
+    ```
     SELECT 
         DECODE(GROUPING(department_name), 1, 'ALL DEPARTMENTS', department_name)
           AS department,
@@ -48,7 +41,4 @@ In the following example, which uses the sample tables `hr.departments` and `hr.
     Finance                        All Jobs            6      103216
     Finance                        FI_ACCOUNT          5       95040
     . . .
-
-[← Previous](GROUP_ID.md)
-
-[Next →](GROUPING_ID.md)
+    ```

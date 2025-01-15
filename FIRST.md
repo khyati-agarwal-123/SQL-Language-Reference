@@ -1,51 +1,44 @@
-[Previous](FEATURE_VALUE.html) [Next](FIRST_VALUE.html) JavaScript must be enabled to correctly display this content 
+##  FIRST {#GUID-85AB9246-0E0A-44A1-A7E6-4E57502E9238} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. FIRST 
+Syntax 
 
+*first* ::= 
 
+![Description of first.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/first.gif)[ Description of the illustration first.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/first.md)
 
-## FIRST 
+> **note:** See Also: 
 
-Syntax
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions of the ` ORDER ` ` BY ` clause and ` OVER ` clause 
 
-first::= 
+Purpose 
 
-![Description of first.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/first.gif)[Description of the illustration first.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/first.html)
+` FIRST ` and ` LAST ` are very similar functions. Both are aggregate and analytic functions that operate on a set of values from a set of rows that rank as the ` FIRST ` or ` LAST ` with respect to a given sorting specification. If only one row ranks as ` FIRST ` or ` LAST ` , then the aggregate operates on the set with only one element. 
 
-See Also:
+If you omit the ` OVER ` clause, then the ` FIRST ` and ` LAST ` functions are treated as aggregate functions. You can use these functions as analytic functions by specifying the ` OVER ` clause. The *query_partition_clause* is the only part of the ` OVER ` clause valid with these functions. If you include the ` OVER ` clause but omit the *query_partition_clause* , then the function is treated as an analytic function, but the window defined for analysis is the entire table. 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions of the `ORDER` `BY` clause and `OVER` clause 
+These functions take as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument. 
 
-Purpose
+When you need a value from the first or last row of a sorted group, but the needed value is not the sort key, the ` FIRST ` and ` LAST ` functions eliminate the need for self-joins or views and enable better performance. 
 
-`FIRST` and `LAST` are very similar functions. Both are aggregate and analytic functions that operate on a set of values from a set of rows that rank as the `FIRST` or `LAST` with respect to a given sorting specification. If only one row ranks as `FIRST` or `LAST`, then the aggregate operates on the set with only one element. 
+  * The *aggregate_function* argument is any one of the ` MIN ` , ` MAX ` , ` SUM ` , ` AVG ` , ` COUNT ` , ` VARIANCE ` , or ` STDDEV ` functions. It operates on values from the rows that rank either ` FIRST ` or ` LAST ` . If only one row ranks as ` FIRST ` or ` LAST ` , then the aggregate operates on a singleton (nonaggregate) set. 
 
-If you omit the `OVER` clause, then the `FIRST` and `LAST` functions are treated as aggregate functions. You can use these functions as analytic functions by specifying the `OVER` clause. The `query_partition_clause` is the only part of the `OVER` clause valid with these functions. If you include the `OVER` clause but omit the `query_partition_clause`, then the function is treated as an analytic function, but the window defined for analysis is the entire table. 
+  * The ` KEEP ` keyword is for semantic clarity. It qualifies *aggregate_function* , indicating that only the ` FIRST ` or ` LAST ` values of *aggregate_function* will be returned. 
 
-These functions take as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument.
-
-When you need a value from the first or last row of a sorted group, but the needed value is not the sort key, the `FIRST` and `LAST` functions eliminate the need for self-joins or views and enable better performance. 
-
-  * The `aggregate_function` argument is any one of the `MIN`, `MAX`, `SUM`, `AVG`, `COUNT`, `VARIANCE`, or `STDDEV` functions. It operates on values from the rows that rank either `FIRST` or `LAST`. If only one row ranks as `FIRST` or `LAST`, then the aggregate operates on a singleton (nonaggregate) set. 
-
-  * The `KEEP` keyword is for semantic clarity. It qualifies `aggregate_function`, indicating that only the `FIRST` or `LAST` values of `aggregate_function` will be returned. 
-
-  * `DENSE_RANK` `FIRST` or `DENSE_RANK` `LAST` indicates that Oracle Database will aggregate over only those rows with the minimum (`FIRST`) or the maximum (`LAST`) dense rank (also called olympic rank). 
+  * ` DENSE_RANK ` ` FIRST ` or ` DENSE_RANK ` ` LAST ` indicates that Oracle Database will aggregate over only those rows with the minimum ( ` FIRST ` ) or the maximum ( ` LAST ` ) dense rank (also called olympic rank). 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion and [LAST](LAST.html#GUID-4E16BC0E-D3B8-4BA4-8F97-3A08891A85CC)
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion and [ LAST ](LAST.md#GUID-4E16BC0E-D3B8-4BA4-8F97-3A08891A85CC)
 
-Aggregate Example
+Aggregate Example 
 
-The following example returns, within each department of the sample table `hr.employees`, the minimum salary among the employees who make the lowest commission and the maximum salary among the employees who make the highest commission: 
+The following example returns, within each department of the sample table ` hr.employees ` , the minimum salary among the employees who make the lowest commission and the maximum salary among the employees who make the highest commission: 
     
     
+    ```
     SELECT department_id,
            MIN(salary) KEEP (DENSE_RANK FIRST ORDER BY commission_pct) "Worst",
            MAX(salary) KEEP (DENSE_RANK LAST ORDER BY commission_pct) "Best"
@@ -67,12 +60,14 @@ The following example returns, within each department of the sample table `hr.em
               100       6900      12008
               110       8300      12008
                         7000       7000
+    ```
 
-Analytic Example
+Analytic Example 
 
-The next example makes the same calculation as the previous example but returns the result for each employee within the department:
+The next example makes the same calculation as the previous example but returns the result for each employee within the department: 
     
     
+    ```
     SELECT last_name, department_id, salary,
            MIN(salary) KEEP (DENSE_RANK FIRST ORDER BY commission_pct)
              OVER (PARTITION BY department_id) "Worst",
@@ -90,7 +85,4 @@ The next example makes the same calculation as the previous example but returns 
     Gietz                         110       8300       8300      12008
     Higgins                       110      12008       8300      12008
     Grant                                   7000       7000       7000
-
-[← Previous](FEATURE_VALUE.md)
-
-[Next →](FIRST_VALUE.md)
+    ```

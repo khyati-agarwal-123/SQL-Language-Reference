@@ -1,56 +1,49 @@
-[Previous](COSH.html) [Next](COVAR_POP.html) JavaScript must be enabled to correctly display this content 
+##  COUNT {#GUID-AEF08B79-024D-4E3A-B362-9715FB011776} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. COUNT 
+Syntax 
 
+![Description of count.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/count.gif)[ Description of the illustration count.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/count.md)
 
+> **note:** See Also: 
 
-## COUNT 
+[ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of count.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/count.gif)[Description of the illustration count.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/count.html)
+` COUNT ` returns the number of rows returned by the query. You can use it as an aggregate or analytic function. 
 
-See Also:
+If you specify ` DISTINCT ` , then you can specify only the *query_partition_clause* of the *analytic_clause* . The *order_by_clause* and *windowing_clause* are not allowed. 
 
-[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056) for information on syntax, semantics, and restrictions 
+If you specify *expr* , then ` COUNT ` returns the number of rows where *expr* is not null. You can count either all rows, or only distinct values of *expr* . 
 
-Purpose
+If you specify the asterisk (*), then this function returns all rows, including duplicates and nulls. ` COUNT ` never returns null. 
 
-`COUNT` returns the number of rows returned by the query. You can use it as an aggregate or analytic function. 
+> **note:** 
 
-If you specify `DISTINCT`, then you can specify only the `query_partition_clause` of the `analytic_clause`. The `order_by_clause` and `windowing_clause` are not allowed. 
+Before performing a ` COUNT ` ` (DISTINCT ` *expr* ` ) ` operation on a large amount of data, consider using one of the following methods to obtain approximate results more quickly than exact results: 
 
-If you specify `expr`, then `COUNT` returns the number of rows where `expr` is not null. You can count either all rows, or only distinct values of `expr`. 
+  * Set the ` APPROX_FOR_COUNT_DISTINCT ` initialization parameter to true before using the ` COUNT ` ` (DISTINCT ` *expr* ` ) ` function. Refer to [ *Oracle Database Reference*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=REFRN-GUID-D2A8A53F-113A-4E6F-AC2E-37139460EF8D) for more information on this parameter. 
 
-If you specify the asterisk (*), then this function returns all rows, including duplicates and nulls. `COUNT` never returns null. 
-
-Note:
-
-Before performing a `COUNT` `(DISTINCT` `expr``)`operation on a large amount of data, consider using one of the following methods to obtain approximate results more quickly than exact results: 
-
-  * Set the `APPROX_FOR_COUNT_DISTINCT` initialization parameter to true before using the `COUNT` `(DISTINCT` `expr``)` function. Refer to [Oracle Database Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=REFRN-GUID-D2A8A53F-113A-4E6F-AC2E-37139460EF8D) for more information on this parameter. 
-
-  * Use the `APPROX_COUNT_DISTINCT` function instead of the `COUNT` `(DISTINCT` `expr``)` function. Refer to [APPROX_COUNT_DISTINCT](APPROX_COUNT_DISTINCT.html#GUID-50055A05-0187-4481-AFE5-2414F7227713). 
+  * Use the ` APPROX_COUNT_DISTINCT ` function instead of the ` COUNT ` ` (DISTINCT ` *expr* ` ) ` function. Refer to [ APPROX_COUNT_DISTINCT ](APPROX_COUNT_DISTINCT.md#GUID-50055A05-0187-4481-AFE5-2414F7227713) . 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-  * "[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" for information on valid forms of `expr` and [Aggregate Functions](Aggregate-Functions.html#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)
+  * " [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  for information on valid forms of *expr* and [ Aggregate Functions ](Aggregate-Functions.md#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)
 
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules, which define the collation `COUNT` uses to compare character values for the `DISTINCT` clause 
-
-
+  * Appendix C in [ *Oracle Database Globalization Support Guide*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules, which define the collation ` COUNT ` uses to compare character values for the ` DISTINCT ` clause 
 
 
-Aggregate Examples
 
-The following examples use `COUNT` as an aggregate function: 
+
+Aggregate Examples 
+
+The following examples use ` COUNT ` as an aggregate function: 
     
     
+    ```
     SELECT COUNT(*) "Total"
       FROM employees;
     
@@ -79,12 +72,14 @@ The following examples use `COUNT` as an aggregate function:
       Managers
     ----------
             18
+    ```
 
-Analytic Example
+Analytic Example 
 
-The following example calculates, for each employee in the `employees` table, the moving count of employees earning salaries in the range 50 less than through 150 greater than the employee's salary. 
+The following example calculates, for each employee in the ` employees ` table, the moving count of employees earning salaries in the range 50 less than through 150 greater than the employee's salary. 
     
     
+    ```
     SELECT last_name, salary,
            COUNT(*) OVER (ORDER BY salary RANGE BETWEEN 50 PRECEDING AND
                           150 FOLLOWING) AS mov_count
@@ -102,7 +97,4 @@ The following example calculates, for each employee in the `employees` table, th
     Marlow                          2500         10
     Patel                           2500         10
     . . .
-
-[← Previous](COSH.md)
-
-[Next →](COVAR_POP.md)
+    ```

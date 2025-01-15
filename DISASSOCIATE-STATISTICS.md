@@ -1,58 +1,48 @@
-[Previous](DELETE.html) [Next](DROP-ANALYTIC-VIEW.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: CREATE SEQUENCE to DROP CLUSTER](SQL-Statements-CREATE-SEQUENCE-to-DROP-CLUSTER.html)
-  3. DISASSOCIATE STATISTICS 
-
-
-
-## DISASSOCIATE STATISTICS 
+##  DISASSOCIATE STATISTICS {#GUID-6E9A7D93-E28A-469D-97AB-2BECC2EF3C43} 
 
 Purpose 
 
-Use the `DISASSOCIATE` `STATISTICS` statement to disassociate default statistics or a statistics type from columns, standalone functions, packages, types, domain indexes, or indextypes. 
+Use  the ` DISASSOCIATE ` ` STATISTICS ` statement to disassociate default statistics or a statistics type from columns, standalone functions, packages, types, domain indexes, or indextypes. 
 
-See Also:
+> **note:** See Also: 
 
-[ASSOCIATE STATISTICS](ASSOCIATE-STATISTICS.html#GUID-BD02BA6A-32A7-4093-A6B6-BAE860C0F834) for more information on statistics type associations 
+[ ASSOCIATE STATISTICS ](ASSOCIATE-STATISTICS.md#GUID-BD02BA6A-32A7-4093-A6B6-BAE860C0F834) for more information on statistics type associations 
 
 Prerequisites 
 
 To issue this statement, you must have the appropriate privileges to alter the underlying table, function, package, type, domain index, or indextype. 
 
-Syntax
+Syntax 
 
-disassociate_statistics::= 
+*disassociate_statistics* ::= 
 
-![Description of disassociate_statistics.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/disassociate_statistics.gif)[Description of the illustration disassociate_statistics.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/disassociate_statistics.html)
+![Description of disassociate_statistics.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/disassociate_statistics.gif)[ Description of the illustration disassociate_statistics.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/disassociate_statistics.md)
 
-Semantics
+Semantics 
 
-FROM COLUMNS | FUNCTIONS | PACKAGES | TYPES | INDEXES | INDEXTYPES
+FROM COLUMNS | FUNCTIONS | PACKAGES | TYPES | INDEXES | INDEXTYPES 
 
 Specify one or more columns, standalone functions, packages, types, domain indexes, or indextypes from which you are disassociating statistics. 
 
-If you do not specify `schema`, then Oracle Database assumes the object is in your own schema. 
+If you do not specify *schema* , then Oracle Database assumes the object is in your own schema. 
 
-If you have collected user-defined statistics on the object, then the statement fails unless you specify `FORCE`. 
+If you have collected user-defined statistics on the object, then the statement fails unless you specify ` FORCE ` . 
 
-FORCE
+FORCE 
 
-Specify `FORCE` to remove the association regardless of whether any statistics exist for the object using the statistics type. If statistics do exist, then the statistics are deleted before the association is deleted. 
+Specify ` FORCE ` to remove the association regardless of whether any statistics exist for the object using the statistics type. If statistics do exist, then the statistics are deleted before the association is deleted. 
 
-Note:
+> **note:** 
 
-When you drop an object with which a statistics type has been associated, Oracle Database automatically disassociates the statistics type with the `FORCE` option and drops all statistics that have been collected with the statistics type. 
+When you drop an object with which a statistics type has been associated, Oracle Database automatically disassociates the statistics type with the ` FORCE ` option and drops all statistics that have been collected with the statistics type. 
 
-Examples
+Examples 
 
-Disassociating Statistics: Example
+Disassociating Statistics: Example 
 
-This statement disassociates statistics from the `emp_mgmt` package. See [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01378) for the example that creates this package in the `hr` schema. 
+This statement disassociates statistics from the ` emp_mgmt ` package. See [ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01378) for the example that creates this package in the ` hr ` schema. 
     
     
+    ```
     DISASSOCIATE STATISTICS FROM PACKAGES hr.emp_mgmt;
-
-[← Previous](DELETE.md)
-
-[Next →](DROP-ANALYTIC-VIEW.md)
+    ```

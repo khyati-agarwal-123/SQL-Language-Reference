@@ -1,43 +1,36 @@
-[Previous](VSIZE.html) [Next](XMLAGG.html) JavaScript must be enabled to correctly display this content 
+##  WIDTH_BUCKET {#GUID-5E9058E5-A91F-45ED-A90D-E21355D19A88} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. WIDTH_BUCKET 
+Syntax 
 
+![Description of width_bucket.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/width_bucket.gif)[ Description of the illustration width_bucket.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/width_bucket.md)
 
+Purpose 
 
-## WIDTH_BUCKET 
+` WIDTH_BUCKET ` lets you construct equiwidth histograms, in which the histogram range is divided into intervals that have identical size. (Compare this function with ` NTILE ` , which creates equiheight histograms.) Ideally each bucket is a closed-open interval of the real number line. For example, a bucket can be assigned to scores between 10.00 and 19.999 ... to indicate that 10 is included in the interval and 20 is excluded. This is sometimes denoted [10, 20). 
 
-Syntax
+For a given expression, ` WIDTH_BUCKET ` returns the bucket number into which the value of this expression would fall after being evaluated. 
 
-![Description of width_bucket.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/width_bucket.gif)[Description of the illustration width_bucket.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/width_bucket.html)
+  * *expr* is the expression for which the histogram is being created. This expression must evaluate to a numeric or datetime value or to a value that can be implicitly converted to a numeric or datetime value. If *expr* evaluates to null, then the expression returns null. 
 
-Purpose
+  * *min_value* and *max_value* are expressions that resolve to the end points of the acceptable range for *expr* . Both of these expressions must also evaluate to numeric or datetime values, and neither can evaluate to null. 
 
-`WIDTH_BUCKET` lets you construct equiwidth histograms, in which the histogram range is divided into intervals that have identical size. (Compare this function with `NTILE`, which creates equiheight histograms.) Ideally each bucket is a closed-open interval of the real number line. For example, a bucket can be assigned to scores between 10.00 and 19.999 ... to indicate that 10 is included in the interval and 20 is excluded. This is sometimes denoted [10, 20). 
+  * *num_buckets* is an expression that resolves to a constant indicating the number of buckets. This expression must evaluate to a positive integer. 
 
-For a given expression, `WIDTH_BUCKET` returns the bucket number into which the value of this expression would fall after being evaluated. 
+> **note:** See Also: 
 
-  * `expr` is the expression for which the histogram is being created. This expression must evaluate to a numeric or datetime value or to a value that can be implicitly converted to a numeric or datetime value. If `expr` evaluates to null, then the expression returns null. 
-
-  * `min_value` and `max_value` are expressions that resolve to the end points of the acceptable range for `expr`. Both of these expressions must also evaluate to numeric or datetime values, and neither can evaluate to null. 
-
-  * `num_buckets` is an expression that resolves to a constant indicating the number of buckets. This expression must evaluate to a positive integer. 
-
-See Also:
-
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion 
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion 
 
 
 
 
-When needed, Oracle Database creates an underflow bucket numbered 0 and an overflow bucket numbered `num_buckets`+1. These buckets handle values less than `min_value` and more than `max_value` and are helpful in checking the reasonableness of endpoints. 
+When needed, Oracle Database creates an underflow bucket numbered 0 and an overflow bucket numbered *num_buckets* +1. These buckets handle values less than *min_value* and more than *max_value* and are helpful in checking the reasonableness of endpoints. 
 
-Examples
+Examples 
 
-The following example creates a ten-bucket histogram on the `credit_limit` column for customers in Switzerland in the sample table `oe.customers` and returns the bucket number ("Credit Group") for each customer. Customers with credit limits greater than or equal to the maximum value are assigned to the overflow bucket, 11: 
+The following example creates a ten-bucket histogram on the ` credit_limit ` column for customers in Switzerland in the sample table ` oe.customers ` and returns the bucket number ("Credit Group") for each customer. Customers with credit limits greater than or equal to the maximum value are assigned to the overflow bucket, 11: 
     
     
+    ```
     SELECT customer_id, cust_last_name, credit_limit, 
        WIDTH_BUCKET(credit_limit, 100, 5000, 10) "Credit Group"
        FROM customers WHERE nls_territory = 'SWITZERLAND'
@@ -74,7 +67,4 @@ The following example creates a ten-bucket histogram on the `credit_limit` colum
             845 Fawcett                      5000           11
             846 Brando                       5000           11
             847 Streep                       5000           11
-
-[← Previous](VSIZE.md)
-
-[Next →](XMLAGG.md)
+    ```

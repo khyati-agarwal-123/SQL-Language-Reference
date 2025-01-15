@@ -1,23 +1,11 @@
-[Previous](SQL-JSON-Conditions.html) [Next](BETWEEN-Condition.html) JavaScript must be enabled to correctly display this content 
+##  Compound Conditions {#GUID-D2A245F5-8071-4DF7-886E-A46F3D13AC80} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Conditions](Conditions.html)
-  3. Compound Conditions 
+A compound condition specifies a combination of other conditions. 
 
+*compound_condition* ::= 
 
+![Description of compound_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/compound_condition.gif)[ Description of the illustration compound_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/compound_condition.md)
 
-## Compound Conditions 
+> **note:** See Also: 
 
-A compound condition specifies a combination of other conditions.
-
-compound_condition::= 
-
-![Description of compound_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/compound_condition.gif)[Description of the illustration compound_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/compound_condition.html)
-
-See Also:
-
-[Logical Conditions](Logical-Conditions.html#GUID-C5E48AF2-3FF9-401D-A104-CDB5FC19E65F) for more information about `NOT`, `AND`, and `OR` conditions 
-
-[← Previous](SQL-JSON-Conditions.md)
-
-[Next →](BETWEEN-Condition.md)
+[ Logical Conditions ](Logical-Conditions.md#GUID-C5E48AF2-3FF9-401D-A104-CDB5FC19E65F) for more information about ` NOT ` , ` AND ` , and ` OR ` conditions 

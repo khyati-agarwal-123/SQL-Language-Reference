@@ -1,55 +1,50 @@
-[Previous](Multiset-Operators.html) [Next](User-Defined-Operators.html) JavaScript must be enabled to correctly display this content 
+##  SHARD_CHUNK_ID Operator {#GUID-FABB2038-EFA8-4A5C-8048-2B3F01D0E6CA} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Operators](Operators.html)
-  3. SHARD_CHUNK_ID Operator
+You can use the SQL operator ` SHARD_CHUNK_ID ` to get the chunk ID in a sharding environment. You must provide the table family ID and the sharding key as input. 
 
+This operator can be used in all three sharding types: system, user-defined, and composite. You can run the operator from the catalog and the shard. 
 
-
-## SHARD_CHUNK_ID Operator
-
-You can use the SQL operator `SHARD_CHUNK_ID` to get the chunk ID in a sharding environment. You must provide the table family ID and the sharding key as input. 
-
-This operator can be used in all three sharding types: system, user-defined, and composite. You can run the operator from the catalog and the shard.
-
-Syntax
+Syntax 
     
     
+    ```
     SELECT SHARD_CHUNK_ID( table_family, sharding_key1 [, sharding_key2 ...]) FROM table_name ...
+    ```
 
-Semantics
+Semantics 
 
-`table_family`
+*table_family* 
 
-The first operand `table_family` refers to the identifier of the table family. It can be: 
+The first operand *table_family* refers to the identifier of the table family. It can be: 
 
-  * The table family id that can be queried from the `GSMADMIN_INTERNAL.TABLE_FAMILY` table, or 
+  * The table family id that can be queried from the ` GSMADMIN_INTERNAL.TABLE_FAMILY ` table, or 
 
-  * The name of the root table in the form of `SCHEMA_NAME.TABLE_NAME` . 
-
-
-
-
-If there is only one table family across the entire sharding environment, `table_family` can take NULL as input. This will default to the existing single table family. 
-
-`sharding_key`
-
-The second operand `sharding_key` refers to a list of sharding keys. It can be a constant value or column name. 
-
-You must order the list of sharding keys as follows:
-
-  1. List of super-sharding keys in the order they are defined.
-  2. List of sharding keys in the order they are defined. For this refer to `GSMADMIN_INTERNAL.SHARDKEY_COLUMNS` . 
+  * The name of the root table in the form of ` SCHEMA_NAME.TABLE_NAME ` . 
 
 
 
-In system and user-defined sharding environments, where super-sharding keys are not used, you only need to supply sharding keys.
 
-Example
+If there is only one table family across the entire sharding environment, ` table_family ` can take NULL as input. This will default to the existing single table family. 
 
-Given the composite sharded table `customers` defined as follows: 
+*sharding_key* 
+
+The second operand *sharding_key* refers to a list of sharding keys. It can be a constant value or column name. 
+
+You must order the list of sharding keys as follows: 
+
+  1. List of super-sharding keys in the order they are defined. 
+  2. List of sharding keys in the order they are defined. For this refer to ` GSMADMIN_INTERNAL.SHARDKEY_COLUMNS ` . 
+
+
+
+In system and user-defined sharding environments, where super-sharding keys are not used, you only need to supply sharding keys. 
+
+Example 
+
+Given the composite sharded table ` customers ` defined as follows: 
     
     
+    ```
     CREATE SHARDED TABLE customers (
         custno         NUMBER NOT NULL,
         name           VARCHAR2(50) NOT NULL,
@@ -62,19 +57,18 @@ Given the composite sharded table `customers` defined as follows:
     (PARTITIONSET gold VALUES ('gld') TABLESPACE SET tbs1,
      PARTITIONSET silver VALUES ('slv') TABLESPACE SET tbs2)
     ;
+    ```
 
-You can query it for the chunk ID with the following statement:
+You can query it for the chunk ID with the following statement: 
     
     
+    ```
     SELECT SHARD_CHUNK_ID(null, class, custno, name) FROM customers;
+    ```
 
-See Also:
+> **note:** See Also: 
 
-  * [Using Oracle Sharding](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=SHARD-GUID-0F39B1FB-DCF9-4C8A-A2EA-88705B90C5BF)
-
-
+  * [ *Using Oracle Sharding* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=SHARD-GUID-0F39B1FB-DCF9-4C8A-A2EA-88705B90C5BF)
 
 
-[← Previous](Multiset-Operators.md)
 
-[Next →](User-Defined-Operators.md)

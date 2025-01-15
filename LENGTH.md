@@ -1,43 +1,36 @@
-[Previous](LEAST.html) [Next](LISTAGG.html) JavaScript must be enabled to correctly display this content 
+##  LENGTH {#GUID-8F97F652-5AE8-4457-AFD7-7A6F25551E0C} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. LENGTH 
+Syntax 
 
+*length* ::= 
 
+![Description of length.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/length.gif)[ Description of the illustration length.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/length.md)
 
-## LENGTH 
+Purpose 
 
-Syntax
+The ` LENGTH ` functions return the length of *char* . ` LENGTH ` calculates length using characters as defined by the input character set. ` LENGTHB ` uses bytes instead of characters. ` LENGTHC ` uses Unicode complete characters. ` LENGTH2 ` uses UCS2 code points. ` LENGTH4 ` uses UCS4 code points. 
 
-length::= 
+*char* can be any of the data types ` CHAR ` , ` VARCHAR2 ` , ` NCHAR ` , ` NVARCHAR2 ` , ` CLOB ` , or ` NCLOB ` . The exceptions are ` LENGTHC ` , ` LENGTH2 ` , and ` LENGTH4 ` , which do not allow *char* to be a ` CLOB ` or ` NCLOB ` . The return value is of data type ` NUMBER ` . If *char* has data type ` CHAR ` , then the length includes all trailing blanks. If *char* is null, then this function returns null. 
 
-![Description of length.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/length.gif)[Description of the illustration length.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/length.html)
+For more on character length see the following: 
 
-Purpose
+  * [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG435)
 
-The `LENGTH` functions return the length of `char`. `LENGTH` calculates length using characters as defined by the input character set. `LENGTHB` uses bytes instead of characters. `LENGTHC` uses Unicode complete characters. `LENGTH2` uses UCS2 code points. `LENGTH4` uses UCS4 code points. 
-
-`char` can be any of the data types `CHAR`, `VARCHAR2`, `NCHAR`, `NVARCHAR2`, `CLOB`, or `NCLOB`. The exceptions are `LENGTHC`, `LENGTH2`, and `LENGTH4`, which do not allow `char` to be a `CLOB` or `NCLOB`. The return value is of data type `NUMBER`. If `char` has data type `CHAR`, then the length includes all trailing blanks. If `char` is null, then this function returns null. 
-
-For more on character length see the following:
-
-  * [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG435)
-
-  * [Oracle Database SecureFiles and Large Objects Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADLOB45586)
+  * [ *Oracle Database SecureFiles and Large Objects Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADLOB45586)
 
 
 
 
-Restriction on LENGTHB
+Restriction on LENGTHB 
 
-The `LENGTHB` function is supported for single-byte LOBs only. It cannot be used with `CLOB` and `NCLOB` data in a multibyte character set. 
+The ` LENGTHB ` function is supported for single-byte LOBs only. It cannot be used with ` CLOB ` and ` NCLOB ` data in a multibyte character set. 
 
-Examples
+Examples 
 
-The following example uses the `LENGTH` function using a single-byte database character set: 
+The following example uses the ` LENGTH ` function using a single-byte database character set: 
     
     
+    ```
     SELECT LENGTH('CANDIDE') "Length in characters"
       FROM DUAL;
     
@@ -45,17 +38,16 @@ The following example uses the `LENGTH` function using a single-byte database ch
     --------------------
                        7
     
+    ```
 
-The next example assumes a double-byte database character set.
+The next example assumes a double-byte database character set. 
     
     
+    ```
     SELECT LENGTHB ('CANDIDE') "Length in bytes"
       FROM DUAL;
      
     Length in bytes
     ---------------
                  14
-
-[← Previous](LEAST.md)
-
-[Next →](LISTAGG.md)
+    ```

@@ -1,117 +1,110 @@
-[Previous](SET-ROLE.html) [Next](TRUNCATE-CLUSTER.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: MERGE to UPDATE](SQL-Statements-MERGE-to-UPDATE.html)
-  3. SET TRANSACTION 
-
-
-
-## SET TRANSACTION 
+##  SET TRANSACTION {#GUID-F11E1E30-5871-48D1-8266-F80A1DF126A1} 
 
 Purpose 
 
-Use the `SET` `TRANSACTION` statement to establish the current transaction as read-only or read/write, establish its isolation level, assign it to a specified rollback segment, or assign a name to the transaction. 
+Use the ` SET ` ` TRANSACTION ` statement to establish the current transaction as read-only or read/write, establish its isolation level, assign it to a specified rollback segment, or assign a name to the transaction. 
 
-A transaction implicitly begins with any operation that obtains a TX lock:
+A transaction implicitly begins with any operation that obtains a TX lock: 
 
-  * When a statement that modifies data is issued
+  * When a statement that modifies data is issued 
 
-  * When a `SELECT` ... `FOR` `UPDATE` statement is issued 
+  * When a ` SELECT ` ... ` FOR ` ` UPDATE ` statement is issued 
 
-  * When a transaction is explicitly started with a `SET` `TRANSACTION` statement or the `DBMS_TRANSACTION` package 
-
-
+  * When a transaction is explicitly started with a ` SET ` ` TRANSACTION ` statement or the ` DBMS_TRANSACTION ` package 
 
 
-Issuing either a `COMMIT` or `ROLLBACK` statement explicitly ends the current transaction. 
 
-The operations performed by a `SET` `TRANSACTION` statement affect only your current transaction, not other users or other transactions. Your transaction ends whenever you issue a `COMMIT` or `ROLLBACK` statement. Oracle Database implicitly commits the current transaction before and after executing a data definition language (DDL) statement. 
 
-See Also:
+Issuing either a ` COMMIT ` or ` ROLLBACK ` statement explicitly ends the current transaction. 
 
-[COMMIT](COMMIT.html#GUID-6CD5C9A7-54B9-4FA2-BA3C-D6B4492B9EE2) and [ROLLBACK](ROLLBACK.html#GUID-94551F0C-A47F-43DE-BC68-9B1C1ED38C93)
+The operations performed by a ` SET ` ` TRANSACTION ` statement affect only your current transaction, not other users or other transactions. Your transaction ends whenever you issue a ` COMMIT ` or ` ROLLBACK ` statement. Oracle Database implicitly commits the current transaction before and after executing a data definition language (DDL) statement. 
+
+> **note:** See Also: 
+
+[ COMMIT ](COMMIT.md#GUID-6CD5C9A7-54B9-4FA2-BA3C-D6B4492B9EE2) and [ ROLLBACK ](ROLLBACK.md#GUID-94551F0C-A47F-43DE-BC68-9B1C1ED38C93)
 
 Prerequisites 
 
-If you use a `SET` `TRANSACTION` statement, then it must be the first statement in your transaction. However, a transaction need not have a `SET` `TRANSACTION` statement. 
+If you use a ` SET ` ` TRANSACTION ` statement, then it must be the first statement in your transaction. However, a transaction need not have a ` SET ` ` TRANSACTION ` statement. 
 
 Syntax 
 
-set_transaction::= 
+*set_transaction* ::= 
 
-![Description of set_transaction.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/set_transaction.gif)[Description of the illustration set_transaction.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/set_transaction.html)
+![Description of set_transaction.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/set_transaction.gif)[ Description of the illustration set_transaction.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/set_transaction.md)
 
 Semantics 
 
-READ ONLY
+READ ONLY 
 
-The `READ` `ONLY` clause establishes the current transaction as a read-only transaction. This clause established transaction-level read consistency. 
+The ` READ ` ` ONLY ` clause establishes the current transaction as a read-only transaction. This clause established  transaction-level read consistency  . 
 
 All subsequent queries in that transaction see only changes that were committed before the transaction began. Read-only transactions are useful for reports that run multiple queries against one or more tables while other users update these same tables. 
 
-This clause is not supported for the user `SYS`. Queries by `SYS` will return changes made during the transaction even if `SYS` has set the transaction to be `READ` `ONLY`. 
+This clause is not supported for the user ` SYS ` . Queries by ` SYS ` will return changes made during the transaction even if ` SYS ` has set the transaction to be ` READ ` ` ONLY ` . 
 
-Restriction on Read-only Transactions
+Restriction on Read-only Transactions 
 
 Only the following statements are permitted in a read-only transaction: 
 
-  * Subqueriesâ`SELECT` statements without the `for_update_clause`
+  * Subqueries— ` SELECT ` statements without the *for_update_clause* 
 
-  * `LOCK` `TABLE`
+  * ` LOCK ` ` TABLE `
 
-  * `SET` `ROLE`
+  * ` SET ` ` ROLE `
 
-  * `ALTER` `SESSION`
+  * ` ALTER ` ` SESSION `
 
-  * `ALTER` `SYSTEM`
-
-
-
-
-READ WRITE
-
-Specify `READ` `WRITE` to establish the current transaction as a read/write transaction. This clause establishes statement-level read consistency, which is the default. 
-
-Restriction on Read/Write Transactions
-
-You cannot toggle between transaction-level and statement-level read consistency in the same transaction.
-
-ISOLATION LEVEL Clause
-
-  * The `SERIALIZABLE` setting specifies serializable transaction isolation mode as defined in the SQL standard. If a serializable transaction contains data manipulation language (DML) that attempts to update any resource that may have been updated in a transaction uncommitted at the start of the serializable transaction, then the DML statement fails. 
-
-  * The `READ` `COMMITTED` setting is the default Oracle Database transaction behavior. If the transaction contains DML that requires row locks held by another transaction, then the DML statement waits until the row locks are released. 
+  * ` ALTER ` ` SYSTEM `
 
 
 
 
-USE ROLLBACK SEGMENT Clause
+READ WRITE 
 
-Note:
+Specify ` READ ` ` WRITE ` to establish the current transaction as a read/write transaction. This clause establishes  statement-level read consistency  , which is the default. 
 
-This clause is relevant and valid only if you are using rollback segments for undo. Oracle strongly recommends that you use automatic undo management to handle undo space. If you follow this recommendation and run your database in automatic undo mode, then Oracle Database ignores this clause.
+Restriction on Read/Write Transactions 
 
-Specify `USE ROLLBACK SEGMENT` to assign the current transaction to the specified rollback segment. This clause also implicitly establishes the transaction as a read/write transaction. 
+You cannot toggle between transaction-level and statement-level read consistency in the same transaction. 
 
-Parallel DML requires more than one rollback segment. Therefore, if your transaction contains parallel DML operations, then the database ignores this clause.
+ISOLATION LEVEL Clause 
 
-NAME Clause
+  * The ` SERIALIZABLE ` setting specifies serializable transaction isolation mode as defined in the SQL standard. If a serializable transaction contains data manipulation language (DML) that attempts to update any resource that may have been updated in a transaction uncommitted at the start of the serializable transaction, then the DML statement fails. 
 
-Use the `NAME` clause to assign a name to the current transaction. This clause is especially useful in distributed database environments when you must identify and resolve in-doubt transactions. The `string` value is limited to 255 bytes. 
+  * The ` READ ` ` COMMITTED ` setting is the default Oracle Database transaction behavior. If the transaction contains DML that requires row locks held by another transaction, then the DML statement waits until the row locks are released. 
 
-If you specify a name for a distributed transaction, then when the transaction commits, the name becomes the commit comment, overriding any comment specified explicitly in the `COMMIT` statement. 
 
-See Also:
 
-[Oracle Database Concepts](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT1122) for more information about transaction naming 
+
+USE ROLLBACK SEGMENT Clause 
+
+> **note:** 
+
+This clause is relevant and valid only if you are using rollback segments for undo. Oracle strongly recommends that you use automatic undo management to handle undo space. If you follow this recommendation and run your database in automatic undo mode, then Oracle Database ignores this clause. 
+
+Specify ` USE ROLLBACK SEGMENT ` to assign the current transaction to the specified rollback segment. This clause also implicitly establishes the transaction as a read/write transaction. 
+
+Parallel DML requires more than one rollback segment. Therefore, if your transaction contains parallel DML operations, then the database ignores this clause. 
+
+NAME Clause 
+
+Use the ` NAME ` clause to assign a name to the current transaction. This clause is especially useful in distributed database environments when you must identify and resolve in-doubt transactions. The *string* value is limited to 255 bytes. 
+
+If you specify a name for a distributed transaction, then when the transaction commits, the name becomes the commit comment, overriding any comment specified explicitly in the ` COMMIT ` statement. 
+
+> **note:** See Also: 
+
+[ *Oracle Database Concepts* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT1122) for more information about transaction naming 
 
 Examples 
 
-Setting Transactions: Examples
+Setting Transactions: Examples 
 
-The following statements could be run at midnight of the last day of every month to count the products and quantities on hand in the Toronto warehouse in the sample Order Entry (`oe`) schema. This report would not be affected by any other user who might be adding or removing inventory to a different warehouse. 
+The following statements could be run at midnight of the last day of every month to count the products and quantities on hand in the Toronto warehouse in the sample Order Entry ( ` oe ` ) schema. This report would not be affected by any other user who might be adding or removing inventory to a different warehouse. 
     
     
+    ```
     COMMIT; 
     
     SET TRANSACTION READ ONLY NAME 'Toronto'; 
@@ -122,9 +115,6 @@ The following statements could be run at midnight of the last day of every month
     
     COMMIT; 
     
+    ```
 
-The first `COMMIT` statement ensures that `SET` `TRANSACTION` is the first statement in the transaction. The last `COMMIT` statement does not actually make permanent any changes to the database. It simply ends the read-only transaction. 
-
-[← Previous](SET-ROLE.md)
-
-[Next →](TRUNCATE-CLUSTER.md)
+The first ` COMMIT ` statement ensures that ` SET ` ` TRANSACTION ` is the first statement in the transaction. The last ` COMMIT ` statement does not actually make permanent any changes to the database. It simply ends the read-only transaction. 

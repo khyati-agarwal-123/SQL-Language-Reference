@@ -1,26 +1,19 @@
-[Previous](LAST.html) [Next](LAST_VALUE.html) JavaScript must be enabled to correctly display this content 
+##  LAST_DAY {#GUID-296C7C02-7FB9-4AAC-8927-6A79320CE0C6} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. LAST_DAY 
+Syntax 
 
+![Description of last_day.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/last_day.gif)[ Description of the illustration last_day.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/last_day.md)
 
+Purpose 
 
-## LAST_DAY 
+` LAST_DAY ` returns the date of the last day of the month that contains *date* . The last day of the month is defined by the session parameter ` NLS_CALENDAR ` . The return type is always ` DATE ` , regardless of the data type of *date* . 
 
-Syntax
+Examples 
 
-![Description of last_day.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/last_day.gif)[Description of the illustration last_day.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/last_day.html)
-
-Purpose
-
-`LAST_DAY` returns the date of the last day of the month that contains `date`. The last day of the month is defined by the session parameter `NLS_CALENDAR`. The return type is always `DATE`, regardless of the data type of `date`. 
-
-Examples
-
-The following statement determines how many days are left in the current month.
+The following statement determines how many days are left in the current month. 
     
     
+    ```
     SELECT SYSDATE,
            LAST_DAY(SYSDATE) "Last",
            LAST_DAY(SYSDATE) - SYSDATE "Days Left"
@@ -30,10 +23,12 @@ The following statement determines how many days are left in the current month.
     --------- --------- ----------
     30-MAY-09 31-MAY-09          1
     
+    ```
 
-The following example adds `5` months to the hire date of each employee to give an evaluation date: 
+The following example adds ` 5 ` months to the hire date of each employee to give an evaluation date: 
     
     
+    ```
     SELECT last_name, hire_date,
            TO_CHAR(ADD_MONTHS(LAST_DAY(hire_date), 5)) "Eval Date"
       FROM employees
@@ -50,7 +45,4 @@ The following example adds `5` months to the hire date of each employee to give 
     Banda                     21-APR-08 30-SEP-08
     Bates                     24-MAR-07 31-AUG-07
     . . .
-
-[← Previous](LAST.md)
-
-[Next →](LAST_VALUE.md)
+    ```

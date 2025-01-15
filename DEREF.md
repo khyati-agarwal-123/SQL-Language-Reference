@@ -1,30 +1,23 @@
-[Previous](DEPTH.html) [Next](domain_check.html) JavaScript must be enabled to correctly display this content 
+##  DEREF {#GUID-E551FFE4-619F-40CE-8303-683EFA3EB28F} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. DEREF 
+Syntax 
 
+![Description of deref.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/deref.gif)[ Description of the illustration deref.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/deref.md)
 
+Purpose 
 
-## DEREF 
+` DEREF ` returns the object reference of argument *expr* , where *expr* must return a ` REF ` to an object. If you do not use this function in a query, then Oracle Database returns the object ID of the ` REF ` instead, as shown in the example that follows. 
 
-Syntax
+> **note:** See Also: 
 
-![Description of deref.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/deref.gif)[Description of the illustration deref.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/deref.html)
+[ MAKE_REF ](MAKE_REF.md#GUID-926B9963-5387-4781-88D5-A005334C1F2A)
 
-Purpose
+Examples 
 
-`DEREF` returns the object reference of argument `expr`, where `expr` must return a `REF` to an object. If you do not use this function in a query, then Oracle Database returns the object ID of the `REF` instead, as shown in the example that follows. 
-
-See Also:
-
-[MAKE_REF](MAKE_REF.html#GUID-926B9963-5387-4781-88D5-A005334C1F2A)
-
-Examples
-
-The sample schema `oe` contains an object type `cust_address_typ`. The [REF Constraint Examples](constraint.html#GUID-1055EA97-BA6F-4764-A15F-1024FD5B6DFE__I1015744) create a similar type, `cust_address_typ_new`, and a table with one column that is a `REF` to the type. The following example shows how to insert into such a column and how to use `DEREF` to extract information from the column: 
+The sample schema ` oe ` contains an object type ` cust_address_typ ` . The [ REF Constraint Examples ](constraint.md#GUID-1055EA97-BA6F-4764-A15F-1024FD5B6DFE__I1015744) create a similar type, ` cust_address_typ_new ` , and a table with one column that is a ` REF ` to the type. The following example shows how to insert into such a column and how to use ` DEREF ` to extract information from the column: 
     
     
+    ```
     INSERT INTO address_table VALUES
       ('1 First', 'G45 EU8', 'Paris', 'CA', 'US');
     
@@ -45,7 +38,4 @@ The sample schema `oe` contains an object type `cust_address_typ`. The [REF Cons
     DEREF(ADDRESS)(STREET_ADDRESS, POSTAL_CODE, CITY, STATE_PROVINCE, COUNTRY_ID)
     --------------------------------------------------------------------------------
     CUST_ADDRESS_TYP_NEW('1 First', 'G45 EU8', 'Paris', 'CA', 'US')
-
-[← Previous](DEPTH.md)
-
-[Next →](domain_check.md)
+    ```

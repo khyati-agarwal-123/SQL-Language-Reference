@@ -1,37 +1,30 @@
-[Previous](PREDICTION_SET.html) [Next](PRESENTV.html) JavaScript must be enabled to correctly display this content 
+##  PRESENTNNV {#GUID-2FB61064-9A7C-49E5-8448-6636CC69837E} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. PRESENTNNV
+Syntax 
 
+![Description of presentnnv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/presentnnv.gif)[ Description of the illustration presentnnv.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/presentnnv.md)
 
+Purpose 
 
-## PRESENTNNV
+The ` PRESENTNNV ` function can be used only in the *model_clause* of the ` SELECT ` statement and then only on the right-hand side of a model rule. It returns *expr1* when *cell_reference* exists prior to the execution of the *model_clause* and is not null when ` PRESENTNNV ` is evaluated. Otherwise it returns *expr2* . This function differs from ` NVL2 ` in that ` NVL2 ` evaluates the data at the time it is executed, rather than evaluating the data as it was prior to the execution of the *model_clause* . 
 
-Syntax
+> **note:** See Also: 
 
-![Description of presentnnv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/presentnnv.gif)[Description of the illustration presentnnv.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/presentnnv.html)
+  * *model_clause* and  " [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) "  for the syntax and semantics 
 
-Purpose
+  * [ NVL2 ](NVL2.md#GUID-414D6E81-9627-4163-8AC2-BD24E57742AE) for comparison 
 
-The `PRESENTNNV` function can be used only in the `model_clause` of the `SELECT` statement and then only on the right-hand side of a model rule. It returns `expr1` when `cell_reference` exists prior to the execution of the `model_clause` and is not null when `PRESENTNNV` is evaluated. Otherwise it returns `expr2`. This function differs from `NVL2` in that `NVL2` evaluates the data at the time it is executed, rather than evaluating the data as it was prior to the execution of the `model_clause`. 
-
-See Also:
-
-  * [model_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2172805) and "[Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257)" for the syntax and semantics 
-
-  * [NVL2](NVL2.html#GUID-414D6E81-9627-4163-8AC2-BD24E57742AE) for comparison 
-
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of `PRESENTNNV` when it is a character value 
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of ` PRESENTNNV ` when it is a character value 
 
 
 
 
-Examples
+Examples 
 
 In the following example, if a row containing sales for the Mouse Pad for the year 2002 exists, and the sales value is not null, then the sales value remains unchanged. If the row exists and the sales value is null, then the sales value is set to 10. If the row does not exist, then the row is created with the sales value set to 10. 
     
     
+    ```
     SELECT country, prod, year, s
       FROM sales_view_ref
       MODEL
@@ -69,9 +62,6 @@ In the following example, if a row containing sales for the Mouse Pad for the ye
     
     18 rows selected.
     
+    ```
 
-The preceding example requires the view `sales_view_ref`. Refer to "[Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066378)" to create this view. 
-
-[← Previous](PREDICTION_SET.md)
-
-[Next →](PRESENTV.md)
+The preceding example requires the view ` sales_view_ref ` . Refer to  " [ Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066378) "  to create this view. 

@@ -1,35 +1,28 @@
-[Previous](PRESENTV.html) [Next](RANK.html) JavaScript must be enabled to correctly display this content 
+##  PREVIOUS {#GUID-75D5C320-ECE3-444A-86C1-A5637F4428AF} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. PREVIOUS 
+Syntax 
 
+![Description of previous.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/previous.gif)[ Description of the illustration previous.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/previous.md)
 
+Purpose 
 
-## PREVIOUS 
+The ` PREVIOUS ` function can be used only in the *model_clause* of the ` SELECT ` statement and then only in the ` ITERATE ` ... [ ` UNTIL ` ` ] ` clause of the *model_rules_clause* . It returns the value of *cell_reference* at the beginning of each iteration. 
 
-Syntax
+> **note:** See Also: 
 
-![Description of previous.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/previous.gif)[Description of the illustration previous.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/previous.html)
+  * *model_clause* and  " [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) "  for the syntax and semantics 
 
-Purpose
-
-The `PREVIOUS` function can be used only in the `model_clause` of the `SELECT` statement and then only in the `ITERATE` ... [ `UNTIL` `]` clause of the `model_rules_clause`. It returns the value of `cell_reference` at the beginning of each iteration. 
-
-See Also:
-
-  * [model_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2172805) and "[Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257)" for the syntax and semantics 
-
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of `PREVIOUS` when it is a character value 
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of ` PREVIOUS ` when it is a character value 
 
 
 
 
-Examples
+Examples 
 
-The following example repeats the rules, up to 1000 times, until the difference between the values of `cur_val` at the beginning and at the end of an iteration is less than one: 
+The following example repeats the rules, up to 1000 times, until the difference between the values of ` cur_val ` at the beginning and at the end of an iteration is less than one: 
     
     
+    ```
     SELECT dim_col, cur_val, num_of_iterations
       FROM (SELECT 1 AS dim_col, 10 AS cur_val FROM dual)
       MODEL
@@ -46,7 +39,4 @@ The following example repeats the rules, up to 1000 times, until the difference 
        DIM_COL    CUR_VAL NUM_OF_ITERATIONS
     ---------- ---------- -----------------
              1       .625                 4
-
-[← Previous](PRESENTV.md)
-
-[Next →](RANK.md)
+    ```

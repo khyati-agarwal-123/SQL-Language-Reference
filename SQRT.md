@@ -1,51 +1,41 @@
-[Previous](SOUNDEX.html) [Next](STANDARD_HASH.html) JavaScript must be enabled to correctly display this content 
+##  SQRT {#GUID-E28C0B65-AAD8-4077-A82E-2FB4CD261CCA} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. SQRT 
+Syntax 
 
+![Description of sqrt.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sqrt.gif)[ Description of the illustration sqrt.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sqrt.md)
 
+Purpose 
 
-## SQRT 
+` SQRT ` returns the square root of *n* . 
 
-Syntax
+This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument. 
 
-![Description of sqrt.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sqrt.gif)[Description of the illustration sqrt.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sqrt.html)
+> **note:** See Also: 
 
-Purpose
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion 
 
-`SQRT` returns the square root of `n`. 
+  * If *n* resolves to a ` NUMBER ` , then the value *n* cannot be negative. ` SQRT ` returns a real number. 
 
-This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument.
+  * If *n* resolves to a binary floating-point number ( ` BINARY_FLOAT ` or ` BINARY_DOUBLE ` ): 
 
-See Also:
+    * If *n* >= 0, then the result is positive. 
 
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion 
+    * If *n* = -0, then the result is -0. 
 
-  * If `n` resolves to a `NUMBER`, then the value `n` cannot be negative. `SQRT` returns a real number. 
-
-  * If `n` resolves to a binary floating-point number (`BINARY_FLOAT` or `BINARY_DOUBLE`): 
-
-    * If `n` >= 0, then the result is positive. 
-
-    * If `n` = -0, then the result is -0. 
-
-    * If `n` < 0, then the result is `NaN`. 
+    * If *n* < 0, then the result is ` NaN ` . 
 
 
 
 
-Examples
+Examples 
 
-The following example returns the square root of 26:
+The following example returns the square root of 26: 
     
     
+    ```
     SELECT SQRT(26) "Square root" FROM DUAL;
     
     Square root
     -----------
     5.09901951 
-
-[← Previous](SOUNDEX.md)
-
-[Next →](STANDARD_HASH.md)
+    ```

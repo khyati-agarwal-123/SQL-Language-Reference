@@ -1,37 +1,27 @@
-[Previous](NLS_CHARSET_NAME.html) [Next](NLS_COLLATION_NAME.html) JavaScript must be enabled to correctly display this content 
+##  NLS_COLLATION_ID {#GUID-69EA3869-28E3-4CF8-9678-CD4F9878EE99} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. NLS_COLLATION_ID 
+Syntax 
 
+![Description of nls_collation_id.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/nls_collation_id.gif)[ Description of the illustration nls_collation_id.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/nls_collation_id.md)
 
+Purpose 
 
-## NLS_COLLATION_ID 
+` NLS_COLLATION_ID ` takes as its argument a collation name and returns the corresponding collation ID number. Collation IDs are used in the data dictionary tables and in Oracle Call Interface (OCI). Collation names are used in SQL statements and data dictionary views 
 
-Syntax
+For *expr* , specify the collation name as a ` VARCHAR2 ` value. You can specify a valid named collation or a pseudo-collation, in any combination of uppercase and lowercase letters. 
 
-![Description of nls_collation_id.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/nls_collation_id.gif)[Description of the illustration nls_collation_id.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/nls_collation_id.html)
+This function returns a ` NUMBER ` value. If you specify an invalid collation name, then this function returns null. 
 
-Purpose
+Examples 
 
-`NLS_COLLATION_ID` takes as its argument a collation name and returns the corresponding collation ID number. Collation IDs are used in the data dictionary tables and in Oracle Call Interface (OCI). Collation names are used in SQL statements and data dictionary views 
-
-For `expr`, specify the collation name as a `VARCHAR2` value. You can specify a valid named collation or a pseudo-collation, in any combination of uppercase and lowercase letters. 
-
-This function returns a `NUMBER` value. If you specify an invalid collation name, then this function returns null. 
-
-Examples
-
-The following example returns the collation ID of collation `BINARY_CI`: 
+The following example returns the collation ID of collation ` BINARY_CI ` : 
     
     
+    ```
     SELECT NLS_COLLATION_ID('BINARY_CI') 
       FROM DUAL; 
     
     NLS_COLLATION_ID('BINARY_CI')
     -----------------------------
                            147455
-
-[← Previous](NLS_CHARSET_NAME.md)
-
-[Next →](NLS_COLLATION_NAME.md)
+    ```

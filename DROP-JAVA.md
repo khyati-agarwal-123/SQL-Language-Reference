@@ -1,69 +1,59 @@
-[Previous](DROP-INMEMORY-JOIN-GROUP.html) [Next](SQL-Statements-DROP-LIBRARY-to-DROP-SYNONYM.html) JavaScript must be enabled to correctly display this content 
+##  DROP JAVA {#GUID-0D24ADCD-01C8-4FB0-B14C-F5D9FB25E321} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: DROP CONTEXT to DROP JAVA](SQL-Statements-DROP-CONTEXT-to-DROP-JAVA.html)
-  3. DROP JAVA 
+Purpose 
 
+Use the ` DROP ` ` JAVA ` statement to drop a Java source, class, or resource schema object. 
 
+> **note:** See Also: 
 
-## DROP JAVA 
+  * [ CREATE JAVA ](CREATE-JAVA.md#GUID-69E13452-1F91-4F98-B154-CF5B1C198387) for information on creating Java objects 
 
-Purpose
-
-Use the `DROP` `JAVA` statement to drop a Java source, class, or resource schema object. 
-
-See Also:
-
-  * [CREATE JAVA](CREATE-JAVA.html#GUID-69E13452-1F91-4F98-B154-CF5B1C198387) for information on creating Java objects 
-
-  * [Oracle Database Java Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JJDEV02000) for more information on resolving Java sources, classes, and resources 
+  * [ *Oracle Database Java Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JJDEV02000) for more information on resolving Java sources, classes, and resources 
 
 
 
 
-Prerequisites
+Prerequisites 
 
-The Java source, class, or resource must be in your own schema or you must have the `DROP` `ANY` `PROCEDURE` system privilege. You also must have the `EXECUTE` object privilege on Java classes to use this command. 
+The Java source, class, or resource must be in your own schema or you must have the ` DROP ` ` ANY ` ` PROCEDURE ` system privilege. You also must have the ` EXECUTE ` object privilege on Java classes to use this command. 
 
-Syntax
+Syntax 
 
-drop_java::= 
+*drop_java* ::= 
 
-![Description of drop_java.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_java.gif)[Description of the illustration drop_java.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_java.html)
+![Description of drop_java.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_java.gif)[ Description of the illustration drop_java.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_java.md)
 
-Semantics
+Semantics 
 
-IF EXISTS
+IF EXISTS 
 
-Specify `IF EXISTS` to drop an existing object. 
+Specify ` IF EXISTS ` to drop an existing object. 
 
-Specifying `IF NOT EXISTS` with `DROP` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
+Specifying ` IF NOT EXISTS ` with ` DROP ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-JAVA SOURCE
+JAVA SOURCE 
 
-Specify `SOURCE` to drop a Java source schema object and all Java class schema objects derived from it. 
+Specify ` SOURCE ` to drop a Java source schema object and all Java class schema objects derived from it. 
 
-JAVA CLASS
+JAVA CLASS 
 
-Specify `CLASS` to drop a Java class schema object. 
+Specify ` CLASS ` to drop a Java class schema object. 
 
-JAVA RESOURCE
+JAVA RESOURCE 
 
-Specify `RESOURCE` to drop a Java resource schema object. 
+Specify ` RESOURCE ` to drop a Java resource schema object. 
 
-object_name
+*object_name* 
 
-Specify the name of an existing Java class, source, or resource schema object. Enclose the `object_name` in double quotation marks to preserve lower- or mixed-case names. 
+Specify the name of an existing Java class, source, or resource schema object. Enclose the *object_name* in double quotation marks to preserve lower- or mixed-case names. 
 
-Examples
+Examples 
 
-Dropping a Java Class Object: Example
+Dropping a Java Class Object: Example 
 
-The following statement drops the Java class `Agent`, created in "[Creating a Java Class Object: Example](CREATE-JAVA.html#GUID-69E13452-1F91-4F98-B154-CF5B1C198387__BABHIECB)": 
+The following statement drops the Java class ` Agent ` , created in  " [ Creating a Java Class Object: Example ](CREATE-JAVA.md#GUID-69E13452-1F91-4F98-B154-CF5B1C198387__BABHIECB) "  : 
     
     
+    ```
     DROP JAVA CLASS "Agent";
-
-[← Previous](DROP-INMEMORY-JOIN-GROUP.md)
-
-[Next →](SQL-Statements-DROP-LIBRARY-to-DROP-SYNONYM.md)
+    ```

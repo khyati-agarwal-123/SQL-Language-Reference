@@ -1,15 +1,3 @@
-[Previous](Oracle-Compliance-with-SQLMED2008.html) [Next](Oracle-Compliance-with-SQLJRT2008.html) JavaScript must be enabled to correctly display this content 
+##  Oracle Compliance with SQL/OLB {#GUID-79118C02-7279-4582-BDFA-8EFF1EE8BB90} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Oracle and Standard SQL](Oracle-and-Standard-SQL.html)
-  3. Oracle Compliance with SQL/OLB
-
-
-
-## Oracle Compliance with SQL/OLB
-
-Oracle SQLJ conforms to SQL/OLB:1999 and not yet to SQL/OLB:2016.
-
-[← Previous](Oracle-Compliance-with-SQLMED2008.md)
-
-[Next →](Oracle-Compliance-with-SQLJRT2008.md)
+Oracle SQLJ conforms to SQL/OLB:1999 and not yet to SQL/OLB:2016. 

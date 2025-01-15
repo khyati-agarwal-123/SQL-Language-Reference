@@ -1,65 +1,58 @@
-[Previous](APPROX_PERCENTILE_AGG.html) [Next](APPROX_RANK.html) JavaScript must be enabled to correctly display this content 
+##  APPROX_PERCENTILE_DETAIL {#GUID-F9A0B9B5-671F-43CA-9FA7-69A2DD174F54} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. APPROX_PERCENTILE_DETAIL
+Syntax 
 
+![Description of approx_percentile_detail.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/approx_percentile_detail.gif)[ Description of the illustration approx_percentile_detail.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/approx_percentile_detail.md)
 
+Purpose 
 
-## APPROX_PERCENTILE_DETAIL
+` APPROX_PERCENTILE_DETAIL ` calculates approximate percentile information for the values of *expr* and returns a ` BLOB ` value, called a detail, which contains that information in a special format. 
 
-Syntax
+The acceptable data types for *expr* depend on the algorithm that you specify with the ` DETERMINISTIC ` clause. Refer to the [ DETERMINISTIC ](APPROX_PERCENTILE_DETAIL.md#GUID-F9A0B9B5-671F-43CA-9FA7-69A2DD174F54__DETERMINISTIC-0889AFA7) clause for more information. 
 
-![Description of approx_percentile_detail.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/approx_percentile_detail.gif)[Description of the illustration approx_percentile_detail.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/approx_percentile_detail.html)
+This function is commonly used with the ` GROUP ` ` BY ` clause in a ` SELECT ` statement. It calculates approximate percentile information for *expr* within each group of rows and returns a single detail for each group. 
 
-Purpose
+The details returned by ` APPROX_PERCENTILE_DETAIL ` can be used as input to the ` APPROX_PERCENTILE_AGG ` function, which enables you to perform aggregations of the details, or the ` TO_APPROX_PERCENTILE ` function, which converts a detail to a specified percentile value. You can use these three functions together to perform resource-intensive approximate percentile calculations once, store the resulting details, and then perform efficient aggregations and queries on those details. For example: 
 
-`APPROX_PERCENTILE_DETAIL` calculates approximate percentile information for the values of `expr` and returns a `BLOB` value, called a detail, which contains that information in a special format. 
+  1. Use the ` APPROX_PERCENTILE_DETAIL ` function to perform approximate percentile calculations and store the resulting details in a table or materialized view. These could be highly-granular percentile details, such as income percentile information for cities. 
 
-The acceptable data types for `expr` depend on the algorithm that you specify with the `DETERMINISTIC` clause. Refer to the [DETERMINISTIC](APPROX_PERCENTILE_DETAIL.html#GUID-F9A0B9B5-671F-43CA-9FA7-69A2DD174F54__DETERMINISTIC-0889AFA7) clause for more information. 
+  2. Use the ` APPROX_PERCENTILE_AGG ` function to aggregate the details obtained in the previous step and store the resulting details in a table or materialized view. These could be details of lower granularity, such as income percentile information for states. 
 
-This function is commonly used with the `GROUP` `BY` clause in a `SELECT` statement. It calculates approximate percentile information for `expr` within each group of rows and returns a single detail for each group. 
-
-The details returned by `APPROX_PERCENTILE_DETAIL` can be used as input to the `APPROX_PERCENTILE_AGG` function, which enables you to perform aggregations of the details, or the `TO_APPROX_PERCENTILE` function, which converts a detail to a specified percentile value. You can use these three functions together to perform resource-intensive approximate percentile calculations once, store the resulting details, and then perform efficient aggregations and queries on those details. For example: 
-
-  1. Use the `APPROX_PERCENTILE_DETAIL` function to perform approximate percentile calculations and store the resulting details in a table or materialized view. These could be highly-granular percentile details, such as income percentile information for cities. 
-
-  2. Use the `APPROX_PERCENTILE_AGG` function to aggregate the details obtained in the previous step and store the resulting details in a table or materialized view. These could be details of lower granularity, such as income percentile information for states. 
-
-  3. Use the `TO_APPROX_PERCENTILE` function to convert the stored detail values to percentile values. You can use the `TO_APPROX_PERCENTILE` function to query detail values created by the `APPROX_PERCENTILE_DETAIL` function or the `APPROX_PERCENTILE_AGG` function. 
+  3. Use the ` TO_APPROX_PERCENTILE ` function to convert the stored detail values to percentile values. You can use the ` TO_APPROX_PERCENTILE ` function to query detail values created by the ` APPROX_PERCENTILE_DETAIL ` function or the ` APPROX_PERCENTILE_AGG ` function. 
 
 
 
 
-DETERMINISTIC
+DETERMINISTIC 
 
-This clause lets you control the type of algorithm used to calculate the approximate percentile values.
+This clause lets you control the type of algorithm used to calculate the approximate percentile values. 
 
-  * If you specify `DETERMINISTIC`, then this function calculates deterministic approximate percentile information. In this case, `expr` must evaluate to a numeric value, or to a value that can be implicitly converted to a numeric value. 
+  * If you specify ` DETERMINISTIC ` , then this function calculates deterministic approximate percentile information. In this case, *expr* must evaluate to a numeric value, or to a value that can be implicitly converted to a numeric value. 
 
-  * If you omit `DETERMINSTIC`, then this function calculates nondeterministic approximate percentile information. In this case, `expr` must evaluate to a numeric or datetime value, or to a value that can be implicitly converted to a numeric or datetime value. 
-
-
-
-
-See Also:
-
-  * [APPROX_PERCENTILE_AGG](APPROX_PERCENTILE_AGG.html#GUID-72A1DAB0-4A3E-42BF-9E20-92273AD62E11)
-
-  * [TO_APPROX_PERCENTILE](TO_APPROX_PERCENTILE.html#GUID-463702B2-9199-41ED-AE03-865CABAD3E23)
+  * If you omit ` DETERMINSTIC ` , then this function calculates nondeterministic approximate percentile information. In this case, *expr* must evaluate to a numeric or datetime value, or to a value that can be implicitly converted to a numeric or datetime value. 
 
 
 
 
-Examples
+> **note:** See Also: 
 
-The examples in this section demonstrate how to use the `APPROX_PERCENTILE_DETAIL`, `APPROX_PERCENTILE_AGG`, and `TO_APPROX_PERCENTILE` functions together to perform resource-intensive approximate percentile calculations once, store the resulting details, and then perform efficient aggregations and queries on those details. 
+  * [ APPROX_PERCENTILE_AGG ](APPROX_PERCENTILE_AGG.md#GUID-72A1DAB0-4A3E-42BF-9E20-92273AD62E11)
 
-APPROX_PERCENTILE_DETAIL: Example
+  * [ TO_APPROX_PERCENTILE ](TO_APPROX_PERCENTILE.md#GUID-463702B2-9199-41ED-AE03-865CABAD3E23)
 
-The following statement queries the tables `sh`.`customers` and `sh`.`sales` for the monetary amounts for products sold to each customer. The `APPROX_PERCENTILE_DETAIL` function returns the information in a detail, called `city_detail`, for each city in which customers reside. The returned details are stored in a materialized view called `amt_sold_by_city_mv`. 
+
+
+
+Examples 
+
+The examples in this section demonstrate how to use the ` APPROX_PERCENTILE_DETAIL ` , ` APPROX_PERCENTILE_AGG ` , and ` TO_APPROX_PERCENTILE ` functions together to perform resource-intensive approximate percentile calculations once, store the resulting details, and then perform efficient aggregations and queries on those details. 
+
+APPROX_PERCENTILE_DETAIL: Example 
+
+The following statement queries the tables ` sh ` . ` customers ` and ` sh ` . ` sales ` for the monetary amounts for products sold to each customer. The ` APPROX_PERCENTILE_DETAIL ` function returns the information in a detail, called ` city_detail ` , for each city in which customers reside. The returned details are stored in a materialized view called ` amt_sold_by_city_mv ` . 
     
     
+    ```
     CREATE MATERIALIZED VIEW amt_sold_by_city_mv
     ENABLE QUERY REWRITE AS
     SELECT c.country_id country,
@@ -69,33 +62,39 @@ The following statement queries the tables `sh`.`customers` and `sh`.`sales` for
     FROM customers c, sales s
     WHERE c.cust_id = s.cust_id
     GROUP BY c.country_id, c.cust_state_province, c.cust_city;
+    ```
 
-APPROX_PERCENTILE_AGG: Examples
+APPROX_PERCENTILE_AGG: Examples 
 
-The following statement uses the `APPROX_PERCENTILE_AGG` function to read the details stored in `amt_sold_by_city_mv` and create aggregated details that contain the monetary amounts for products sold to customers in each state. These aggregated details are stored in a materialized view called `amt_sold_by_state_mv`. 
+The following statement uses the ` APPROX_PERCENTILE_AGG ` function to read the details stored in ` amt_sold_by_city_mv ` and create aggregated details that contain the monetary amounts for products sold to customers in each state. These aggregated details are stored in a materialized view called ` amt_sold_by_state_mv ` . 
     
     
+    ```
     CREATE MATERIALIZED VIEW amt_sold_by_state_mv AS
     SELECT country,
            state,
            APPROX_PERCENTILE_AGG(city_detail) state_detail
     FROM amt_sold_by_city_mv
     GROUP BY country, state;
+    ```
 
-The following statement is similar to the previous statement, except it creates aggregated details that contain the approximate monetary amounts for products sold to customers in each country. These aggregated details are stored in a materialized view called `amt_sold_by_country_mv`. 
+The following statement is similar to the previous statement, except it creates aggregated details that contain the approximate monetary amounts for products sold to customers in each country. These aggregated details are stored in a materialized view called ` amt_sold_by_country_mv ` . 
     
     
+    ```
     CREATE MATERIALIZED VIEW amt_sold_by_country_mv AS
       SELECT country,
              APPROX_PERCENTILE_AGG(city_detail) country_detail
       FROM amt_sold_by_city_mv
       GROUP BY country;
+    ```
 
-TO_APPROX_PERCENTILE: Examples
+TO_APPROX_PERCENTILE: Examples 
 
-The following statement uses the `TO_APPROX_PERCENTILE` function to query the details stored in `amt_sold_by_city_mv` and return approximate 25th percentile, 50th percentile, and 75th percentile values for monetary amounts for products sold to customers in each city: 
+The following statement uses the ` TO_APPROX_PERCENTILE ` function to query the details stored in ` amt_sold_by_city_mv ` and return approximate 25th percentile, 50th percentile, and 75th percentile values for monetary amounts for products sold to customers in each city: 
     
     
+    ```
     SELECT country,
            state,
            city,
@@ -114,10 +113,12 @@ The following statement uses the `TO_APPROX_PERCENTILE` function to query the de
       52769 Selangor     Petaling Jaya            19.29           35.43            60.2
     . . .
     
+    ```
 
-The following statement uses the `TO_APPROX_PERCENTILE` function to query the details stored in `amt_sold_by_state_mv` and return approximate 25th percentile, 50th percentile, and 75th percentile values for monetary amounts for products sold to customers in each state: 
+The following statement uses the ` TO_APPROX_PERCENTILE ` function to query the details stored in ` amt_sold_by_state_mv ` and return approximate 25th percentile, 50th percentile, and 75th percentile values for monetary amounts for products sold to customers in each state: 
     
     
+    ```
     SELECT country,
            state,
            TO_APPROX_PERCENTILE(state_detail, .25, 'NUMBER') "25th Percentile",
@@ -134,10 +135,12 @@ The following statement uses the `TO_APPROX_PERCENTILE` function to query the de
       52770 Drenthe                16.76            31.7           53.89
       52770 Flevopolder            20.38           39.73           61.81
     . . .
+    ```
 
-The following statement uses the `TO_APPROX_PERCENTILE` function to query the details stored in `amt_sold_by_country_mv` and return approximate 25th percentile, 50th percentile, and 75th percentile values for monetary amounts for products sold to customers in each country: 
+The following statement uses the ` TO_APPROX_PERCENTILE ` function to query the details stored in ` amt_sold_by_country_mv ` and return approximate 25th percentile, 50th percentile, and 75th percentile values for monetary amounts for products sold to customers in each country: 
     
     
+    ```
     SELECT country,
            TO_APPROX_PERCENTILE(country_detail, .25, 'NUMBER') "25th Percentile",
            TO_APPROX_PERCENTILE(country_detail, .50, 'NUMBER') "50th Percentile",
@@ -153,10 +156,12 @@ The following statement uses the `TO_APPROX_PERCENTILE` function to query the de
         52772           18.08           33.72           54.16
         52773           15.67           29.61           50.65
     . . .
+    ```
 
-`APPROX_PERCENTILE_AGG` takes as its input a column of details containing approximate percentile information, and enables you to perform aggregations of that information. The following statement demonstrates how approximate percentile details can interpreted by `APPROX_PERCENTILE_AGG` to provide an input to the `TO_APPROX_PERCENTILE` function. Like the previous example, this query returns approximate 25th percentile values for monetary amounts for products sold to customers in each country. Note that the results are identical to those returned for the 25th percentile in the previous example. 
+` APPROX_PERCENTILE_AGG ` takes as its input a column of details containing approximate percentile information, and enables you to perform aggregations of that information. The following statement demonstrates how approximate percentile details can interpreted by ` APPROX_PERCENTILE_AGG ` to provide an input to the ` TO_APPROX_PERCENTILE ` function. Like the previous example, this query returns approximate 25th percentile values for monetary amounts for products sold to customers in each country. Note that the results are identical to those returned for the 25th percentile in the previous example. 
     
     
+    ```
     SELECT country,
            TO_APPROX_PERCENTILE(APPROX_PERCENTILE_AGG(city_detail), .25, 'NUMBER') "25th Percentile"
     FROM amt_sold_by_city_mv
@@ -171,33 +176,39 @@ The following statement uses the `TO_APPROX_PERCENTILE` function to query the de
          52772           18.08
          52773           15.67
     . . .
+    ```
 
-Query Rewrite and Materialized Views Based on Approximate Queries: Example
+Query Rewrite and Materialized Views Based on Approximate Queries: Example 
 
-In [APPROX_PERCENTILE_DETAIL: Example](APPROX_PERCENTILE_DETAIL.html#GUID-F9A0B9B5-671F-43CA-9FA7-69A2DD174F54__APPROX_PERCENTILE_DETAILEXAMPLE-088B773B), the `ENABLE` `QUERY` `REWRITE` clause is specified when creating the materialized view `amt_sold_by_city_mv`. This enables queries that contain approximation functions, such as `APPROX_MEDIAN` or `APPROX_PERCENTILE`, to be rewritten using the materialized view. 
+In [ APPROX_PERCENTILE_DETAIL: Example ](APPROX_PERCENTILE_DETAIL.md#GUID-F9A0B9B5-671F-43CA-9FA7-69A2DD174F54__APPROX_PERCENTILE_DETAILEXAMPLE-088B773B) , the ` ENABLE ` ` QUERY ` ` REWRITE ` clause is specified when creating the materialized view ` amt_sold_by_city_mv ` . This enables queries that contain approximation functions, such as ` APPROX_MEDIAN ` or ` APPROX_PERCENTILE ` , to be rewritten using the materialized view. 
 
-For example, ensure that query rewrite is enabled at either the database level or for the current session, and run the following query:
+For example, ensure that query rewrite is enabled at either the database level or for the current session, and run the following query: 
     
     
+    ```
     SELECT c.country_id country,
            APPROX_MEDIAN(s.amount_sold) amount_median
     FROM customers c, sales s
     WHERE c.cust_id = s.cust_id
     GROUP BY c.country_id;
     
+    ```
 
-Explain the plan by querying `DBMS_XPLAN`: 
+Explain the plan by querying ` DBMS_XPLAN ` : 
     
     
+    ```
     SET LINESIZE 300
     SET PAGESIZE 0
     COLUMN plan_table_output FORMAT A150
     
     SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY_CURSOR(format=>'BASIC'));
+    ```
 
-As shown in the following plan, the optimizer used the materialized view `amt_sold_by_city_mv` for the query: 
+As shown in the following plan, the optimizer used the materialized view ` amt_sold_by_city_mv ` for the query: 
     
     
+    ```
     EXPLAINED SQL STATEMENT:
     ------------------------
     SELECT c.country_id country, APPROX_MEDIAN(s.amount_sold)
@@ -213,7 +224,4 @@ As shown in the following plan, the optimizer used the materialized view `amt_so
     |   1 |  HASH GROUP BY APPROX         |                     |
     |   2 |   MAT_VIEW REWRITE ACCESS FULL| AMT_SOLD_BY_CITY_MV |
     -------------------------------------------------------------
-
-[← Previous](APPROX_PERCENTILE_AGG.md)
-
-[Next →](APPROX_RANK.md)
+    ```

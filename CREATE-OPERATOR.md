@@ -1,162 +1,155 @@
-[Previous](create-mle-module.html) [Next](CREATE-OUTLINE.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: CREATE LIBRARY to CREATE SCHEMA](SQL-Statements-CREATE-LIBRARY-to-CREATE-SCHEMA.html)
-  3. CREATE OPERATOR 
-
-
-
-## CREATE OPERATOR 
+##  CREATE OPERATOR {#GUID-62676C58-6F57-4572-8C09-7984A8E3EE9F} 
 
 Purpose 
 
-Use the `CREATE` `OPERATOR` statement to create a new operator and define its bindings. 
+Use the ` CREATE ` ` OPERATOR ` statement to create a new operator and define its bindings. 
 
 Operators can be referenced by indextypes and by SQL queries and DML statements. The operators, in turn, reference functions, packages, types, and other user-defined objects. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Cartridge Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI2100) and [Oracle Database Concepts](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT1859) for a discussion of these dependencies and of operators in general 
+[ *Oracle Database Data Cartridge Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI2100) and [ *Oracle Database Concepts* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT1859) for a discussion of these dependencies and of operators in general 
 
 Prerequisites 
 
-To create an operator in your own schema, you must have the `CREATE` `OPERATOR` system privilege. To create an operator in another schema, you must have the `CREATE` `ANY` `OPERATOR` system privilege. In either case, you must also have the `EXECUTE` object privilege on the functions and operators referenced. 
+To create an operator in your own schema, you must have the ` CREATE ` ` OPERATOR ` system privilege. To create an operator in another schema, you must have the ` CREATE ` ` ANY ` ` OPERATOR ` system privilege. In either case, you must also have the ` EXECUTE ` object privilege on the functions and operators referenced. 
 
-Syntax
+Syntax 
 
-create_operator::= 
+*create_operator* ::= 
 
-![Description of create_operator.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/create_operator.gif)[Description of the illustration create_operator.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/create_operator.html)
+![Description of create_operator.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/create_operator.gif)[ Description of the illustration create_operator.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/create_operator.md)
 
-binding_clause::= 
+*binding_clause* ::= 
 
-![Description of binding_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/binding_clause.gif)[Description of the illustration binding_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/binding_clause.html)
+![Description of binding_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/binding_clause.gif)[ Description of the illustration binding_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/binding_clause.md)
 
-implementation_clause::= 
+*implementation_clause* ::= 
 
-![Description of implementation_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/implementation_clause.gif)[Description of the illustration implementation_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/implementation_clause.html)
+![Description of implementation_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/implementation_clause.gif)[ Description of the illustration implementation_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/implementation_clause.md)
 
-context_clause::= 
+*context_clause* ::= 
 
-![Description of context_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/context_clause.gif)[Description of the illustration context_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/context_clause.html)
+![Description of context_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/context_clause.gif)[ Description of the illustration context_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/context_clause.md)
 
-using_function_clause::= 
+*using_function_clause* ::= 
 
-![Description of using_function_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/using_function_clause.gif)[Description of the illustration using_function_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/using_function_clause.html)
+![Description of using_function_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/using_function_clause.gif)[ Description of the illustration using_function_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/using_function_clause.md)
 
-Semantics
+Semantics 
 
-OR REPLACE
+OR REPLACE 
 
-Specify `OR` `REPLACE` to replace the definition of the operator schema object. 
+Specify ` OR ` ` REPLACE ` to replace the definition of the operator schema object. 
 
-Restriction on Replacing an Operator
+Restriction on Replacing an Operator 
 
-You can replace the definition only if the operator has no dependent objects, such as indextypes supporting the operator.
+You can replace the definition only if the operator has no dependent objects, such as indextypes supporting the operator. 
 
-IF NOT EXISTS
+IF NOT EXISTS 
 
-Specifying `IF NOT EXISTS` has the following effects: 
+Specifying ` IF NOT EXISTS ` has the following effects: 
 
-  * If the operator does not exist, a new operator is created at the end of the statement.
+  * If the operator does not exist, a new operator is created at the end of the statement. 
 
-  * If the operator exists, this is the operator you have at the end of the statement. A new one is not created because the older one is detected.
-
-
+  * If the operator exists, this is the operator you have at the end of the statement. A new one is not created because the older one is detected. 
 
 
-You can have one of `OR REPLACE` or `IF NOT EXISTS` in a statement at a time. Using both `OR REPLACE` with `IF NOT EXISTS` in the very same statement results in the following error: `ORA-11541: REPLACE and IF NOT EXISTS cannot coexist in the same DDL statement`. 
 
-Using `IF EXISTS` with `CREATE` results in `ORA-11543: Incorrect IF NOT EXISTS clause for CREATE statement`. 
 
-schema
+You can have *one* of ` OR REPLACE ` or ` IF NOT EXISTS ` in a statement at a time. Using both ` OR REPLACE ` with ` IF NOT EXISTS ` in the very same statement results in the following error: ` ORA-11541: REPLACE and IF NOT EXISTS cannot coexist in the same DDL statement ` . 
 
-Specify the schema containing the operator. If you omit `schema`, then the database creates the operator in your own schema. 
+Using ` IF EXISTS ` with ` CREATE ` results in ` ORA-11543: Incorrect IF NOT EXISTS clause for CREATE statement ` . 
 
-operator
+*schema* 
 
-Specify the name of the operator to be created. The name must satisfy the requirements listed in "[Database Object Naming Rules](Database-Object-Names-and-Qualifiers.html#GUID-75337742-67FD-4EC0-985F-741C93D918DA)". 
+Specify the schema containing the operator. If you omit *schema* , then the database creates the operator in your own schema. 
 
-binding_clause
+*operator* 
 
-Use the `binding_clause` to specify one or more parameter data types (`parameter_type`) for binding the operator to a function. The signature of each bindingâthe sequence of the data types of the arguments to the corresponding functionâmust be unique according to the rules of overloading. 
+Specify the name of the operator to be created. The name must satisfy the requirements listed in  " [ Database Object Naming Rules ](Database-Object-Names-and-Qualifiers.md#GUID-75337742-67FD-4EC0-985F-741C93D918DA) "  . 
 
-The `parameter_type` can itself be an object type. If it is, then you can optionally qualify it with its schema. 
+*binding_clause* 
 
-Restriction on Binding Operators
+Use the *binding_clause* to specify one or more parameter data types ( *parameter_type* ) for binding the operator to a function. The signature of each binding—the sequence of the data types of the arguments to the corresponding function—must be unique according to the rules of overloading. 
 
-You cannot specify a `parameter_type` of `REF`, `LONG`, or `LONG` `RAW`. 
+The *parameter_type* can itself be an object type. If it is, then you can optionally qualify it with its schema. 
 
-See Also:
+Restriction on Binding Operators 
 
-[Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS00807) for more information about overloading 
+You cannot specify a *parameter_type* of ` REF ` , ` LONG ` , or ` LONG ` ` RAW ` . 
 
-RETURN Clause
+> **note:** See Also: 
 
-Specify the return data type for the binding.
+[ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS00807) for more information about overloading 
 
-The `return_type` can itself be an object type. If so, then you can optionally qualify it with its schema. 
+RETURN Clause 
 
-Restriction on Binding Return Data Type
+Specify the return data type for the binding. 
 
-You cannot specify a `return_type` of `REF`, `LONG`, or `LONG` `RAW`. 
+The *return_type* can itself be an object type. If so, then you can optionally qualify it with its schema. 
 
-SHARING
+Restriction on Binding Return Data Type 
+
+You cannot specify a *return_type* of ` REF ` , ` LONG ` , or ` LONG ` ` RAW ` . 
+
+SHARING 
 
 Use the sharing clause if you want to create the object in an application root in the context of an application maintenance. This type of object is called an application common object and it can be shared with the application PDBs that belong to the application root. 
 
-You can specify how the object is shared using one of the following sharing attributes:
+You can specify how the object is shared using one of the following sharing attributes: 
 
-  * `METADATA` \- A metadata link shares the metadata, but its data is unique to each container. This type of object is referred to as a metadata-linked application common object. 
+  * ` METADATA ` \- A metadata link shares the metadata, but its data is unique to each container. This type of object is referred to as a metadata-linked application common object. 
 
-  * `NONE` \- The object is not shared and can only be accessed in the application root. 
-
-
+  * ` NONE ` \- The object is not shared and can only be accessed in the application root. 
 
 
-implementation_clause
+
+
+*implementation_clause* 
 
 Use this clause to describe the implementation of the binding. 
 
-ANCILLARY TO Clause
+ANCILLARY TO Clause 
 
-Use the `ANCILLARY` `TO` clause to indicate that the operator binding is ancillary to the specified primary operator binding (`primary_operator`). If you specify this clause, then do not specify a previous binding with just one number parameter. 
+Use the ` ANCILLARY ` ` TO ` clause to indicate that the operator binding is ancillary to the specified primary operator binding ( *primary_operator* ). If you specify this clause, then do not specify a previous binding with just one number parameter. 
 
-context_clause
+*context_clause* 
 
-Use the `context_clause` to describe the functional implementation of a binding that is not ancillary to a primary operator binding. 
+Use the *context_clause* to describe the functional implementation of a binding that is not ancillary to a primary operator binding. 
 
-WITH INDEX CONTEXT, SCAN CONTEXT
+WITH INDEX CONTEXT, SCAN CONTEXT 
 
-Use this clause to indicate that the functional evaluation of the operator uses the index and a scan context that is specified by the implementation type.
+Use this clause to indicate that the functional evaluation of the operator uses the index and a scan context that is specified by the implementation type. 
 
-COMPUTE ANCILLARY DATA
+COMPUTE ANCILLARY DATA 
 
-Specify `COMPUTE` `ANCILLARY` `DATA` to indicate that the operator binding computes ancillary data. 
+Specify ` COMPUTE ` ` ANCILLARY ` ` DATA ` to indicate that the operator binding computes ancillary data. 
 
-WITH COLUMN CONTEXT
+WITH COLUMN CONTEXT 
 
-Specify `WITH` `COLUMN` `CONTEXT` to indicate that Oracle Database should pass the column information to the functional implementation for the operator. 
+Specify ` WITH ` ` COLUMN ` ` CONTEXT ` to indicate that Oracle Database should pass the column information to the functional implementation for the operator. 
 
-If you specify this clause, then the signature of the function implemented must include one extra `ODCIFuncCallInfo` structure. 
+If you specify this clause, then the signature of the function implemented must include one extra ` ODCIFuncCallInfo ` structure. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Cartridge Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI024) for instructions on using the `ODCIFuncCallInfo` routine 
+[ *Oracle Database Data Cartridge Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI024) for instructions on using the ` ODCIFuncCallInfo ` routine 
 
-using_function_clause
+*using_function_clause* 
 
-The `using_function_clause` lets you specify the function that provides the implementation for the binding. The `function_name` can be a standalone function, packaged function, type method, or a synonym for any of these. 
+The *using_function_clause* lets you specify the function that provides the implementation for the binding. The *function_name* can be a standalone function, packaged function, type method, or a synonym for any of these. 
 
-If the function is subsequently dropped, then the database marks all dependent objects `INVALID`, including the operator. However, if you then subsequently issue an `ALTER` `OPERATOR` ... `DROP` `BINDING` statement to drop the binding, then subsequent queries and DML will revalidate the dependent objects. 
+If the function is subsequently dropped, then the database marks all dependent objects ` INVALID ` , including the operator. However, if you then subsequently issue an ` ALTER ` ` OPERATOR ` ... ` DROP ` ` BINDING ` statement to drop the binding, then subsequent queries and DML will revalidate the dependent objects. 
 
-Examples
+Examples 
 
-Creating User-Defined Operators: Example
+Creating User-Defined Operators: Example 
 
-This example creates a very simple functional implementation of equality and then creates an operator that uses the function. For a more complete set of examples, see [Oracle Database Data Cartridge Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI2100). 
+This example creates a very simple functional implementation of equality and then creates an operator that uses the function. For a more complete set of examples, see [ *Oracle Database Data Cartridge Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI2100) . 
     
     
+    ```
     CREATE FUNCTION eq_f(a VARCHAR2, b VARCHAR2) RETURN NUMBER AS
     BEGIN
        IF a = b THEN RETURN 1;
@@ -169,7 +162,4 @@ This example creates a very simple functional implementation of equality and the
        BINDING (VARCHAR2, VARCHAR2) 
        RETURN NUMBER 
        USING eq_f; 
-
-[← Previous](create-mle-module.md)
-
-[Next →](CREATE-OUTLINE.md)
+    ```

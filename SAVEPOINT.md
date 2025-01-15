@@ -1,24 +1,16 @@
-[Previous](ROLLBACK.html) [Next](SELECT.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: MERGE to UPDATE](SQL-Statements-MERGE-to-UPDATE.html)
-  3. SAVEPOINT 
-
-
-
-## SAVEPOINT 
+##  SAVEPOINT {#GUID-78EEA746-0021-42E8-9971-3BA6DFFEE794} 
 
 Purpose 
 
-Use the `SAVEPOINT` statement to create a name for a system change number (SCN), to which you can later roll back. 
+Use the ` SAVEPOINT ` statement to create a name for a system change number (SCN), to which you can later roll back. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Concepts](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT016) for information on savepoints. 
+  * [ *Oracle Database Concepts* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT016) for information on savepoints. 
 
-  * [ROLLBACK](ROLLBACK.html#GUID-94551F0C-A47F-43DE-BC68-9B1C1ED38C93) for information on rolling back transactions 
+  * [ ROLLBACK ](ROLLBACK.md#GUID-94551F0C-A47F-43DE-BC68-9B1C1ED38C93) for information on rolling back transactions 
 
-  * [SET TRANSACTION](SET-TRANSACTION.html#GUID-F11E1E30-5871-48D1-8266-F80A1DF126A1) for information on setting characteristics of the current transaction 
+  * [ SET TRANSACTION ](SET-TRANSACTION.md#GUID-F11E1E30-5871-48D1-8266-F80A1DF126A1) for information on setting characteristics of the current transaction 
 
 
 
@@ -27,27 +19,28 @@ Prerequisites
 
 None. 
 
-Syntax
+Syntax 
 
-savepoint::= 
+*savepoint* ::= 
 
-![Description of savepoint.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/savepoint.gif)[Description of the illustration savepoint.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/savepoint.html)
+![Description of savepoint.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/savepoint.gif)[ Description of the illustration savepoint.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/savepoint.md)
 
-Semantics
+Semantics 
 
-savepoint
+*savepoint* 
 
 Specify the name of the savepoint to be created. 
 
 Savepoint names must be distinct within a given transaction. If you create a second savepoint with the same identifier as an earlier savepoint, then the earlier savepoint is erased. After a savepoint has been created, you can either continue processing, commit your work, roll back the entire transaction, or roll back to the savepoint. 
 
-Examples
+Examples 
 
-Creating Savepoints: Example
+Creating Savepoints: Example 
 
-To update the salary for `Banda` and `Greene` in the sample table `hr.employees`, check that the total department salary does not exceed 314,000, then reenter the salary for `Greene`: 
+To update the salary for ` Banda ` and ` Greene ` in the sample table ` hr.employees ` , check that the total department salary does not exceed 314,000, then reenter the salary for ` Greene ` : 
     
     
+    ```
     UPDATE employees 
         SET salary = 7000 
         WHERE last_name = 'Banda';
@@ -67,7 +60,4 @@ To update the salary for `Banda` and `Greene` in the sample table `hr.employees`
         WHERE last_name = 'Greene';
      
     COMMIT; 
-
-[← Previous](ROLLBACK.md)
-
-[Next →](SELECT.md)
+    ```

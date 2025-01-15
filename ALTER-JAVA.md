@@ -1,107 +1,97 @@
-[Previous](ALTER-INMEMORY-JOIN-GROUP.html) [Next](alter-json-relational-duality-view.html) JavaScript must be enabled to correctly display this content 
+##  ALTER JAVA {#GUID-6B211750-3247-4D71-9533-3DD8F66640CD} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: ADMINISTER KEY MANAGEMENT to ALTER JSON RELATIONAL DUALITY VIEW](SQL-Statements-ADMINISTER-KEY-MANAGEMENT-to-ALTER-JAVA.html)
-  3. ALTER JAVA 
+Purpose 
 
+Use the ` ALTER ` ` JAVA ` statement to force the resolution of a Java class schema object or compilation of a Java source schema object. (You cannot call the methods of a Java class before all its external references to Java names are associated with other classes.) 
 
+> **note:** See Also: 
 
-## ALTER JAVA 
+[ *Oracle Database Java Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JJDEV02000) for more information on resolving Java classes and compiling Java sources 
 
-Purpose
+Prerequisites 
 
-Use the `ALTER` `JAVA` statement to force the resolution of a Java class schema object or compilation of a Java source schema object. (You cannot call the methods of a Java class before all its external references to Java names are associated with other classes.) 
+The Java source or class must be in your own schema, or you must have the ` ALTER ` ` ANY ` ` PROCEDURE ` system privilege. You must also have the ` EXECUTE ` object privilege on Java classes. 
 
-See Also:
+Syntax 
 
-[Oracle Database Java Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JJDEV02000) for more information on resolving Java classes and compiling Java sources 
+*alter_java* ::= 
 
-Prerequisites
+![Description of alter_java.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_java.gif)[ Description of the illustration alter_java.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_java.md)( *invoker_rights_clause::=* ) 
 
-The Java source or class must be in your own schema, or you must have the `ALTER` `ANY` `PROCEDURE` system privilege. You must also have the `EXECUTE` object privilege on Java classes. 
+*invoker_rights_clause* ::= 
 
-Syntax
+![Description of invoker_rights_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/invoker_rights_clause.gif)[ Description of the illustration invoker_rights_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/invoker_rights_clause.md)
 
-alter_java::= 
+Semantics 
 
-![Description of alter_java.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_java.gif)[Description of the illustration alter_java.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_java.html)([invoker_rights_clause::=](ALTER-JAVA.html#GUID-6B211750-3247-4D71-9533-3DD8F66640CD__I2208708)) 
+IF EXISTS 
 
-invoker_rights_clause::= 
+Specify ` IF EXISTS ` to alter an existing table. 
 
-![Description of invoker_rights_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/invoker_rights_clause.gif)[Description of the illustration invoker_rights_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/invoker_rights_clause.html)
+Specifying ` IF NOT EXISTS ` with ` ALTER VIEW ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-Semantics
+JAVA SOURCE 
 
-IF EXISTS
+Use ` ALTER ` ` JAVA ` ` SOURCE ` to compile a Java source schema object. 
 
-Specify `IF EXISTS` to alter an existing table. 
+JAVA CLASS 
 
-Specifying `IF NOT EXISTS` with `ALTER VIEW` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
+Use ` ALTER ` ` JAVA ` ` CLASS ` to resolve a Java class schema object. 
 
-JAVA SOURCE
+*object_name* 
 
-Use `ALTER` `JAVA` `SOURCE` to compile a Java source schema object. 
+Specify a previously created Java class or source schema object. Use double quotation marks to preserve lower- or mixed-case names. 
 
-JAVA CLASS
+RESOLVER 
 
-Use `ALTER` `JAVA` `CLASS` to resolve a Java class schema object. 
+The ` RESOLVER ` clause lets you specify how schemas are searched for referenced fully specified Java names, using the mapping pairs specified when the Java class or source was created. 
 
-object_name
+> **note:** See Also: 
 
-Specify a previously created Java class or source schema object. Use double quotation marks to preserve lower- or mixed-case names.
+[ CREATE JAVA ](CREATE-JAVA.md#GUID-69E13452-1F91-4F98-B154-CF5B1C198387) and  " [ Resolving a Java Class: Example ](ALTER-JAVA.md#GUID-6B211750-3247-4D71-9533-3DD8F66640CD__I2136137) " 
 
-RESOLVER
+RESOLVE | COMPILE 
 
-The `RESOLVER` clause lets you specify how schemas are searched for referenced fully specified Java names, using the mapping pairs specified when the Java class or source was created. 
-
-See Also:
-
-[CREATE JAVA](CREATE-JAVA.html#GUID-69E13452-1F91-4F98-B154-CF5B1C198387) and "[Resolving a Java Class: Example](ALTER-JAVA.html#GUID-6B211750-3247-4D71-9533-3DD8F66640CD__I2136137)"
-
-RESOLVE | COMPILE
-
-`RESOLVE` and `COMPILE` are synonymous keywords. They let you specify that Oracle Database should attempt to resolve the primary Java class schema object. 
+` RESOLVE ` and ` COMPILE ` are synonymous keywords. They let you specify that Oracle Database should attempt to resolve the primary Java class schema object. 
 
   * When applied to a class, resolution of referenced names to other class schema objects occurs. 
 
-  * When applied to a source, source compilation occurs.
+  * When applied to a source, source compilation occurs. 
 
 
 
 
-invoker_rights_clause
+*invoker_rights_clause* 
 
-The `invoker_rights_clause` lets you specify whether the methods of the class execute with the privileges and in the schema of the user who defined it or with the privileges and in the schema of `CURRENT_USER`. 
+The *invoker_rights_clause* lets you specify whether the methods of the class execute with the privileges and in the schema of the user who defined it or with the privileges and in the schema of ` CURRENT_USER ` . 
 
 This clause also determines how Oracle Database resolves external names in queries, DML operations, and dynamic SQL statements in the member functions and procedures of the type. 
 
-AUTHID CURRENT_USER
+AUTHID CURRENT_USER 
 
-Specify `CURRENT_USER` if you want the methods of the class to execute with the privileges of `CURRENT_USER`. This clause is the default and creates an invoker-rights class. 
+Specify ` CURRENT_USER ` if you want the methods of the class to execute with the privileges of ` CURRENT_USER ` . This clause is the default and creates an  invoker-rights class  . 
 
-This clause also specifies that external names in queries, DML operations, and dynamic SQL statements resolve in the schema of `CURRENT_USER`. External names in all other statements resolve in the schema in which the methods reside. 
+This clause also specifies that external names in queries, DML operations, and dynamic SQL statements resolve in the schema of ` CURRENT_USER ` . External names in all other statements resolve in the schema in which the methods reside. 
 
-AUTHID DEFINER
+AUTHID DEFINER 
 
-Specify `DEFINER` if you want the methods of the class to execute with the privileges of the user who defined the class. 
+Specify ` DEFINER ` if you want the methods of the class to execute with the privileges of the user who defined the class. 
 
-This clause also specifies that external names resolve in the schema where the methods reside.
+This clause also specifies that external names resolve in the schema where the methods reside. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS008) for information on how `CURRENT_USER` is determined 
+[ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS008) for information on how ` CURRENT_USER ` is determined 
 
-Examples
+Examples 
 
-Resolving a Java Class: Example 
+Resolving a Java Class: Exampl  e 
 
-The following statement forces the resolution of a Java class:
+The following statement forces the resolution of a Java class: 
     
     
+    ```
     ALTER JAVA CLASS "Agent"
        RESOLVER (("/usr/bin/bfile_dir/*" pm)(* public))
        RESOLVE;
-
-[← Previous](ALTER-INMEMORY-JOIN-GROUP.md)
-
-[Next →](alter-json-relational-duality-view.md)
+    ```

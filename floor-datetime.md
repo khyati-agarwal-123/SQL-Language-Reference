@@ -1,56 +1,50 @@
-[Previous](FIRST_VALUE.html) [Next](floor-interval.html) JavaScript must be enabled to correctly display this content 
+##  FLOOR (datetime) {#GUID-3EB4F1BA-9D18-437C-96BA-D3B0282DDE97} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. FLOOR (datetime)
-
-
-
-## FLOOR (datetime)
-
-Syntax
+Syntax 
 
   
 
 
-![Description of floor_datetimes.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/floor_datetimes.gif)[Description of the illustration floor_datetimes.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/floor_datetimes.html)
+![Description of floor_datetimes.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/floor_datetimes.gif)[ Description of the illustration floor_datetimes.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/floor_datetimes.md)
 
   
 
 
-Purpose
+Purpose 
 
-`FLOOR(datetime)` returns the date or the timestamp rounded down to the unit specified by the second argument `fmt`, the format model. This function is not sensitive to the `NLS_CALENDAR` session parameter. It operates according to the rules of the Gregorian calendar. The value returned is always of data type `DATE`, even if you specify a different datetime data type for the first argument. If you do not specify the second argument, the default format model '`DD`' is used. 
+` FLOOR(datetime) ` returns the date or the timestamp rounded down to the unit specified by the second argument *fmt* , the format model. This function is not sensitive to the ` NLS_CALENDAR ` session parameter. It operates according to the rules of the Gregorian calendar. The value returned is always of data type ` DATE ` , even if you specify a different datetime data type for the first argument. If you do not specify the second argument, the default format model ' ` DD ` ' is used. 
 
-The `FLOOR` and `TRUNC` functions are synonymous for dates and timestamps. 
+The ` FLOOR ` and ` TRUNC ` functions are synonymous for dates and timestamps. 
 
-See Also:
+> **note:** See Also: 
 
-Refer to [CEIL, FLOOR, ROUND, and TRUNC Date Functions](ROUND-and-TRUNC-Date-Functions.html#GUID-8E10AB76-21DA-490F-A389-023B648DDEF8) for the permitted format models to use in `fmt`. 
+Refer to [ CEIL, FLOOR, ROUND, and TRUNC Date Functions ](ROUND-and-TRUNC-Date-Functions.md#GUID-8E10AB76-21DA-490F-A389-023B648DDEF8) for the permitted format models to use in *fmt* . 
 
-Examples
+Examples 
 
-For these examples `NLS_DATE_FORMAT` is set: 
+For these examples ` NLS_DATE_FORMAT ` is set: 
     
     
+    ```
     ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YYYY HH24:MI:SS';
     
+    ```
     
     
+    ```
     SELECT FLOOR(TO_DATE ('28-FEB-2023','DD-MON-YYYY'), 'MM') AS month_floor;
     
     MONTH_FLOOR
     --------------------
     01-FEB-2023 00:00:00
+    ```
     
     
+    ```
     SELECT FLOOR(TO_TIMESTAMP ('28-FEB-2023 14:10:10','DD-MON-YYYY HH24:MI:SS'),'HH24') AS hour_floor;
     
     HOUR_FLOOR
     --------------------
     28-FEB-2023 14:00:00
     
-
-[← Previous](FIRST_VALUE.md)
-
-[Next →](floor-interval.md)
+    ```

@@ -1,34 +1,27 @@
-[Previous](con_id_to_guid.html) [Next](CON_NAME_TO_ID.html) JavaScript must be enabled to correctly display this content 
+##  CON_ID_TO_UID {#GUID-0C8239D7-5848-4C23-8680-E0B19490C48B} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. CON_ID_TO_UID
-
-
-
-## CON_ID_TO_UID
-
-Syntax
+Syntax 
 
   
 
 
-![Description of con_id_to_uid.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/con_id_to_uid.gif)[Description of the illustration con_id_to_uid.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/con_id_to_uid.html)
+![Description of con_id_to_uid.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/con_id_to_uid.gif)[ Description of the illustration con_id_to_uid.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/con_id_to_uid.md)
 
   
 
 
-Purpose
+Purpose 
 
-`CON_ID_TO_UID` takes as an argument a container `CON_ID` and returns the container's `UNIQUE ID` ( `UID`). For `CON_ID` you must specify a number or an expression that resolves to a number. The function returns a `NUMBER` value. 
+` CON_ID_TO_UID ` takes as an argument a container ` CON_ID ` and returns the container's ` UNIQUE ID ` ( ` UID ` ). For ` CON_ID ` you must specify a number or an expression that resolves to a number. The function returns a ` NUMBER ` value. 
 
 This function is useful in a multitentant container database (CDB). 
 
-Example
+Example 
 
-The following query displays the `CON_ID`, `NAME` and `CON_UID` for all containers in a CDB: 
+The following query displays the ` CON_ID ` , ` NAME ` and ` CON_UID ` for all containers in a CDB: 
     
     
+    ```
     SELECT CON_ID, NAME, CON_UID FROM V$CONTAINERS;
     
     CON_ID      NAME           CON_UID
@@ -37,15 +30,14 @@ The following query displays the `CON_ID`, `NAME` and `CON_UID` for all containe
        2        PDB$SEED       2929762556
        3        CDB1_PDB1      3483444080
        4        SALESPDB       2221053340 
+    ```
 
-The following statement returns the container `CON_UID` given the container `CON_ID` 4: 
+The following statement returns the container ` CON_UID ` given the container ` CON_ID ` 4: 
     
     
+    ```
     SELECT CON_ID_TO_UID(4) "PDB_UID" FROM DUAL;
         PDB_UID
         –------------
         2221053340
-
-[← Previous](con_id_to_guid.md)
-
-[Next →](CON_NAME_TO_ID.md)
+    ```

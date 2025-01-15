@@ -1,26 +1,19 @@
-[Previous](REF.html) [Next](REGEXP_COUNT.html) JavaScript must be enabled to correctly display this content 
+##  REFTOHEX {#GUID-3F8A9932-063D-4EF1-85B7-03D823F6AC09} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. REFTOHEX 
+Syntax 
 
+![Description of reftohex.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/reftohex.gif)[ Description of the illustration reftohex.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/reftohex.md)
 
+Purpose 
 
-## REFTOHEX 
+` REFTOHEX ` converts argument *expr* to a character value containing its hexadecimal equivalent. *expr* must return a ` REF ` . 
 
-Syntax
+Examples 
 
-![Description of reftohex.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/reftohex.gif)[Description of the illustration reftohex.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/reftohex.html)
-
-Purpose
-
-`REFTOHEX` converts argument `expr` to a character value containing its hexadecimal equivalent. `expr` must return a `REF`. 
-
-Examples
-
-The sample schema `oe` contains a `warehouse_typ`. The following example builds on that type to illustrate how to convert the `REF` value of a column to a character value containing its hexadecimal equivalent: 
+The sample schema ` oe ` contains a ` warehouse_typ ` . The following example builds on that type to illustrate how to convert the ` REF ` value of a column to a character value containing its hexadecimal equivalent: 
     
     
+    ```
     CREATE TABLE warehouse_table OF warehouse_typ
        (PRIMARY KEY (warehouse_id));
     
@@ -37,7 +30,4 @@ The sample schema `oe` contains a `warehouse_typ`. The following example builds 
     REFTOHEX(BUILDING)
     --------------------------------------------------------------------------
     0000220208859B5E9255C31760E034080020825436859B5E9255C21760E034080020825436
-
-[← Previous](REF.md)
-
-[Next →](REGEXP_COUNT.md)
+    ```

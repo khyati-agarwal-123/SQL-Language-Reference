@@ -1,28 +1,21 @@
-[Previous](Model-Conditions.html) [Next](Pattern-matching-Conditions.html) JavaScript must be enabled to correctly display this content 
+##  Multiset Conditions {#GUID-E8164A15-715A-40A0-944D-26DF4C84DE3F} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Conditions](Conditions.html)
-  3. Multiset Conditions 
+Multiset conditions test various aspects of nested tables. 
 
+###  IS A SET Condition {#GUID-1F61D1E7-4EA7-4254-8056-CB74ACFF254D} 
 
+Use ` IS ` ` A ` ` SET ` conditions to test whether a specified nested table is composed of unique elements. The condition returns ` UNKNOWN ` if the nested table is ` NULL ` . Otherwise, it returns ` TRUE ` if the nested table is a set, even if it is a nested table of length zero, and ` FALSE ` otherwise. 
 
-## Multiset Conditions 
+*is_a_set_condition* ::= 
 
-Multiset conditions test various aspects of nested tables.
+![Description of is_a_set_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_a_set_condition.gif)[ Description of the illustration is_a_set_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_a_set_condition.md)
 
-### IS A SET Condition 
+Example 
 
-Use `IS` `A` `SET` conditions to test whether a specified nested table is composed of unique elements. The condition returns `UNKNOWN` if the nested table is `NULL`. Otherwise, it returns `TRUE` if the nested table is a set, even if it is a nested table of length zero, and `FALSE` otherwise. 
-
-is_a_set_condition::= 
-
-![Description of is_a_set_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_a_set_condition.gif)[Description of the illustration is_a_set_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_a_set_condition.html)
-
-Example
-
-The following example selects from the table `customers_demo` those rows in which the `cust_address_ntab` nested table column contains unique elements: 
+The following example selects from the table ` customers_demo ` those rows in which the ` cust_address_ntab ` nested table column contains unique elements: 
     
     
+    ```
     SELECT customer_id, cust_address_ntab
       FROM customers_demo
       WHERE cust_address_ntab IS A SET
@@ -36,53 +29,57 @@ The following example selects from the table `customers_demo` those rows in whic
             104 CUST_ADDRESS_TAB_TYP(CUST_ADDRESS_TYP('6445 Bay Harbor Ln', '46254', 'Indianapolis', 'IN', 'US'))
             105 CUST_ADDRESS_TAB_TYP(CUST_ADDRESS_TYP('4019 W 3Rd St', '47404', 'Bloomington', 'IN', 'US'))
     
+    ```
 
-The preceding example requires the table `customers_demo` and a nested table column containing data. Refer to "[Multiset Operators](Multiset-Operators.html#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B)" to create this table and nested table column. 
+The preceding example requires the table ` customers_demo ` and a nested table column containing data. Refer to  " [ Multiset Operators ](Multiset-Operators.md#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B) "  to create this table and nested table column. 
 
-### IS EMPTY Condition 
+###  IS EMPTY Condition {#GUID-EED3C932-8A77-4841-BCC0-CD524F1E65A1} 
 
-Use the `IS` `[NOT]` `EMPTY` conditions to test whether a specified nested table is empty. A nested table that consists of a single value, a `NULL`, is not considered an empty nested table. 
+Use the ` IS ` ` [NOT] ` ` EMPTY ` conditions to test whether a specified nested table is empty. A nested table that consists of a single value, a ` NULL ` , is not considered an empty nested table. 
 
-is_empty_condition::= 
+*is_empty_condition* ::= 
 
-![Description of is_empty_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_empty_condition.gif)[Description of the illustration is_empty_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_empty_condition.html)
+![Description of is_empty_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_empty_condition.gif)[ Description of the illustration is_empty_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_empty_condition.md)
 
-The condition returns a Boolean value: `TRUE` for an `IS` `EMPTY` condition if the collection is empty, and `TRUE` for an `IS` `NOT` `EMPTY` condition if the collection is not empty. If you specify `NULL` for the nested table or varray, then the result is `NULL`. 
+The condition returns a Boolean value: ` TRUE ` for an ` IS ` ` EMPTY ` condition if the collection is empty, and ` TRUE ` for an ` IS ` ` NOT ` ` EMPTY ` condition if the collection is not empty. If you specify ` NULL ` for the nested table or varray, then the result is ` NULL ` . 
 
-Example
+Example 
 
-The following example selects from the sample table `pm.print_media` those rows in which the `ad_textdocs_ntab` nested table column is not empty: 
+The following example selects from the sample table ` pm.print_media ` those rows in which the ` ad_textdocs_ntab ` nested table column is not empty: 
     
     
+    ```
     SELECT product_id, TO_CHAR(ad_finaltext) AS text
        FROM print_media
        WHERE ad_textdocs_ntab IS NOT EMPTY 
        ORDER BY product_id, text;
+    ```
 
-### MEMBER Condition 
+###  MEMBER Condition {#GUID-228D6708-37E1-4C54-8715-7EC2CF5B5998} 
 
-member_condition::= 
+*member_condition* ::= 
 
-![Description of member_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/member_condition.gif)[Description of the illustration member_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/member_condition.html)
+![Description of member_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/member_condition.gif)[ Description of the illustration member_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/member_condition.md)
 
-A `member_condition` is a membership condition that tests whether an element is a member of a nested table. The return value is `TRUE` if `expr` is equal to a member of the specified nested table or varray. The return value is `NULL` if `expr` is null or if the nested table is empty. 
+A *member_condition* is a membership condition that tests whether an element is a member of a nested table. The return value is ` TRUE ` if *expr* is equal to a member of the specified nested table or varray. The return value is ` NULL ` if *expr* is null or if the nested table is empty. 
 
-  * `expr` must be of the same type as the element type of the nested table. 
+  * *expr* must be of the same type as the element type of the nested table. 
 
-  * The `OF` keyword is optional and does not change the behavior of the condition. 
+  * The ` OF ` keyword is optional and does not change the behavior of the condition. 
 
-  * The `NOT` keyword reverses the Boolean output: Oracle returns `FALSE` if `expr` is a member of the specified nested table. 
+  * The ` NOT ` keyword reverses the Boolean output: Oracle returns ` FALSE ` if *expr* is a member of the specified nested table. 
 
-  * The element types of the nested table must be comparable. Refer to [Comparison Conditions](Comparison-Conditions.html#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927) for information on the comparability of nonscalar types. 
-
-
+  * The element types of the nested table must be comparable. Refer to [ Comparison Conditions ](Comparison-Conditions.md#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927) for information on the comparability of nonscalar types. 
 
 
-Example
 
-The following example selects from the table `customers_demo` those rows in which the `cust_address_ntab` nested table column contains the values specified in the `WHERE` clause: 
+
+Example 
+
+The following example selects from the table ` customers_demo ` those rows in which the ` cust_address_ntab ` nested table column contains the values specified in the ` WHERE ` clause: 
     
     
+    ```
     SELECT customer_id, cust_address_ntab
       FROM customers_demo
       WHERE cust_address_typ('8768 N State Rd 37', 47404, 
@@ -94,61 +91,60 @@ The following example selects from the table `customers_demo` those rows in whic
     ------------ ---------------------------------------------------------------------------------
             103 CUST_ADDRESS_TAB_TYP(CUST_ADDRESS_TYP('8768 N State Rd 37', '47404', 'Bloomington', 'IN', 'US'))
     
+    ```
 
-The preceding example requires the table `customers_demo` and a nested table column containing data. Refer to [Multiset Operators](Multiset-Operators.html#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B) to create this table and nested table column. 
+The preceding example requires the table ` customers_demo ` and a nested table column containing data. Refer to [ Multiset Operators ](Multiset-Operators.md#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B) to create this table and nested table column. 
 
-### SUBMULTISET Condition 
+###  SUBMULTISET Condition {#GUID-6EC9172B-DF92-469B-B8BD-E7FFFCEFB37B} 
 
-The `SUBMULTISET` condition tests whether a specified nested table is a submultiset of another specified nested table. 
+The ` SUBMULTISET ` condition tests whether a specified nested table is a submultiset of another specified nested table. 
 
-The operator returns a Boolean value. `TRUE` is returned when `nested_table1` is a submultiset of `nested_table2`. `nested_table1` is a submultiset of `nested_table2` when one of the following conditions occur: 
+The operator returns a Boolean value. ` TRUE ` is returned when *nested_table1* is a submultiset of *nested_table2* . *nested_table1* is a submultiset of *nested_table2* when one of the following conditions occur: 
 
-  * `nested_table1` is not null and contains no rows. `TRUE` is returned even if `nested_table2` is null since an empty multiset is a submultiset of any non-null replacement for `nested_table2`. 
+  * *nested_table1* is not null and contains no rows. ` TRUE ` is returned even if *nested_table2* is null since an empty multiset is a submultiset of any non-null replacement for *nested_table2* . 
 
-  * `nested_table1` and `nested_table2` are not null, `nested_table1` does not contain a null element, and there is a one-to-one mapping of each element in `nested_table1` to an equal element in `nested_table2`. 
-
-
-
-
-`NULL` is returned when one of the following conditions occurs: 
-
-  * `nested_table1` is null. 
-
-  * `nested_table2` is null, and `nested_table1` is not null and not empty. 
-
-  * `nested_table1` is a submultiset of `nested_table2` after modifying each null element of `nested_table1` and `nested_table2` to some non-null value, enabling a one-to-one mapping of each element in `nested_table1` to an equal element in `nested_table2`. 
+  * *nested_table1* and *nested_table2* are not null, *nested_table1* does not contain a null element, and there is a one-to-one mapping of each element in *nested_table1* to an equal element in *nested_table2* . 
 
 
 
 
-If none of the above conditions occur, then `FALSE` is returned. 
+` NULL ` is returned when one of the following conditions occurs: 
 
-submultiset_condition::= 
+  * *nested_table1* is null. 
 
-![Description of submultiset_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/submultiset_condition.gif)[Description of the illustration submultiset_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/submultiset_condition.html)
+  * *nested_table2* is null, and *nested_table1* is not null and not empty. 
 
-  * The `OF` keyword is optional and does not change the behavior of the operator. 
-
-  * The `NOT` keyword reverses the Boolean output: Oracle returns `FALSE` if `nested_table1` is a subset of `nested_table2`. 
-
-  * The element types of the nested table must be comparable. Refer to [Comparison Conditions](Comparison-Conditions.html#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927) for information on the comparability of nonscalar types. 
+  * *nested_table1* is a submultiset of *nested_table2* after modifying each null element of *nested_table1* and *nested_table2* to some non-null value, enabling a one-to-one mapping of each element in *nested_table1* to an equal element in *nested_table2* . 
 
 
 
 
-Example
+If none of the above conditions occur, then ` FALSE ` is returned. 
 
-The following example selects from the `customers_demo` table those rows in which the `cust_address_ntab` nested table is a submultiset of the `cust_address2_ntab` nested table: 
+*submultiset_condition* ::= 
+
+![Description of submultiset_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/submultiset_condition.gif)[ Description of the illustration submultiset_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/submultiset_condition.md)
+
+  * The ` OF ` keyword is optional and does not change the behavior of the operator. 
+
+  * The ` NOT ` keyword reverses the Boolean output: Oracle returns ` FALSE ` if *nested_table1* is a subset of *nested_table2* . 
+
+  * The element types of the nested table must be comparable. Refer to [ Comparison Conditions ](Comparison-Conditions.md#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927) for information on the comparability of nonscalar types. 
+
+
+
+
+Example 
+
+The following example selects from the ` customers_demo ` table those rows in which the ` cust_address_ntab ` nested table is a submultiset of the ` cust_address2_ntab ` nested table: 
     
     
+    ```
     SELECT customer_id, cust_address_ntab
       FROM customers_demo
       WHERE cust_address_ntab SUBMULTISET OF cust_address2_ntab
       ORDER BY customer_id;
     
+    ```
 
-The preceding example requires the table `customers_demo` and two nested table columns containing data. Refer to [Multiset Operators](Multiset-Operators.html#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B) to create this table and nested table columns. 
-
-[← Previous](Model-Conditions.md)
-
-[Next →](Multiset-Conditions.md)
+The preceding example requires the table ` customers_demo ` and two nested table columns containing data. Refer to [ Multiset Operators ](Multiset-Operators.md#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B) to create this table and nested table columns. 

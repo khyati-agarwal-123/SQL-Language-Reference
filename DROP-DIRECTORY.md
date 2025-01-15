@@ -1,62 +1,52 @@
-[Previous](DROP-DIMENSION.html) [Next](DROP-DISKGROUP.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: DROP CONTEXT to DROP JAVA](SQL-Statements-DROP-CONTEXT-to-DROP-JAVA.html)
-  3. DROP DIRECTORY 
-
-
-
-## DROP DIRECTORY 
+##  DROP DIRECTORY {#GUID-3719950A-7B6A-4284-8467-B3455ECF8516} 
 
 Purpose 
 
-Use the `DROP` `DIRECTORY` statement to remove a directory object from the database. 
+Use the ` DROP ` ` DIRECTORY ` statement to remove a directory object from the database. 
 
-See Also:
+> **note:** See Also: 
 
-[CREATE DIRECTORY](CREATE-DIRECTORY.html#GUID-8E9C569A-1B06-42C4-9586-0EF83437001A) for information on creating a directory 
+[ CREATE DIRECTORY ](CREATE-DIRECTORY.md#GUID-8E9C569A-1B06-42C4-9586-0EF83437001A) for information on creating a directory 
 
 Prerequisites 
 
-To drop a directory, you must have the `DROP` `ANY` `DIRECTORY` system privilege. 
+To drop a directory, you must have the ` DROP ` ` ANY ` ` DIRECTORY ` system privilege. 
 
-Note:
+> **note:** 
 
-Do not drop a directory when files in the associated file system are being accessed by PL/SQL or OCI programs.
+Do not drop a directory when files in the associated file system are being accessed by PL/SQL or OCI programs. 
 
-Syntax
+Syntax 
 
-drop_directory::= 
+*drop_directory* ::= 
 
-![Description of drop_directory.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_directory.gif)[Description of the illustration drop_directory.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_directory.html)
+![Description of drop_directory.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_directory.gif)[ Description of the illustration drop_directory.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_directory.md)
 
-Semantics
+Semantics 
 
-IF EXISTS
+IF EXISTS 
 
-Specify `IF EXISTS` to drop an existing object. 
+Specify ` IF EXISTS ` to drop an existing object. 
 
-Specifying `IF NOT EXISTS` with `DROP` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
+Specifying ` IF NOT EXISTS ` with ` DROP ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-directory_name
+*directory_name* 
 
 Specify the name of the directory database object to be dropped. 
 
-Oracle Database removes the directory object but does not delete the associated operating system directory on the server file system.
+Oracle Database removes the directory object but does not delete the associated operating system directory on the server file system. 
 
-Examples
+Examples 
 
-Dropping a Directory: Example
+Dropping a Directory: Example 
 
-The following statement drops the directory object `bfile_dir`: 
+The following statement drops the directory object ` bfile_dir ` : 
     
     
+    ```
     DROP DIRECTORY bfile_dir;
+    ```
 
-See Also:
+> **note:** See Also: 
 
-"[Creating a Directory: Examples](CREATE-DIRECTORY.html#GUID-8E9C569A-1B06-42C4-9586-0EF83437001A__I2092417)"
-
-[← Previous](DROP-DIMENSION.md)
-
-[Next →](DROP-DISKGROUP.md)
+" [ Creating a Directory: Examples ](CREATE-DIRECTORY.md#GUID-8E9C569A-1B06-42C4-9586-0EF83437001A__I2092417) " 

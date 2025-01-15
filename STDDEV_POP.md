@@ -1,47 +1,40 @@
-[Previous](STDDEV.html) [Next](STDDEV_SAMP.html) JavaScript must be enabled to correctly display this content 
+##  STDDEV_POP {#GUID-4F804DE5-7E20-4E08-A1BA-32DBB167B34B} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. STDDEV_POP 
+Syntax 
 
+![Description of stddev_pop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/stddev_pop.gif)[ Description of the illustration stddev_pop.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/stddev_pop.md)
 
+> **note:** See Also: 
 
-## STDDEV_POP 
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of stddev_pop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/stddev_pop.gif)[Description of the illustration stddev_pop.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/stddev_pop.html)
+` STDDEV_POP ` computes the population standard deviation and returns the square root of the population variance. You can use it as both an aggregate and analytic function. 
 
-See Also:
+This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument. 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions 
+> **note:** See Also: 
 
-Purpose
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion 
 
-`STDDEV_POP` computes the population standard deviation and returns the square root of the population variance. You can use it as both an aggregate and analytic function. 
+This function is the same as the square root of the ` VAR_POP ` function. When ` VAR_POP ` returns null, this function returns null. 
 
-This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument.
+> **note:** See Also: 
 
-See Also:
+  * " [ Aggregate Functions ](Aggregate-Functions.md#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848) "  and [ VAR_POP ](VAR_POP.md#GUID-B62FB4A4-BD1F-47B0-B412-31A98B70C2E4)
 
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion 
-
-This function is the same as the square root of the `VAR_POP` function. When `VAR_POP` returns null, this function returns null. 
-
-See Also:
-
-  * "[Aggregate Functions](Aggregate-Functions.html#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)" and [VAR_POP](VAR_POP.html#GUID-B62FB4A4-BD1F-47B0-B412-31A98B70C2E4)
-
-  * "[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" for information on valid forms of `expr`
+  * " [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  for information on valid forms of *expr* 
 
 
 
 
-Aggregate Example
+Aggregate Example 
 
-The following example returns the population and sample standard deviations of the amount of sales in the sample table `sh.sales`: 
+The following example returns the population and sample standard deviations of the amount of sales in the sample table ` sh.sales ` : 
     
     
+    ```
     SELECT STDDEV_POP(amount_sold) "Pop", 
        STDDEV_SAMP(amount_sold) "Samp"
        FROM sales;
@@ -49,12 +42,14 @@ The following example returns the population and sample standard deviations of t
            Pop       Samp
     ---------- ----------
     896.355151 896.355592
+    ```
 
-Analytic Example
+Analytic Example 
 
-The following example returns the population standard deviations of salaries in the sample `hr.employees` table by department: 
+The following example returns the population standard deviations of salaries in the sample ` hr.employees ` table by department: 
     
     
+    ```
     SELECT department_id, last_name, salary, 
        STDDEV_POP(salary) OVER (PARTITION BY department_id) AS pop_std
        FROM employees
@@ -71,7 +66,4 @@ The following example returns the population standard deviations of salaries in 
               110 Gietz                           8300       1850
               110 Higgins                        12000       1850
                   Grant                           7000          0
-
-[← Previous](STDDEV.md)
-
-[Next →](STDDEV_SAMP.md)
+    ```

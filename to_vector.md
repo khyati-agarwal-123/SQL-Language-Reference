@@ -1,55 +1,49 @@
-[Previous](TO_UTC_TIMESTAMP_TZ.html) [Next](TO_YMINTERVAL.html) JavaScript must be enabled to correctly display this content 
+##  TO_VECTOR {#GUID-2CCAB607-A28B-43F7-A71D-9800C0B9A380} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. TO_VECTOR
+` TO_VECTOR ` is a constructor that takes a string of type ` VARCHAR2 ` , ` CLOB ` , ` BLOB ` , or ` JSON ` as input, converts it to a vector, and returns a vector as output. ` TO_VECTOR ` also takes another vector as input, adjusts its format, and returns the adjusted vector as output. ` TO_VECTOR ` is synonymous with ` VECTOR ` . 
 
-
-
-## TO_VECTOR
-
-`TO_VECTOR` is a constructor that takes a string of type `VARCHAR2`, `CLOB`, `BLOB`, or `JSON` as input, converts it to a vector, and returns a vector as output. `TO_VECTOR` also takes another vector as input, adjusts its format, and returns the adjusted vector as output. `TO_VECTOR` is synonymous with `VECTOR`. 
-
-Syntax
+Syntax 
 
   
 
 
-![Description of to_vector_vecse.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_vector_vecse.gif)[Description of the illustration to_vector_vecse.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_vector_vecse.html)
+![Description of to_vector_vecse.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_vector_vecse.gif)[ Description of the illustration to_vector_vecse.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_vector_vecse.md)
 
   
 
 
-Parameters
+Parameters 
 
-  * `expr` must evaluate to one of: 
+  * *expr* must evaluate to one of: 
 
-    * A string (of character types or `CLOB`) that represents a vector. 
-    * A `VECTOR`. 
-    * A `BLOB`. The `BLOB` must represent the vector's binary bytes. 
-    * A JSON array. All elements in the array must be numeric.
+    * A string (of character types or ` CLOB ` ) that represents a vector. 
+    * A ` VECTOR ` . 
+    * A ` BLOB ` . The ` BLOB ` must represent the vector's binary bytes. 
+    * A JSON array. All elements in the array must be numeric. 
 
-If `expr` is NULL, the result is NULL. 
+If *expr* is NULL, the result is NULL. 
 
-The string representation of the vector must be in the form of an array of non-null numbers enclosed with a bracket and separated by commas, such as `[1, 3.4, -05.60, 3e+4]`. `TO_VECTOR` converts a valid string representation of a vector to a vector in the format specified. If no format is specified the default format is used. 
+The string representation of the vector must be in the form of an array of non-null numbers enclosed with a bracket and separated by commas, such as ` [1, 3.4, -05.60, 3e+4] ` . ` TO_VECTOR ` converts a valid string representation of a vector to a vector in the format specified. If no format is specified the default format is used. 
 
-  * `number_of_dimensions` must be a numeric value that describes the number of dimensions of the vector to construct. The number of dimensions may also be specified as an asterisk (*), in which case the dimension is determined by `expr`. 
+  * *number_of_dimensions* must be a numeric value that describes the number of dimensions of the vector to construct. The number of dimensions may also be specified as an asterisk (*), in which case the dimension is determined by *expr* . 
 
-  * `format` must be one of the following tokens: `INT8`, `FLOAT32`, `FLOAT64`, `BINARY`, or `*`. This is the target internal storage format of the vector. If `*` is used, the format will be `FLOAT32`. 
+  * *format* must be one of the following tokens: ` INT8 ` , ` FLOAT32 ` , ` FLOAT64 ` , ` BINARY ` , or ` * ` . This is the target internal storage format of the vector. If ` * ` is used, the format will be ` FLOAT32 ` . 
 
-Note that this behavior is different from declaring a vector column. When you declare a column of type `VECTOR(3, *)`, then all inserted vectors will be stored as is without a change in format. 
+Note that this behavior is different from declaring a vector column. When you declare a column of type ` VECTOR(3, *) ` , then all inserted vectors will be stored as is without a change in format. 
 
-  * `storage_format` must be one of the following tokens: `DENSE`, `SPARSE`, or `*`. If no storage format is specified or if `*` is used, the following will be observed depending on the input type: 
-    * Textual input: the storage format will default to `DENSE`. 
-    * JSON input: the storage format will default to `DENSE`. 
-    * `VECTOR` input: there is no default and the storage format is not changed. 
-    * `BLOB` input: there is no default and the storage format is not changed. 
-
-
+  * *storage_format* must be one of the following tokens: ` DENSE ` , ` SPARSE ` , or ` * ` . If no storage format is specified or if ` * ` is used, the following will be observed depending on the input type: 
+    * Textual input: the storage format will default to ` DENSE ` . 
+    * JSON input: the storage format will default to ` DENSE ` . 
+    * ` VECTOR ` input: there is no default and the storage format is not changed. 
+    * ` BLOB ` input: there is no default and the storage format is not changed. 
 
 
-Examples
+
+
+Examples 
     
+    
+    ```
     
     SELECT TO_VECTOR('[34.6, 77.8]');
     
@@ -81,21 +75,23 @@ Examples
     ---------------------------------------------------------------------
     [3.45999985E+001,7.78000031E+001,-8.93399963E+001]
     
+    ```
 
-Note:
+> **note:** 
 
-  * For applications using Oracle Client libraries prior to 23ai connected to Oracle Database 23ai, use the `TO_VECTOR` function to insert vector data. For example: 
+  * For applications using Oracle Client libraries prior to 23ai connected to Oracle Database 23ai, use the ` TO_VECTOR ` function to insert vector data. For example: 
     
-        INSERT INTO vecTab VALUES(TO_VECTOR('[1.1, 2.9, 3.14]'));
-
-  * Applications using Oracle Client 23ai libraries or Thin mode drivers can insert vector data directly as a string or a `CLOB`. For example: 
+        ```
     
-        INSERT INTO vecTab VALUES ('[1.1, 2.9, 3.14]');
+    INSERT INTO vecTab VALUES(TO_VECTOR('[1.1, 2.9, 3.14]'));
+    ```
+
+  * Applications using Oracle Client 23ai libraries or Thin mode drivers can insert vector data directly as a string or a ` CLOB ` . For example: 
     
+        ```
+    INSERT INTO vecTab VALUES ('[1.1, 2.9, 3.14]');
+    
+    ```
 
 
 
-
-[← Previous](TO_UTC_TIMESTAMP_TZ.md)
-
-[Next →](TO_YMINTERVAL.md)

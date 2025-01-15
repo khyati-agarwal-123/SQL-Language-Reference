@@ -1,35 +1,28 @@
-[Previous](PRESENTNNV.html) [Next](PREVIOUS.html) JavaScript must be enabled to correctly display this content 
+##  PRESENTV {#GUID-201643DA-918F-4F68-BF80-FEAA7EBFD829} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. PRESENTV
+Syntax 
 
+![Description of presentv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/presentv.gif)[ Description of the illustration presentv.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/presentv.md)
 
+Purpose 
 
-## PRESENTV
+The ` PRESENTV ` function can be used only within the *model_clause* of the ` SELECT ` statement and then only on the right-hand side of a model rule. It returns *expr1* when, prior to the execution of the *model_clause* , *cell_reference* exists. Otherwise it returns *expr2* . 
 
-Syntax
+> **note:** See Also: 
 
-![Description of presentv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/presentv.gif)[Description of the illustration presentv.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/presentv.html)
+  * *model_clause* and  " [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) "  for the syntax and semantics 
 
-Purpose
-
-The `PRESENTV` function can be used only within the `model_clause` of the `SELECT` statement and then only on the right-hand side of a model rule. It returns `expr1` when, prior to the execution of the `model_clause`, `cell_reference` exists. Otherwise it returns `expr2`. 
-
-See Also:
-
-  * [model_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2172805) and "[Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257)" for the syntax and semantics 
-
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of `PRESENTV` when it is a character value 
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of ` PRESENTV ` when it is a character value 
 
 
 
 
-Examples
+Examples 
 
 In the following example, if a row containing sales for the Mouse Pad for the year 2000 exists, then the sales value for the Mouse Pad for the year 2001 is set to the sales value for the Mouse Pad for the year 2000. If the row does not exist, then a row is created with the sales value for the Mouse Pad for year 20001 set to 0. 
     
     
+    ```
     SELECT country, prod, year, s
       FROM sales_view_ref
       MODEL
@@ -66,9 +59,6 @@ In the following example, if a row containing sales for the Mouse Pad for the ye
     
     16 rows selected.
     
+    ```
 
-The preceding example requires the view `sales_view_ref`. Refer to "[The MODEL clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160)" to create this view. 
-
-[← Previous](PRESENTNNV.md)
-
-[Next →](PREVIOUS.md)
+The preceding example requires the view ` sales_view_ref ` . Refer to  " [ The MODEL clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) "  to create this view. 

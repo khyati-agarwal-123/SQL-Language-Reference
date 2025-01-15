@@ -1,130 +1,118 @@
-[Previous](create-true-cache.html) [Next](CREATE-TYPE-BODY.html) JavaScript must be enabled to correctly display this content 
+##  CREATE TYPE {#GUID-E72E3EE6-DE95-4F58-8941-E2F76D0EAE80} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: CREATE SEQUENCE to DROP CLUSTER](SQL-Statements-CREATE-SEQUENCE-to-DROP-CLUSTER.html)
-  3. CREATE TYPE 
+Purpose 
 
+Object types are defined using PL/SQL. Therefore, this section provides some general information but refers to [ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01375) for details of syntax and semantics. 
 
+> **note:** 
 
-## CREATE TYPE 
+Starting with Oracle Database 23ai, the SQLJ method of embedding SQL statements in Java code is deprecated. Oracle recommends using the Java Database Connectivity (JDBC) APIs instead of SQLJ. 
 
-Purpose
+Use the ` CREATE ` ` TYPE ` statement to create the specification of an  object type  , a  SQLJ object type  , a named varying array (  varray  ), a  nested table type  , or an  incomplete object type  . You create object types with the ` CREATE ` ` TYPE ` and the ` CREATE ` ` TYPE ` ` BODY ` statements. The ` CREATE ` ` TYPE ` statement specifies the name of the object type, its attributes, methods, and other properties. The ` CREATE ` ` TYPE ` ` BODY ` statement contains the code for the methods that implement the type. 
 
-Object types are defined using PL/SQL. Therefore, this section provides some general information but refers to [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01375) for details of syntax and semantics. 
+> **note:** 
 
-Note:
+  * If you create an object type for which the type specification declares only attributes but no methods, then you need not specify a type body. 
 
-Starting with Oracle Database 23ai, the SQLJ method of embedding SQL statements in Java code is deprecated. Oracle recommends using the Java Database Connectivity (JDBC) APIs instead of SQLJ.
-
-Use the `CREATE` `TYPE` statement to create the specification of an object type, a SQLJ object type, a named varying array (varray), a nested table type, or an incomplete object type. You create object types with the `CREATE` `TYPE` and the `CREATE` `TYPE` `BODY` statements. The `CREATE` `TYPE` statement specifies the name of the object type, its attributes, methods, and other properties. The `CREATE` `TYPE` `BODY` statement contains the code for the methods that implement the type. 
-
-Note:
-
-  * If you create an object type for which the type specification declares only attributes but no methods, then you need not specify a type body.
-
-  * If you create a SQLJ object type, then you cannot specify a type body. The implementation of the type is specified as a Java class.
+  * If you create a SQLJ object type, then you cannot specify a type body. The implementation of the type is specified as a Java class. 
 
 
 
 
-An incomplete type is a type created by a forward type definition. It is called "incomplete" because it has a name but no attributes or methods. It can be referenced by other types, and so can be used to define types that refer to each other. However, you must fully specify the type before you can use it to create a table or an object column or a column of a nested table type. 
+An  incomplete type  is a type created by a forward type definition. It is called "incomplete" because it has a name but no attributes or methods. It can be referenced by other types, and so can be used to define types that refer to each other. However, you must fully specify the type before you can use it to create a table or an object column or a column of a nested table type. 
 
-See Also:
+> **note:** See Also: 
 
-  * [CREATE TYPE BODY](CREATE-TYPE-BODY.html#GUID-C4F1591A-6F62-4897-9039-2C3F066F1E9D) for information on creating the member methods of a type 
+  * [ CREATE TYPE BODY ](CREATE-TYPE-BODY.md#GUID-C4F1591A-6F62-4897-9039-2C3F066F1E9D) for information on creating the member methods of a type 
 
-  * [Oracle Database Object-Relational Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADOBJ001) for more information about objects, incomplete types, varrays, and nested tables 
-
-
+  * [ *Oracle Database Object-Relational Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADOBJ001) for more information about objects, incomplete types, varrays, and nested tables 
 
 
-Prerequisites
 
-To create a type in your own schema, you must have the `CREATE` `TYPE` system privilege. To create a type in another user's schema, you must have the `CREATE` `ANY` `TYPE` system privilege. You can acquire these privileges explicitly or be granted them through a role. 
 
-To create a subtype, you must have the `UNDER` `ANY` `TYPE` system privilege or the `UNDER` object privilege on the supertype. 
+Prerequisites 
 
-The owner of the type must be explicitly granted the `EXECUTE` object privilege in order to access all other types referenced within the definition of the type, or the type owner must be granted the `EXECUTE` `ANY` `TYPE` system privilege. The owner cannot obtain these privileges through roles. 
+To create a type in your own schema, you must have the ` CREATE ` ` TYPE ` system privilege. To create a type in another user's schema, you must have the ` CREATE ` ` ANY ` ` TYPE ` system privilege. You can acquire these privileges explicitly or be granted them through a role. 
 
-If the type owner intends to grant other users access to the type, then the owner must be granted the `EXECUTE` object privilege on the referenced types with the `GRANT` `OPTION` or the `EXECUTE` `ANY` `TYPE` system privilege with the `ADMIN` `OPTION`. Otherwise, the type owner has insufficient privileges to grant access on the type to other users. 
+To create a subtype, you must have the ` UNDER ` ` ANY ` ` TYPE ` system privilege or the ` UNDER ` object privilege on the supertype. 
 
-User-Defined Data Types Declared as Non-Persistable Data Types
+The owner of the type must be explicitly granted the ` EXECUTE ` object privilege in order to access all other types referenced within the definition of the type, or the type owner must be granted the ` EXECUTE ` ` ANY ` ` TYPE ` system privilege. The owner cannot obtain these privileges through roles. 
+
+If the type owner intends to grant other users access to the type, then the owner must be granted the ` EXECUTE ` object privilege on the referenced types with the ` GRANT ` ` OPTION ` or the ` EXECUTE ` ` ANY ` ` TYPE ` system privilege with the ` ADMIN ` ` OPTION ` . Otherwise, the type owner has insufficient privileges to grant access on the type to other users. 
+
+User-Defined Data Types Declared as Non-Persistable Data Types 
 
 You can specify a user-defined data type as non-persistable when creating the data type. Instances of non-persistable types cannot persist on disk. Perisistable data types include the following: 
 
-  * ANSI-supported data types, for example `NUMERIC`, `DECIMAL`, `REAL`. 
+  * ANSI-supported data types, for example ` NUMERIC ` , ` DECIMAL ` , ` REAL ` . 
 
-  * Oracle built-in data types, for example `NUMBER`, `VARCHAR2`, `TIMESTAMP`. 
+  * Oracle built-in data types, for example ` NUMBER ` , ` VARCHAR2 ` , ` TIMESTAMP ` . 
 
-  * Oracle-supplied data types, for example `ANYDATA`, `XML Type`, `ORDImage`. 
-
-
-
-
-Rules For SQL User-Defined Data Types
-
-  * A persistable type cannot have attributes or elements of non-persistable types.
-
-  * A non-persistable type can have attributes or elements of both persistable and non-persistable types.
-
-  * A sub-type must inherit the persistence property from its super type.
-
-  * A `REF` type is persistable and can hold references only to objects of persistable types. 
-
-  * You cannot persist instances of non-persistable types on disk. If you create a table with a type that has been declared as non-persistable, the `CREATE TABLE` statement will fail. The following operations will likewise fail: 
-
-    * Create or alter a relational table with columns of non-persistable types.
-
-    * Create an object table with columns of non-persistable types.
-
-    * Store instances of non-persistable types in an `ANYDATA` instance which is persisted on disk. 
+  * Oracle-supplied data types, for example ` ANYDATA ` , ` XML Type ` , ` ORDImage ` . 
 
 
 
 
-You can specify unique PL/SQL attributes in the `CREATE TYPE` statement in the PL/SQL context only. 
+Rules For SQL User-Defined Data Types 
 
-Syntax
+  * A persistable type cannot have attributes or elements of non-persistable types. 
 
-Types are defined using PL/SQL. Therefore, the syntax diagram in this book shows only the SQL keywords. Refer to [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01375) for the PL/SQL syntax, semantics, and examples. 
+  * A non-persistable type can have attributes or elements of both persistable and non-persistable types. 
 
-create_type::= 
+  * A sub-type must inherit the persistence property from its super type. 
 
-![Description of create_type.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/create_type.gif)[Description of the illustration create_type.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/create_type.html)(`plsql_type_source`: See [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS1619).) 
+  * A ` REF ` type is persistable and can hold references only to objects of persistable types. 
 
-Semantics
+  * You cannot persist instances of non-persistable types on disk. If you create a table with a type that has been declared as non-persistable, the ` CREATE TABLE ` statement will fail. The following operations will likewise fail: 
 
-OR REPLACE
+    * Create or alter a relational table with columns of non-persistable types. 
 
-Specify `OR` `REPLACE` to re-create the type if it already exists. Use this clause to change the definition of an existing type without first dropping it. 
+    * Create an object table with columns of non-persistable types. 
 
-Users previously granted privileges on the re-created object type can use and reference the object type without being granted privileges again.
-
-If any function-based indexes depend on the type, then Oracle Database marks the indexes `DISABLED`. 
-
-IF NOT EXISTS
-
-Specifying `IF NOT EXISTS` has the following effects: 
-
-  * If the type does not exist, a new type is created at the end of the statement.
-
-  * If the type exists, this is the type you have at the end of the statement. A new one is not created because the older one is detected.
+    * Store instances of non-persistable types in an ` ANYDATA ` instance which is persisted on disk. 
 
 
 
 
-You can have one of `OR REPLACE` or `IF NOT EXISTS` in a statement at a time. Using both `OR REPLACE` with `IF NOT EXISTS` in the very same statement results in the following error: `ORA-11541: REPLACE and IF NOT EXISTS cannot coexist in the same DDL statement`. 
+You can specify unique PL/SQL attributes in the ` CREATE TYPE ` statement in the PL/SQL context only. 
 
-Using `IF EXISTS` with `CREATE` results in `ORA-11543: Incorrect IF NOT EXISTS clause for CREATE statement`. 
+Syntax 
 
-[ EDITIONABLE | NONEDITIONABLE ]
+Types are defined using PL/SQL. Therefore, the syntax diagram in this book shows only the SQL keywords. Refer to [ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01375) for the PL/SQL syntax, semantics, and examples. 
 
-Use these clauses to specify whether the type is an editioned or noneditioned object if editioning is enabled for the schema object type `TYPE` in `schema`.The default is `EDITIONABLE`. For information about editioned and noneditioned objects, see [Oracle Database Development Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS99923). 
+*create_type* ::= 
 
-plsql_type_source
+![Description of create_type.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/create_type.gif)[ Description of the illustration create_type.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/create_type.md)( *plsql_type_source* : See [ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS1619) .) 
 
-See [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS1619) for the syntax and semantics of the `plsql_type_source`. 
+Semantics 
 
-[← Previous](create-true-cache.md)
+OR REPLACE 
 
-[Next →](CREATE-TYPE-BODY.md)
+Specify ` OR ` ` REPLACE ` to re-create the type if it already exists. Use this clause to change the definition of an existing type without first dropping it. 
+
+Users previously granted privileges on the re-created object type can use and reference the object type without being granted privileges again. 
+
+If any function-based indexes depend on the type, then Oracle Database marks the indexes ` DISABLED ` . 
+
+IF NOT EXISTS 
+
+Specifying ` IF NOT EXISTS ` has the following effects: 
+
+  * If the type does not exist, a new type is created at the end of the statement. 
+
+  * If the type exists, this is the type you have at the end of the statement. A new one is not created because the older one is detected. 
+
+
+
+
+You can have *one* of ` OR REPLACE ` or ` IF NOT EXISTS ` in a statement at a time. Using both ` OR REPLACE ` with ` IF NOT EXISTS ` in the very same statement results in the following error: ` ORA-11541: REPLACE and IF NOT EXISTS cannot coexist in the same DDL statement ` . 
+
+Using ` IF EXISTS ` with ` CREATE ` results in ` ORA-11543: Incorrect IF NOT EXISTS clause for CREATE statement ` . 
+
+[ EDITIONABLE | NONEDITIONABLE ] 
+
+Use these clauses to specify whether the type is an editioned or noneditioned object if editioning is enabled for the schema object type ` TYPE ` in *schema* .The default is ` EDITIONABLE ` . For information about editioned and noneditioned objects, see [ *Oracle Database Development Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS99923) . 
+
+*plsql_type_source* 
+
+See [ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS1619) for the syntax and semantics of the *plsql_type_source* . 

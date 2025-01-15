@@ -1,18 +1,10 @@
-[Previous](Column-Expressions.html) [Next](Datetime-Expressions.html) JavaScript must be enabled to correctly display this content 
+##  CURSOR Expressions {#GUID-B28362BE-8831-4687-89CF-9F77DB3698D2} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Expressions](Expressions.html)
-  3. CURSOR Expressions
+A ` CURSOR ` expression returns a nested cursor. This form of expression is equivalent to the PL/SQL ` REF ` ` CURSOR ` and can be passed as a ` REF ` ` CURSOR ` argument to a function. 
 
+![Description of cursor_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cursor_expression.gif)[ Description of the illustration cursor_expression.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cursor_expression.md)
 
-
-## CURSOR Expressions
-
-A `CURSOR` expression returns a nested cursor. This form of expression is equivalent to the PL/SQL `REF` `CURSOR` and can be passed as a `REF` `CURSOR` argument to a function. 
-
-![Description of cursor_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cursor_expression.gif)[Description of the illustration cursor_expression.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cursor_expression.html)
-
-A nested cursor is implicitly opened when the cursor expression is evaluated. For example, if the cursor expression appears in a select list, a nested cursor will be opened for each row fetched by the query. The nested cursor is closed only when:
+A nested cursor is implicitly opened when the cursor expression is evaluated. For example, if the cursor expression appears in a select list, a nested cursor will be opened for each row fetched by the query. The nested cursor is closed only when: 
 
   * The nested cursor is explicitly closed by the user 
 
@@ -27,36 +19,39 @@ A nested cursor is implicitly opened when the cursor expression is evaluated. Fo
 
 
 
-Restrictions on CURSOR Expressions
+Restrictions on CURSOR Expressions 
 
-The following restrictions apply to `CURSOR` expressions: 
+The following restrictions apply to ` CURSOR ` expressions: 
 
-  * If the enclosing statement is not a `SELECT` statement, then nested cursors can appear only as `REF` `CURSOR` arguments of a procedure. 
+  * If the enclosing statement is not a ` SELECT ` statement, then nested cursors can appear only as ` REF ` ` CURSOR ` arguments of a procedure. 
 
-  * If the enclosing statement is a `SELECT` statement, then nested cursors can also appear in the outermost select list of the query specification or in the outermost select list of another nested cursor. 
+  * If the enclosing statement is a ` SELECT ` statement, then nested cursors can also appear in the outermost select list of the query specification or in the outermost select list of another nested cursor. 
 
   * Nested cursors cannot appear in views. 
 
-  * You cannot perform `BIND` and `EXECUTE` operations on nested cursors. 
+  * You cannot perform ` BIND ` and ` EXECUTE ` operations on nested cursors. 
 
 
 
 
-Examples
+Examples 
 
-The following example shows the use of a `CURSOR` expression in the select list of a query: 
+The following example shows the use of a ` CURSOR ` expression in the select list of a query: 
     
     
+    ```
     SELECT department_name, CURSOR(SELECT salary, commission_pct 
        FROM employees e
        WHERE e.department_id = d.department_id)
        FROM departments d
        ORDER BY department_name;
     
+    ```
 
-The next example shows the use of a `CURSOR` expression as a function argument. The example begins by creating a function in the sample `OE` schema that can accept the `REF` `CURSOR` argument. (The PL/SQL function body is shown in italics.) 
+The next example shows the use of a ` CURSOR ` expression as a function argument. The example begins by creating a function in the sample ` OE ` schema that can accept the ` REF ` ` CURSOR ` argument. (The PL/SQL function body is shown in italics.) 
     
     
+    ```
     CREATE FUNCTION f(cur SYS_REFCURSOR, mgr_hiredate DATE) 
        RETURN NUMBER IS
        emp_hiredate DATE;
@@ -81,10 +76,12 @@ The next example shows the use of a `CURSOR` expression as a function argument. 
     end;
     /
     
+    ```
 
-The function accepts a cursor and a date. The function expects the cursor to be a query returning a set of dates. The following query uses the function to find those managers in the sample `employees` table, most of whose employees were hired before the manager. 
+The function accepts a cursor and a date. The function expects the cursor to be a query returning a set of dates. The following query uses the function to find those managers in the sample ` employees ` table, most of whose employees were hired before the manager. 
     
     
+    ```
     SELECT e1.last_name FROM employees e1
        WHERE f(
        CURSOR(SELECT e2.hire_date FROM employees e2
@@ -100,7 +97,4 @@ The function accepts a cursor and a date. The function expects the cursor to be 
     Kochhar
     Mourgos
     Zlotkey
-
-[← Previous](Column-Expressions.md)
-
-[Next →](Datetime-Expressions.md)
+    ```

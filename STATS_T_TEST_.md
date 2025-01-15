@@ -1,64 +1,57 @@
-[Previous](STATS_ONE_WAY_ANOVA.html) [Next](STATS_WSR_TEST.html) JavaScript must be enabled to correctly display this content 
+##  STATS_T_TEST_* {#GUID-B570D6F6-E4D7-4033-AC83-7E76F2E9CC2A} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. STATS_T_TEST_* 
+The *t* -test functions are: 
 
+  * ` STATS_T_TEST_ONE ` : A one-sample *t* -test 
 
+  * ` STATS_T_TEST_PAIRED ` : A two-sample, paired *t* -test (also known as a crossed *t* -test) 
 
-## STATS_T_TEST_* 
+  * ` STATS_T_TEST_INDEP ` : A *t* -test of two independent groups with the same variance (pooled variances) 
 
-The t-test functions are: 
-
-  * `STATS_T_TEST_ONE`: A one-sample t-test 
-
-  * `STATS_T_TEST_PAIRED`: A two-sample, paired t-test (also known as a crossed t-test) 
-
-  * `STATS_T_TEST_INDEP`: A t-test of two independent groups with the same variance (pooled variances) 
-
-  * `STATS_T_TEST_INDEPU`: A t-test of two independent groups with unequal variance (unpooled variances) 
+  * ` STATS_T_TEST_INDEPU ` : A *t* -test of two independent groups with unequal variance (unpooled variances) 
 
 
 
 
-Syntax
+Syntax 
 
-stats_t_test::= 
+*stats_t_test* ::= 
 
-![Description of stats_t_test.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/stats_t_test.gif)[Description of the illustration stats_t_test.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/stats_t_test.html)
+![Description of stats_t_test.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/stats_t_test.gif)[ Description of the illustration stats_t_test.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/stats_t_test.md)
 
-Purpose
+Purpose 
 
-The t-test measures the significance of a difference of means. You can use it to compare the means of two groups or the means of one group with a constant. Each t-test function takes two expression arguments, although the second expression is optional for the one-sample function (`STATS_T_TEST_ONE`). Each t-test function takes an optional third argument, which lets you specify the meaning of the `NUMBER` value returned by the function, as shown in [Table 7-9](STATS_T_TEST_.html#GUID-B570D6F6-E4D7-4033-AC83-7E76F2E9CC2A__G1514103 "The first column lists the values you can specify for the argument of the function and the second column explains the return value meanings."). For this argument, you can specify a text literal, or a bind variable or expression that evaluates to a constant character value. If you omit the third argument, then the default is `'TWO_SIDED_SIG'`. 
+The *t* -test measures the significance of a difference of means. You can use it to compare the means of two groups or the means of one group with a constant. Each *t* -test function takes two expression arguments, although the second expression is optional for the one-sample function ( ` STATS_T_TEST_ONE ` ). Each *t* -test function takes an optional third argument, which lets you specify the meaning of the ` NUMBER ` value returned by the function, as shown in [ Table 7-9 ](STATS_T_TEST_.md#GUID-B570D6F6-E4D7-4033-AC83-7E76F2E9CC2A__G1514103) . For this argument, you can specify a text literal, or a bind variable or expression that evaluates to a constant character value. If you omit the third argument, then the default is ` 'TWO_SIDED_SIG' ` . 
 
-See Also:
+> **note:** See Also: 
 
-Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules for the `STATS_T_TEST_*` functions 
+Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules for the ` STATS_T_TEST_* ` functions 
 
-Table 7-9 STATS_T_TEST_* Return Values
+**Table: STATS_T_TEST_* Return Values** 
 
-Argument | Return Value Meaning  
+Argument  |  Return Value Meaning   
 ---|---  
-'STATISTIC' | The observed value of t  
-'DF' | Degree of freedom  
-'ONE_SIDED_SIG' | One-tailed significance of t  
-'TWO_SIDED_SIG' | Two-tailed significance of t  
+` 'STATISTIC' ` |  The observed value of *t*   
+` 'DF' ` |  Degree of freedom   
+` 'ONE_SIDED_SIG' ` |  One-tailed significance of *t*   
+` 'TWO_SIDED_SIG' ` |  Two-tailed significance of *t*   
   
-The two independent `STATS_T_TEST_`* functions can take a fourth argument (`expr3`) if the third argument is specified as `'STATISTIC'` or `'ONE_SIDED_SIG'`. In this case, `expr3` indicates which value of `expr1` is the high value, or the value whose rejection region is the upper tail. 
+The two independent ` STATS_T_TEST_ ` * functions can take a fourth argument ( *expr3* ) if the third argument is specified as ` 'STATISTIC' ` or ` 'ONE_SIDED_SIG' ` . In this case, *expr3* indicates which value of *expr1* is the high value, or the value whose rejection region is the upper tail. 
 
-The significance of the observed value of t is the probability that the value of t would have been obtained by chanceâa number between 0 and 1. The smaller the value, the more significant the difference between the means. One-sided significance is always respect to the upper tail. For one-sample and paired t-test, the high value is the first expression. For independent t-test, the high value is the one specified by `expr3`. 
+The significance of the observed value of *t* is the probability that the value of *t* would have been obtained by chance—a number between 0 and 1. The smaller the value, the more significant the difference between the means. One-sided significance is always respect to the upper tail. For one-sample and paired *t* -test, the high value is the first expression. For independent *t* -test, the high value is the one specified by *expr3* . 
 
-The degree of freedom depends on the type of t-test that resulted in the observed value of t. For example, for a one-sample t-test (`STATS_T_TEST_ONE`), the degree of freedom is the number of observations in the sample minus 1. 
+The degree of freedom depends on the type of *t* -test that resulted in the observed value of *t* . For example, for a one-sample *t* -test ( ` STATS_T_TEST_ONE ` ), the degree of freedom is the number of observations in the sample minus 1. 
 
-### STATS_T_TEST_ONE 
+###  STATS_T_TEST_ONE {#GUID-448CF6C8-3F3A-4AD4-868A-6EC31D34B61B} 
 
-In the `STATS_T_TEST_ONE` function, `expr1` is the sample and `expr2` is the constant mean against which the sample mean is compared. For this t-test only, `expr2` is optional; the constant mean defaults to 0. This function obtains the value of t by dividing the difference between the sample mean and the known mean by the standard error of the mean (rather than the standard error of the difference of the means, as for `STATS_T_TEST_PAIRED`). 
+In the ` STATS_T_TEST_ONE ` function, *expr1* is the sample and *expr2* is the constant mean against which the sample mean is compared. For this *t* -test only, *expr2* is optional; the constant mean defaults to 0. This function obtains the value of *t* by dividing the difference between the sample mean and the known mean by the standard error of the mean (rather than the standard error of the difference of the means, as for ` STATS_T_TEST_PAIRED ` ). 
 
-STATS_T_TEST_ONE Example
+STATS_T_TEST_ONE Example 
 
-The following example determines the significance of the difference between the average list price and the constant value 60:
+The following example determines the significance of the difference between the average list price and the constant value 60: 
     
     
+    ```
     SELECT AVG(prod_list_price) group_mean,
            STATS_T_TEST_ONE(prod_list_price, 60, 'STATISTIC') t_observed,
            STATS_T_TEST_ONE(prod_list_price, 60) two_sided_p_value
@@ -68,22 +61,24 @@ The following example determines the significance of the difference between the 
     ---------- ---------- -----------------
     139.545556 2.32107746        .023158537
     
+    ```
 
-### STATS_T_TEST_PAIRED 
+###  STATS_T_TEST_PAIRED {#GUID-34C56EBD-F075-4203-9E70-723329FBD13F} 
 
-In the `STATS_T_TEST_PAIRED` function, `expr1` and `expr2` are the two samples whose means are being compared. This function obtains the value of t by dividing the difference between the sample means by the standard error of the difference of the means (rather than the standard error of the mean, as for `STATS_T_TEST_ONE`). 
+In the ` STATS_T_TEST_PAIRED ` function, *expr1* and *expr2* are the two samples whose means are being compared. This function obtains the value of *t* by dividing the difference between the sample means by the standard error of the difference of the means (rather than the standard error of the mean, as for ` STATS_T_TEST_ONE ` ). 
 
-### STATS_T_TEST_INDEP and STATS_T_TEST_INDEPU 
+###  STATS_T_TEST_INDEP and STATS_T_TEST_INDEPU {#GUID-93DB178B-55ED-4526-B676-07F93823484B} 
 
-In the `STATS_T_TEST_INDEP` and `STATS_T_TEST_INDEPU` functions, `expr1` is the grouping column and `expr2` is the sample of values. The pooled variances version (`STATS_T_TEST_INDEP`) tests whether the means are the same or different for two distributions that have similar variances. The unpooled variances version (`STATS_T_TEST_INDEPU`) tests whether the means are the same or different even if the two distributions are known to have significantly different variances. 
+In the ` STATS_T_TEST_INDEP ` and ` STATS_T_TEST_INDEPU ` functions, *expr1* is the grouping column and *expr2* is the sample of values. The pooled variances version ( ` STATS_T_TEST_INDEP ` ) tests whether the means are the same or different for two distributions that have similar variances. The unpooled variances version ( ` STATS_T_TEST_INDEPU ` ) tests whether the means are the same or different even if the two distributions are known to have significantly different variances. 
 
-Before using these functions, it is advisable to determine whether the variances of the samples are significantly different. If they are, then the data may come from distributions with different shapes, and the difference of the means may not be very useful. You can perform an f-test to determine the difference of the variances. If they are not significantly different, use `STATS_T_TEST_INDEP`. If they are significantly different, use `STATS_T_TEST_INDEPU`. Refer to [STATS_F_TEST](STATS_F_TEST.html#GUID-9E2A91FC-5BB3-449A-810C-DA6CB52B56ED) for information on performing an f-test. 
+Before using these functions, it is advisable to determine whether the variances of the samples are significantly different. If they are, then the data may come from distributions with different shapes, and the difference of the means may not be very useful. You can perform an *f* -test to determine the difference of the variances. If they are not significantly different, use ` STATS_T_TEST_INDEP ` . If they are significantly different, use ` STATS_T_TEST_INDEPU ` . Refer to [ STATS_F_TEST ](STATS_F_TEST.md#GUID-9E2A91FC-5BB3-449A-810C-DA6CB52B56ED) for information on performing an *f* -test. 
 
-STATS_T_TEST_INDEP Example
+STATS_T_TEST_INDEP Example 
 
 The following example determines the significance of the difference between the average sales to men and women where the distributions are assumed to have similar (pooled) variances: 
     
     
+    ```
     SELECT SUBSTR(cust_income_level, 1, 22) income_level,
           AVG(DECODE(cust_gender, 'M', amount_sold, null)) sold_to_men,
           AVG(DECODE(cust_gender, 'F', amount_sold, null)) sold_to_women,
@@ -111,12 +106,14 @@ The following example determines the significance of the difference between the 
                             107.121845     113.80441 .686144393        .492670059
                             106.663769    107.276386 1.08013499        .280082357
     14 rows selected.
+    ```
 
-STATS_T_TEST_INDEPU Example
+STATS_T_TEST_INDEPU Example 
 
-The following example determines the significance of the difference between the average sales to men and women where the distributions are known to have significantly different (unpooled) variances:
+The following example determines the significance of the difference between the average sales to men and women where the distributions are known to have significantly different (unpooled) variances: 
     
     
+    ```
     SELECT SUBSTR(cust_income_level, 1, 22) income_level,
            AVG(DECODE(cust_gender, 'M', amount_sold, null)) sold_to_men,
            AVG(DECODE(cust_gender, 'F', amount_sold, null)) sold_to_women,
@@ -144,7 +141,4 @@ The following example determines the significance of the difference between the 
                             107.121845     113.80441 .689462437        .490595765
                             106.663769    107.276386 1.07853782        .280794207
     14 rows selected.
-
-[← Previous](STATS_ONE_WAY_ANOVA.md)
-
-[Next →](STATS_T_TEST_.md)
+    ```

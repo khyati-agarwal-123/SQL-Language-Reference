@@ -1,37 +1,30 @@
-[Previous](CURRENT_TIMESTAMP.html) [Next](DATAOBJ_TO_MAT_PARTITION.html) JavaScript must be enabled to correctly display this content 
+##  CV {#GUID-32E56E9C-4F59-486E-8E4C-F332284C5EA7} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. CV
+Syntax 
 
+![Description of cv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cv.gif)[ Description of the illustration cv.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cv.md)
 
+Purpose 
 
-## CV
+The ` CV ` function can be used only in the *model_clause* of a ` SELECT ` statement and then only on the right-hand side of a model rule. It returns the current value of a dimension column or a partitioning column carried from the left-hand side to the right-hand side of a rule. This function is used in the *model_clause* to provide relative indexing with respect to the dimension column. The return type is that of the data type of the dimension column. If you omit the argument, then it defaults to the dimension column associated with the relative position of the function within the cell reference. 
 
-Syntax
+The ` CV ` function can be used outside a cell reference. In this case, *dimension_column* is required. 
 
-![Description of cv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cv.gif)[Description of the illustration cv.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cv.html)
+> **note:** See Also: 
 
-Purpose
+  * *model_clause* and [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) for the syntax and semantics 
 
-The `CV` function can be used only in the `model_clause` of a `SELECT` statement and then only on the right-hand side of a model rule. It returns the current value of a dimension column or a partitioning column carried from the left-hand side to the right-hand side of a rule. This function is used in the `model_clause` to provide relative indexing with respect to the dimension column. The return type is that of the data type of the dimension column. If you omit the argument, then it defaults to the dimension column associated with the relative position of the function within the cell reference. 
-
-The `CV` function can be used outside a cell reference. In this case, `dimension_column` is required. 
-
-See Also:
-
-  * [model_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2172805) and [Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) for the syntax and semantics 
-
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of `CV` when it is a character value 
+  * Appendix C in [ *Oracle Database Globalization Support Guide*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the return value of ` CV ` when it is a character value 
 
 
 
 
-Examples
+Examples 
 
-The following example assigns the sum of the sales of the product represented by the current value of the dimension column (Mouse Pad or Standard Mouse) for years 1999 and 2000 to the sales of that product for year 2001:
+The following example assigns the sum of the sales of the product represented by the current value of the dimension column (Mouse Pad or Standard Mouse) for years 1999 and 2000 to the sales of that product for year 2001: 
     
     
+    ```
     SELECT country, prod, year, s
       FROM sales_view_ref
       MODEL
@@ -68,9 +61,6 @@ The following example assigns the sum of the sales of the product represented by
      
     16 rows selected.
     
+    ```
 
-The preceding example requires the view `sales_view_ref`. Refer to [The MODEL clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) to create this view. 
-
-[← Previous](CURRENT_TIMESTAMP.md)
-
-[Next →](DATAOBJ_TO_MAT_PARTITION.md)
+The preceding example requires the view ` sales_view_ref ` . Refer to [ The MODEL clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) to create this view. 

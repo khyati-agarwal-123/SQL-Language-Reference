@@ -1,67 +1,51 @@
-[Previous](XMLPARSE.html) [Next](XMLPI.html) JavaScript must be enabled to correctly display this content 
+##  XMLPATCH {#GUID-C52DA494-2840-475B-871F-1EA071299894} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. XMLPATCH 
+Syntax 
 
-
-
-## XMLPATCH 
-
-Syntax
-
-![Description of xmlpatch.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/xmlpatch.gif)[Description of the illustration xmlpatch.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/xmlpatch.html)
+![Description of xmlpatch.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/xmlpatch.gif)[ Description of the illustration xmlpatch.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/xmlpatch.md)
 
 Purpose 
 
-The `XMLPatch` function is the SQL interface for the XmlPatch C API. This function patches an XML document with the changes specified. A patched `XMLType` document is returned. 
+The ` XMLPatch ` function is the SQL interface for the XmlPatch C API. This function patches an XML document with the changes specified. A patched ` XMLType ` document is returned. 
 
-  * For the first argument, specify the name of the input `XMLType` document. 
+  * For the first argument, specify the name of the input ` XMLType ` document. 
 
-  * For the second argument, specify the XMLType document containing the changes to be applied to the first document. The changes should conform to the Xdiff XML schema. You can supply the XML output from the Oracle XML Developer's Kit Java method `diff()`. 
-
-
+  * For the second argument, specify the XMLType document containing the changes to be applied to the first document. The changes should conform to the Xdiff XML schema. You can supply the XML output from the Oracle XML Developer's Kit Java method ` diff() ` . 
 
 
-See Also:
 
-[Oracle XML Developer's Kit Programmer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDK2520) for more information on using this function, including examples, and [Oracle Database XML C API Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CAXML6192) for information on the XML APIs for C 
 
-Examples
+> **note:** See Also: 
 
-The following example patches an `XMLType` document with the changes specified in another `XMLType` and returns a patched `XMLType` document: 
+[ *Oracle XML Developer's Kit Programmer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDK2520) for more information on using this function, including examples, and [ *Oracle Database XML C API Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CAXML6192) for information on the XML APIs for C 
+
+Examples 
+
+The following example patches an ` XMLType ` document with the changes specified in another ` XMLType ` and returns a patched ` XMLType ` document: 
     
     
+    ```
     SELECT XMLPATCH(
-    XMLTYPE('<?xml version="1.0"?>
-    <bk:book xmlns:bk="http://example.com">
-       <bk:tr>
-            <bk:td>
-                    <bk:chapter>
+    XMLTYPE('
+    
+       
+            
+                    
                             Chapter 1.
-                    </bk:chapter>
-            </bk:td>
-            <bk:td>
-                     <bk:chapter>
+                    
+            
+            
+                     
                             Chapter 2.
-                    </bk:chapter>
-            </bk:td>
-       </bk:tr>
-    </bk:book>'),
-    XMLTYPE('<?xml version="1.0"?>
-    <xd:xdiff xsi:schemaLocation="http://xmlns.oracle.com/xdb/xdiff.xsd
-      http://xmlns.oracle.com/xdb/xdiff.xsd"
-      xmlns:xd="http://xmlns.oracle.com/xdb/xdiff.xsd"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:bk="http://example.com">
-      <?oracle-xmldiff operations-in-docorder="true" output-model="snapshot"
-        diff-algorithm="global"?>
-      <xd:delete-node xd:node-type="element"
-       xd:xpath="/bk:book[1]/bk:tr[1]/bk:td[2]/bk:chapter[1]"/>
-    </xd:xdiff>')
+                    
+            
+       
+    '),
+    XMLTYPE('
+    
+      
+      
+    ')
     )
     FROM DUAL;
-
-[← Previous](XMLPARSE.md)
-
-[Next →](XMLPI.md)
+    ```

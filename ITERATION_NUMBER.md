@@ -1,30 +1,23 @@
-[Previous](INSTR.html) [Next](JSON_ARRAY.html) JavaScript must be enabled to correctly display this content 
+##  ITERATION_NUMBER {#GUID-C7B75092-475A-4AB3-8A7C-94C68704538C} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. ITERATION_NUMBER 
+Syntax 
 
+![Description of iteration_number.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/iteration_number.gif)[ Description of the illustration iteration_number.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/iteration_number.md)
 
+Purpose 
 
-## ITERATION_NUMBER 
+The ` ITERATION_NUMBER ` function can be used only in the *model_clause* of the ` SELECT ` statement and then only when ` ITERATE( ` *number* ` ) ` is specified in the *model_rules_clause* . It returns an integer representing the completed iteration through the model rules. The ` ITERATION_NUMBER ` function returns 0 during the first iteration. For each subsequent iteration, the ` ITERATION_NUMBER ` function returns the equivalent of *iteration_number* plus one. 
 
-Syntax
+> **note:** See Also: 
 
-![Description of iteration_number.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/iteration_number.gif)[Description of the illustration iteration_number.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/iteration_number.html)
+*model_clause* and  " [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) "  for the syntax and semantics 
 
-Purpose
-
-The `ITERATION_NUMBER` function can be used only in the `model_clause` of the `SELECT` statement and then only when `ITERATE(``number``)` is specified in the `model_rules_clause`. It returns an integer representing the completed iteration through the model rules. The `ITERATION_NUMBER` function returns 0 during the first iteration. For each subsequent iteration, the `ITERATION_NUMBER` function returns the equivalent of `iteration_number` plus one. 
-
-See Also:
-
-[model_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2172805) and "[Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257)" for the syntax and semantics 
-
-Examples
+Examples 
 
 The following example assigns the sales of the Mouse Pad for the years 1998 and 1999 to the sales of the Mouse Pad for the years 2001 and 2002 respectively: 
     
     
+    ```
     SELECT country, prod, year, s
       FROM sales_view_ref
       MODEL
@@ -63,9 +56,6 @@ The following example assigns the sales of the Mouse Pad for the years 1998 and 
      
     18 rows selected.
     
+    ```
 
-The preceding example requires the view `sales_view_ref`. Refer to "[The MODEL clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160)" to create this view. 
-
-[← Previous](INSTR.md)
-
-[Next →](JSON_ARRAY.md)
+The preceding example requires the view ` sales_view_ref ` . Refer to  " [ The MODEL clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) "  to create this view. 

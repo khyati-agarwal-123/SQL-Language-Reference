@@ -1,43 +1,31 @@
-[Previous](Automatic-Locks-in-DDL-Operations.html) [Next](Oracle-and-Standard-SQL.html) JavaScript must be enabled to correctly display this content 
+##  Manual Data Locking {#GUID-B1DE7D59-7FD1-4971-B98D-B69529DF7688} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Automatic and Manual Locking Mechanisms During SQL Operations](Automatic-and-Manual-Locking-Mechanisms-During-SQL-Operations.html)
-  3. Manual Data Locking
+Oracle Database always performs locking automatically to ensure data concurrency, data integrity, and statement-level read consistency. However, you can override the Oracle default locking mechanisms. This can be useful in situations such as the following: 
 
+  * When your application requires consistent data for the duration of the transaction, not reflecting changes by other transactions, you can achieve transaction-level read consistency by using explicit locking, read-only transactions, serializable transactions, or by overriding default locking. 
 
-
-## Manual Data Locking
-
-Oracle Database always performs locking automatically to ensure data concurrency, data integrity, and statement-level read consistency. However, you can override the Oracle default locking mechanisms. This can be useful in situations such as the following:
-
-  * When your application requires consistent data for the duration of the transaction, not reflecting changes by other transactions, you can achieve transaction-level read consistency by using explicit locking, read-only transactions, serializable transactions, or by overriding default locking.
-
-  * When your application requires that a transaction have exclusive access to a resource so that the transaction does not have to wait for other transactions to complete, you can explicitly lock the data for the duration of the transaction.
+  * When your application requires that a transaction have exclusive access to a resource so that the transaction does not have to wait for other transactions to complete, you can explicitly lock the data for the duration of the transaction. 
 
 
 
 
-You can override automatic locking at two levels:
+You can override automatic locking at two levels: 
 
-  * Transaction. You can override transaction-level locking with the following SQL statements: 
+  * Transaction  . You can override transaction-level locking with the following SQL statements: 
 
-    * `SET` `TRANSACTION` `ISOLATION` `LEVEL`
+    * ` SET ` ` TRANSACTION ` ` ISOLATION ` ` LEVEL `
 
-    * `LOCK` `TABLE`
+    * ` LOCK ` ` TABLE `
 
-    * `SELECT` ... `FOR` `UPDATE`
+    * ` SELECT ` ... ` FOR ` ` UPDATE `
 
-Locks acquired by these statements are released after the transaction commits or rolls back.
+Locks acquired by these statements are released after the transaction commits or rolls back. 
 
-  * Session. A session can set the required transaction isolate level with an `ALTER` `SESSION` `SET` `ISOLATION` `LEVEL` statement. 
-
-
+  * Session  . A session can set the required transaction isolate level with an ` ALTER ` ` SESSION ` ` SET ` ` ISOLATION ` ` LEVEL ` statement. 
 
 
-Note:
 
-When overriding Oracle default locking, the database administrator or application developer should ensure that data integrity is guaranteed, data concurrency is acceptable, and deadlocks are not possible or, if possible, are appropriately handled. For more information on these criteria, see [Oracle Database Concepts](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT1363). 
 
-[← Previous](Automatic-Locks-in-DDL-Operations.md)
+> **note:** 
 
-[Next →](Automatic-and-Manual-Locking-Mechanisms-During-SQL-Operations.md)
+When overriding Oracle default locking, the database administrator or application developer should ensure that data integrity is guaranteed, data concurrency is acceptable, and deadlocks are not possible or, if possible, are appropriately handled. For more information on these criteria, see [ *Oracle Database Concepts* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT1363) . 

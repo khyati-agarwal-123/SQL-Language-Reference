@@ -1,41 +1,31 @@
-[Previous](REPLACE.html) [Next](round-interval.html) JavaScript must be enabled to correctly display this content 
+##  ROUND (datetime) {#GUID-C6D342D0-6068-4986-A759-70EF4599EC41} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. ROUND (datetime) 
+Syntax 
 
+*round_datetime* ::= 
 
+![Description of round_date.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/round_date.gif)[ Description of the illustration round_date.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/round_date.md)
 
-## ROUND (datetime) 
+Purpose 
 
-Syntax
+` ROUND ` returns *datetime* rounded to the unit specified by the format model *fmt* . 
 
-round_datetime::= 
+This function is not sensitive to the ` NLS_CALENDAR ` session parameter. It operates according to the rules of the Gregorian calendar. The value returned is always of data type ` DATE ` , even if you specify a different datetime data type for *date* . If you omit *fmt* , then *date* is rounded to the nearest day. The *date* expression must resolve to a ` DATE ` value. 
 
-![Description of round_date.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/round_date.gif)[Description of the illustration round_date.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/round_date.html)
+> **note:** See Also: 
 
-Purpose
+" [ CEIL, FLOOR, ROUND, and TRUNC Date Functions ](ROUND-and-TRUNC-Date-Functions.md#GUID-8E10AB76-21DA-490F-A389-023B648DDEF8) "  for the permitted format models to use in *fmt* 
 
-`ROUND` returns `datetime` rounded to the unit specified by the format model `fmt`. 
+Examples 
 
-This function is not sensitive to the `NLS_CALENDAR` session parameter. It operates according to the rules of the Gregorian calendar. The value returned is always of data type `DATE`, even if you specify a different datetime data type for `date`. If you omit `fmt`, then `date` is rounded to the nearest day. The `date` expression must resolve to a `DATE` value. 
-
-See Also:
-
-"[CEIL, FLOOR, ROUND, and TRUNC Date Functions](ROUND-and-TRUNC-Date-Functions.html#GUID-8E10AB76-21DA-490F-A389-023B648DDEF8)" for the permitted format models to use in `fmt`
-
-Examples
-
-The following example rounds a date to the first day of the following year:
+The following example rounds a date to the first day of the following year: 
     
     
+    ```
     SELECT ROUND (TO_DATE ('27-OCT-00'),'YEAR')
        "New Year" FROM DUAL;
      
     New Year
     ---------
     01-JAN-01
-
-[← Previous](REPLACE.md)
-
-[Next →](round-interval.md)
+    ```

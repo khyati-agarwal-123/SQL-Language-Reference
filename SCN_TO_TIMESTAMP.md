@@ -1,46 +1,41 @@
-[Previous](RTRIM.html) [Next](SESSIONTIMEZONE.html) JavaScript must be enabled to correctly display this content 
+##  SCN_TO_TIMESTAMP {#GUID-BCB0C8EE-0E03-4A61-A41A-69975FAC1803} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. SCN_TO_TIMESTAMP 
+Syntax 
 
+![Description of scn_to_timestamp.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/scn_to_timestamp.gif)[ Description of the illustration scn_to_timestamp.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/scn_to_timestamp.md)
 
+Purpose 
 
-## SCN_TO_TIMESTAMP 
+` SCN_TO_TIMESTAMP ` takes as an argument a number that evaluates to a system change number (SCN), and returns the approximate timestamp associated with that SCN. The returned value is of ` TIMESTAMP ` data type. This function is useful any time you want to know the timestamp associated with an SCN. For example, it can be used in conjunction with the ` ORA_ROWSCN ` pseudocolumn to associate a timestamp with the most recent change to a row. 
 
-Syntax
+> **note:** Notes: 
 
-![Description of scn_to_timestamp.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/scn_to_timestamp.gif)[Description of the illustration scn_to_timestamp.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/scn_to_timestamp.html)
+  * The usual precision of the result value is 3 seconds. 
 
-Purpose
-
-`SCN_TO_TIMESTAMP` takes as an argument a number that evaluates to a system change number (SCN), and returns the approximate timestamp associated with that SCN. The returned value is of `TIMESTAMP` data type. This function is useful any time you want to know the timestamp associated with an SCN. For example, it can be used in conjunction with the `ORA_ROWSCN` pseudocolumn to associate a timestamp with the most recent change to a row. 
-
-Notes:
-
-  * The usual precision of the result value is 3 seconds.
-
-  * The association between an SCN and a timestamp when the SCN is generated is remembered by the database for a limited period of time. This period is the maximum of the auto-tuned undo retention period, if the database runs in the Automatic Undo Management mode, and the retention times of all flashback archives in the database, but no less than 120 hours. The time for the association to become obsolete elapses only when the database is open. An error is returned if the SCN specified for the argument to `SCN_TO_TIMESTAMP` is too old. 
+  * The association between an SCN and a timestamp when the SCN is generated is remembered by the database for a limited period of time. This period is the maximum of the auto-tuned undo retention period, if the database runs in the Automatic Undo Management mode, and the retention times of all flashback archives in the database, but no less than 120 hours. The time for the association to become obsolete elapses only when the database is open. An error is returned if the SCN specified for the argument to ` SCN_TO_TIMESTAMP ` is too old. 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-[ORA_ROWSCN Pseudocolumn](ORA_ROWSCN-Pseudocolumn.html#GUID-8071AAB0-F656-4C93-B926-0BCE1439F121) and [TIMESTAMP_TO_SCN](TIMESTAMP_TO_SCN.html#GUID-58796E1A-9943-4966-96E6-78B636BD2859)
+[ ORA_ROWSCN Pseudocolumn ](ORA_ROWSCN-Pseudocolumn.md#GUID-8071AAB0-F656-4C93-B926-0BCE1439F121) and [ TIMESTAMP_TO_SCN ](TIMESTAMP_TO_SCN.md#GUID-58796E1A-9943-4966-96E6-78B636BD2859)
 
 Examples 
 
-The following example uses the `ORA_ROWSCN` pseudocolumn to determine the system change number of the last update to a row and uses `SCN_TO_TIMESTAMP` to convert that SCN to a timestamp: 
+The following example uses the ` ORA_ROWSCN ` pseudocolumn to determine the system change number of the last update to a row and uses ` SCN_TO_TIMESTAMP ` to convert that SCN to a timestamp: 
     
     
+    ```
     SELECT SCN_TO_TIMESTAMP(ORA_ROWSCN) FROM employees
        WHERE employee_id = 188;
     
+    ```
 
-You could use such a query to convert a system change number to a timestamp for use in an Oracle Flashback Query:
+You could use such a query to convert a system change number to a timestamp for use in an Oracle Flashback Query: 
     
     
+    ```
     SELECT salary FROM employees WHERE employee_id = 188;
         SALARY
     ----------
@@ -54,8 +49,10 @@ You could use such a query to convert a system change number to a timestamp for 
     ----------
          38000
     
+    ```
     
     
+    ```
     SELECT SCN_TO_TIMESTAMP(ORA_ROWSCN) FROM employees
        WHERE employee_id = 188;
     SCN_TO_TIMESTAMP(ORA_ROWSCN)
@@ -69,7 +66,4 @@ You could use such a query to convert a system change number to a timestamp for 
         SALARY
     ----------
           3800
-
-[← Previous](RTRIM.md)
-
-[Next →](SESSIONTIMEZONE.md)
+    ```

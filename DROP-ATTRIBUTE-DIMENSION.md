@@ -1,50 +1,40 @@
-[Previous](DROP-ANALYTIC-VIEW.html) [Next](DROP-AUDIT-POLICY-Unified-Auditing.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: CREATE SEQUENCE to DROP CLUSTER](SQL-Statements-CREATE-SEQUENCE-to-DROP-CLUSTER.html)
-  3. DROP ATTRIBUTE DIMENSION
-
-
-
-## DROP ATTRIBUTE DIMENSION
+##  DROP ATTRIBUTE DIMENSION {#GUID-98D6273D-5F83-4AEC-85AF-7540A710F59D} 
 
 Purpose 
 
-Use the `DROP` `ATTRIBUTE` `DIMENSION` statement to drop an attribute dimension. An `ATTRIBUTE` `DIMENSION` object is a component of analytic views. 
+Use the ` DROP ` ` ATTRIBUTE ` ` DIMENSION ` statement to drop an attribute dimension. An ` ATTRIBUTE ` ` DIMENSION ` object is a component of analytic views. 
 
-Prerequisites
+Prerequisites 
 
-To drop an attribute dimension in your own schema, you must have the `DROP` `ATTRIBUTE` `DIMENSION` system privilege. To drop an analytic view in another user's schema, you must have the `DROP` `ANY` `ATTRIBUTE` `DIMENSION` system privilege. 
+To drop an attribute dimension in your own schema, you must have the ` DROP ` ` ATTRIBUTE ` ` DIMENSION ` system privilege. To drop an analytic view in another user's schema, you must have the ` DROP ` ` ANY ` ` ATTRIBUTE ` ` DIMENSION ` system privilege. 
 
-Syntax
+Syntax 
 
-drop_attribute_dimension::= 
+*drop_attribute_dimension* ::= 
 
-![Description of drop_attribute_dimension.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_attribute_dimension.gif)[Description of the illustration drop_attribute_dimension.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_attribute_dimension.html)
+![Description of drop_attribute_dimension.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_attribute_dimension.gif)[ Description of the illustration drop_attribute_dimension.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_attribute_dimension.md)
 
-Semantics
+Semantics 
 
-IF EXISTS
+IF EXISTS 
 
-Specify `IF EXISTS` to drop an existing object. 
+Specify ` IF EXISTS ` to drop an existing object. 
 
-Specifying `IF NOT EXISTS` with `DROP` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
+Specifying ` IF NOT EXISTS ` with ` DROP ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-schema
+*schema* 
 
-Specify the schema in which the attribute dimension exists. If you do not specify a schema, then Oracle Database looks for the attribute dimension in your own schema.
+Specify the schema in which the attribute dimension exists. If you do not specify a schema, then Oracle Database looks for the attribute dimension in your own schema. 
 
-attr_dimension_name
+*attr_dimension_name* 
 
-Specify the name of the attribute dimension to drop.
+Specify the name of the attribute dimension to drop. 
 
-Example
+Example 
 
-The following statement drops the specified attribute dimension object:
+The following statement drops the specified attribute dimension object: 
     
     
+    ```
     DROP ATTRIBUTE DIMENSION product_attr_dim;
-
-[← Previous](DROP-ANALYTIC-VIEW.md)
-
-[Next →](DROP-AUDIT-POLICY-Unified-Auditing.md)
+    ```

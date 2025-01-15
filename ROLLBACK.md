@@ -1,30 +1,22 @@
-[Previous](REVOKE.html) [Next](SAVEPOINT.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: MERGE to UPDATE](SQL-Statements-MERGE-to-UPDATE.html)
-  3. ROLLBACK 
-
-
-
-## ROLLBACK 
+##  ROLLBACK {#GUID-94551F0C-A47F-43DE-BC68-9B1C1ED38C93} 
 
 Purpose 
 
-Use the `ROLLBACK` statement to undo work done in the current transaction or to manually undo the work done by an in-doubt distributed transaction. 
+Use the ` ROLLBACK ` statement to undo work done in the current transaction or to manually undo the work done by an in-doubt distributed transaction. 
 
-Note:
+> **note:** 
 
-Oracle recommends that you explicitly end transactions in application programs using either a `COMMIT` or `ROLLBACK` statement. If you do not explicitly commit the transaction and the program terminates abnormally, then Oracle Database rolls back the last uncommitted transaction. 
+Oracle recommends that you explicitly end transactions in application programs using either a ` COMMIT ` or ` ROLLBACK ` statement. If you do not explicitly commit the transaction and the program terminates abnormally, then Oracle Database rolls back the last uncommitted transaction. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Concepts](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT117) for information on transactions 
+  * [ *Oracle Database Concepts* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT117) for information on transactions 
 
-  * [Oracle Database Heterogeneous Connectivity User's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=HETER006) for information on distributed transactions 
+  * [ *Oracle Database Heterogeneous Connectivity User's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=HETER006) for information on distributed transactions 
 
-  * [SET TRANSACTION](SET-TRANSACTION.html#GUID-F11E1E30-5871-48D1-8266-F80A1DF126A1) for information on setting characteristics of the current transaction 
+  * [ SET TRANSACTION ](SET-TRANSACTION.md#GUID-F11E1E30-5871-48D1-8266-F80A1DF126A1) for information on setting characteristics of the current transaction 
 
-  * [COMMIT](COMMIT.html#GUID-6CD5C9A7-54B9-4FA2-BA3C-D6B4492B9EE2) and [SAVEPOINT](SAVEPOINT.html#GUID-78EEA746-0021-42E8-9971-3BA6DFFEE794)
+  * [ COMMIT ](COMMIT.md#GUID-6CD5C9A7-54B9-4FA2-BA3C-D6B4492B9EE2) and [ SAVEPOINT ](SAVEPOINT.md#GUID-78EEA746-0021-42E8-9971-3BA6DFFEE794)
 
 
 
@@ -33,25 +25,25 @@ Prerequisites
 
 To roll back your current transaction, no privileges are necessary. 
 
-To manually roll back an in-doubt distributed transaction that you originally committed, you must have the `FORCE` `TRANSACTION` system privilege. To manually roll back an in-doubt distributed transaction originally committed by another user, you must have the `FORCE` `ANY` `TRANSACTION` system privilege. 
+To manually roll back an in-doubt distributed transaction that you originally committed, you must have the ` FORCE ` ` TRANSACTION ` system privilege. To manually roll back an in-doubt distributed transaction originally committed by another user, you must have the ` FORCE ` ` ANY ` ` TRANSACTION ` system privilege. 
 
-Syntax
+Syntax 
 
-rollback::= 
+*rollback* ::= 
 
-![Description of rollback.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/rollback.gif)[Description of the illustration rollback.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/rollback.html)
+![Description of rollback.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/rollback.gif)[ Description of the illustration rollback.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/rollback.md)
 
-Semantics
+Semantics 
 
-WORK
+WORK 
 
-The keyword `WORK` is optional and is provided for SQL standard compatibility. 
+The keyword ` WORK ` is optional and is provided for SQL standard compatibility. 
 
-TO SAVEPOINT Clause
+TO SAVEPOINT Clause 
 
-Specify the savepoint to which you want to roll back the current transaction. If you omit this clause, then the `ROLLBACK` statement rolls back the entire transaction. 
+Specify the savepoint to which you want to roll back the current transaction. If you omit this clause, then the ` ROLLBACK ` statement rolls back the entire transaction. 
 
-Using `ROLLBACK` without the `TO` `SAVEPOINT` clause performs the following operations: 
+Using ` ROLLBACK ` without the ` TO ` ` SAVEPOINT ` clause performs the following operations: 
 
   * Ends the transaction 
 
@@ -64,13 +56,13 @@ Using `ROLLBACK` without the `TO` `SAVEPOINT` clause performs the following oper
 
 
 
-See Also:
+> **note:** See Also: 
 
-[SAVEPOINT](SAVEPOINT.html#GUID-78EEA746-0021-42E8-9971-3BA6DFFEE794)
+[ SAVEPOINT ](SAVEPOINT.md#GUID-78EEA746-0021-42E8-9971-3BA6DFFEE794)
 
-Using `ROLLBACK` with the `TO` `SAVEPOINT` clause performs the following operations: 
+Using ` ROLLBACK ` with the ` TO ` ` SAVEPOINT ` clause performs the following operations: 
 
-  * Rolls back just the portion of the transaction after the savepoint. It does not end the transaction.
+  * Rolls back just the portion of the transaction after the savepoint. It does not end the transaction. 
 
   * Erases all savepoints created after that savepoint. The named savepoint is retained, so you can roll back to the same savepoint multiple times. Prior savepoints are also retained. 
 
@@ -79,44 +71,46 @@ Using `ROLLBACK` with the `TO` `SAVEPOINT` clause performs the following operati
 
 
 
-Restriction on In-doubt Transactions
+Restriction on In-doubt Transactions 
 
 You cannot manually roll back an in-doubt transaction to a savepoint. 
 
-FORCE Clause
+FORCE Clause 
 
-Specify `FORCE` to manually roll back an in-doubt distributed transaction. The transaction is identified by the `string` containing its local or global transaction ID. To find the IDs of such transactions, query the data dictionary view `DBA_2PC_PENDING`. 
+Specify ` FORCE ` to manually roll back an in-doubt distributed transaction. The transaction is identified by the *string* containing its local or global transaction ID. To find the IDs of such transactions, query the data dictionary view ` DBA_2PC_PENDING ` . 
 
-A `ROLLBACK` statement with a `FORCE` clause rolls back only the specified transaction. Such a statement does not affect your current transaction. 
+A ` ROLLBACK ` statement with a ` FORCE ` clause rolls back only the specified transaction. Such a statement does not affect your current transaction. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Administrator's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN032) for more information on distributed transactions and rolling back in-doubt transactions 
+[ *Oracle Database Administrator's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN032) for more information on distributed transactions and rolling back in-doubt transactions 
 
-Examples
+Examples 
 
-Rolling Back Transactions: Examples
+Rolling Back Transactions: Examples 
 
 The following statement rolls back your entire current transaction: 
     
     
+    ```
     ROLLBACK; 
     
+    ```
 
-The following statement rolls back your current transaction to savepoint `banda_sal`: 
+The following statement rolls back your current transaction to savepoint ` banda_sal ` : 
     
     
+    ```
     ROLLBACK TO SAVEPOINT banda_sal; 
     
+    ```
 
-See "[Creating Savepoints: Example](SAVEPOINT.html#GUID-78EEA746-0021-42E8-9971-3BA6DFFEE794__I2106871)" for a full version of the preceding example. 
+See  " [ Creating Savepoints: Example ](SAVEPOINT.md#GUID-78EEA746-0021-42E8-9971-3BA6DFFEE794__I2106871) "  for a full version of the preceding example. 
 
-The following statement manually rolls back an in-doubt distributed transaction:
+The following statement manually rolls back an in-doubt distributed transaction: 
     
     
+    ```
     ROLLBACK WORK 
         FORCE '25.32.87'; 
-
-[← Previous](REVOKE.md)
-
-[Next →](SAVEPOINT.md)
+    ```

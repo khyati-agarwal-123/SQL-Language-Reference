@@ -1,15 +1,3 @@
-[Previous](Oracle-Compliance-with-SQLCLI2008.html) [Next](Oracle-Compliance-with-SQLMED2008.html) JavaScript must be enabled to correctly display this content 
+##  Oracle Compliance with SQL/PSM {#GUID-651F9066-1511-407B-A002-C04AB2F2A534} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Oracle and Standard SQL](Oracle-and-Standard-SQL.html)
-  3. Oracle Compliance with SQL/PSM
-
-
-
-## Oracle Compliance with SQL/PSM
-
-Oracle PL/SQL provides functionality equivalent to SQL/PSM, with minor syntactic differences, such as the spelling or arrangement of keywords.
-
-[← Previous](Oracle-Compliance-with-SQLCLI2008.md)
-
-[Next →](Oracle-Compliance-with-SQLMED2008.md)
+Oracle PL/SQL provides functionality equivalent to SQL/PSM, with minor syntactic differences, such as the spelling or arrangement of keywords. 

@@ -1,34 +1,27 @@
-[Previous](Logical-Conditions.html) [Next](Multiset-Conditions.html) JavaScript must be enabled to correctly display this content 
+##  Model Conditions {#GUID-1F5B08DB-2B7A-4ECE-B51A-C753A426928B} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Conditions](Conditions.html)
-  3. Model Conditions 
+Model conditions can be used only in the ` MODEL ` clause of a ` SELECT ` statement. 
 
+###  IS ANY Condition {#GUID-759EA766-E377-4EC4-99C6-DE861E96CEDF} 
 
+The ` IS ` ` ANY ` condition can be used only in the *model_clause* of a ` SELECT ` statement. Use this condition to qualify all values of a dimension column, including ` NULL ` . 
 
-## Model Conditions 
+*is_any_condition* ::= 
 
-Model conditions can be used only in the `MODEL` clause of a `SELECT` statement. 
+![Description of is_any_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_any_condition.gif)[ Description of the illustration is_any_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_any_condition.md)
 
-### IS ANY Condition 
+The condition always returns a Boolean value of ` TRUE ` in order to qualify all values of the column. 
 
-The `IS` `ANY` condition can be used only in the `model_clause` of a `SELECT` statement. Use this condition to qualify all values of a dimension column, including `NULL`. 
+> **note:** See Also: 
 
-is_any_condition::= 
+*model_clause* and [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) for information 
 
-![Description of is_any_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_any_condition.gif)[Description of the illustration is_any_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_any_condition.html)
+Example 
 
-The condition always returns a Boolean value of `TRUE` in order to qualify all values of the column. 
-
-See Also:
-
-[model_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2172805) and [Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) for information 
-
-Example
-
-The following example sets sales for each product for year 2000 to 0:
+The following example sets sales for each product for year 2000 to 0: 
     
     
+    ```
     SELECT country, prod, year, s
       FROM sales_view_ref
       MODEL
@@ -64,28 +57,30 @@ The following example sets sales for each product for year 2000 to 0:
      
     16 rows selected.
     
+    ```
 
-The preceding example requires the view `sales_view_ref`. Refer to [The MODEL clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) to create this view. 
+The preceding example requires the view ` sales_view_ref ` . Refer to [ The MODEL clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) to create this view. 
 
-### IS PRESENT Condition 
+###  IS PRESENT Condition {#GUID-A26216BD-D937-412E-87B3-4B79F511AE38} 
 
-is_present_condition::= 
+*is_present_condition* ::= 
 
-The `IS` `PRESENT` condition can be used only in the `model_clause` of a `SELECT` statement. Use this condition to test whether the cell referenced is present prior to the execution of the `model_clause`. 
+The ` IS ` ` PRESENT ` condition can be used only in the *model_clause* of a ` SELECT ` statement. Use this condition to test whether the cell referenced is present prior to the execution of the *model_clause* . 
 
-![Description of is_present_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_present_condition.gif)[Description of the illustration is_present_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_present_condition.html)
+![Description of is_present_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/is_present_condition.gif)[ Description of the illustration is_present_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/is_present_condition.md)
 
-The condition returns `TRUE` if the cell exists prior to the execution of the `model_clause` and `FALSE` if it does not. 
+The condition returns ` TRUE ` if the cell exists prior to the execution of the *model_clause* and ` FALSE ` if it does not. 
 
-See Also:
+> **note:** See Also: 
 
-[model_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2172805) and [Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) for information 
+*model_clause* and [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) for information 
 
-Example
+Example 
 
-In the following example, if sales of the Mouse Pad for year 1999 exist, then sales of the Mouse Pad for year 2000 is set to sales of the Mouse Pad for year 1999. Otherwise, sales of the Mouse Pad for year 2000 is set to 0.
+In the following example, if sales of the Mouse Pad for year 1999 exist, then sales of the Mouse Pad for year 2000 is set to sales of the Mouse Pad for year 1999. Otherwise, sales of the Mouse Pad for year 2000 is set to 0. 
     
     
+    ```
     SELECT country, prod, year, s
       FROM sales_view_ref
       MODEL
@@ -124,9 +119,6 @@ In the following example, if sales of the Mouse Pad for year 1999 exist, then sa
     Germany       Standard Mouse                               2001     6456.13
     16 rows selected.
     
+    ```
 
-The preceding example requires the view `sales_view_ref`. Refer to [The MODEL clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) to create this view. 
-
-[← Previous](Logical-Conditions.md)
-
-[Next →](Model-Conditions.md)
+The preceding example requires the view ` sales_view_ref ` . Refer to [ The MODEL clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) to create this view. 

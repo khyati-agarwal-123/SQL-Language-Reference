@@ -1,46 +1,41 @@
-[Previous](to_char-boolean.html) [Next](TO_CHAR-datetime.html) JavaScript must be enabled to correctly display this content 
+##  TO_CHAR (character) {#GUID-EC078E16-11FE-4ABE-AE05-DA9AC1B4BEBC} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. TO_CHAR (character) 
+Syntax 
 
+*to_char_char* ::= 
 
+![Description of to_char_char.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_char_char.gif)[ Description of the illustration to_char_char.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_char_char.md)
 
-## TO_CHAR (character) 
+Purpose 
 
-Syntax
+` TO_CHAR ` (character) converts ` NCHAR ` , ` NVARCHAR2 ` , ` CLOB ` , or ` NCLOB ` data to the database character set. The value returned is always ` VARCHAR2 ` . 
 
-to_char_char::= 
+When you use this function to convert a character LOB into the database character set, if the LOB value to be converted is larger than the target type, then the database returns an error. 
 
-![Description of to_char_char.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_char_char.gif)[Description of the illustration to_char_char.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_char_char.html)
+> **note:** See Also: 
 
-Purpose
+Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of this function 
 
-`TO_CHAR` (character) converts `NCHAR`, `NVARCHAR2`, `CLOB`, or `NCLOB` data to the database character set. The value returned is always `VARCHAR2`. 
+Examples 
 
-When you use this function to convert a character LOB into the database character set, if the LOB value to be converted is larger than the target type, then the database returns an error.
-
-See Also:
-
-Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of this function 
-
-Examples
-
-The following example interprets a simple string as character data:
+The following example interprets a simple string as character data: 
     
     
+    ```
     SELECT TO_CHAR('01110') FROM DUAL;
     
     TO_CH
     -----
     01110
     
+    ```
 
-Compare this example with the first example for [TO_CHAR (number)](TO_CHAR-number.html#GUID-00DA076D-2468-41AB-A3AC-CC78DBA0D9CB). 
+Compare this example with the first example for [ TO_CHAR (number) ](TO_CHAR-number.md#GUID-00DA076D-2468-41AB-A3AC-CC78DBA0D9CB) . 
 
-The following example converts some `CLOB` data from the `pm.print_media` table to the database character set: 
+The following example converts some ` CLOB ` data from the ` pm.print_media ` table to the database character set: 
     
     
+    ```
     SELECT TO_CHAR(ad_sourcetext) FROM print_media
           WHERE product_id = 2268;
     
@@ -53,12 +48,14 @@ The following example converts some `CLOB` data from the `pm.print_media` table 
     and Internet voicing. Make real-time full duplex phone calls at the same time
     you're online.
     **********************************
+    ```
 
-TO_CHAR (character) Function: Example
+TO_CHAR (character) Function: Example 
 
-The following statements create a table named `empl_temp` and populate it with employee details: 
+The following statements create a table named ` empl_temp ` and populate it with employee details: 
     
     
+    ```
     CREATE TABLE empl_temp 
       ( 
          employee_id NUMBER(6), 
@@ -81,10 +78,12 @@ The following statements create a table named `empl_temp` and populate it with e
     
     INSERT INTO empl_temp
     VALUES(115,'Jane','Doe','example.com','15-JAN-2015','1005','Executive Employee');
+    ```
 
-The following statement converts CLOB data to the database character set:
+The following statement converts CLOB data to the database character set: 
     
     
+    ```
     SELECT To_char(clob_column) "CLOB_TO_CHAR" 
     FROM   empl_temp 
     WHERE  employee_id IN ( 111, 112, 115 );
@@ -94,11 +93,8 @@ The following statement converts CLOB data to the database character set:
     Experienced Employee
     Junior Employee
     Executive Employee
+    ```
 
-Live SQL:
+> **note:** Live SQL: 
 
-View and run a related example on Oracle Live SQL at [Using the TO_CHAR Function](https://livesql.oracle.com/apex/livesql/docs/sqlrf/to_char/tochar_basic.md)
-
-[← Previous](to_char-boolean.md)
-
-[Next →](TO_CHAR-datetime.md)
+View and run a related example on Oracle Live SQL at [ *Using the TO_CHAR Function* ](https://livesql.oracle.com/apex/livesql/docs/sqlrf/to_char/tochar_basic.md)

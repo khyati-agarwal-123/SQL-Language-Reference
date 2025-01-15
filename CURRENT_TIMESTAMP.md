@@ -1,32 +1,25 @@
-[Previous](CURRENT_DATE.html) [Next](CV.html) JavaScript must be enabled to correctly display this content 
+##  CURRENT_TIMESTAMP {#GUID-CBD42B84-869D-45C7-9FFC-001DD7712097} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. CURRENT_TIMESTAMP 
+Syntax 
 
+![Description of current_timestamp.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/current_timestamp.gif)[ Description of the illustration current_timestamp.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/current_timestamp.md)
 
+Purpose 
 
-## CURRENT_TIMESTAMP 
+` CURRENT_TIMESTAMP ` returns the current date and time in the session time zone, in a value of data type ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` . The time zone offset reflects the current local time of the SQL session. If you omit precision, then the default is 6. The difference between this function and ` LOCALTIMESTAMP ` is that ` CURRENT_TIMESTAMP ` returns a ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` value while ` LOCALTIMESTAMP ` returns a ` TIMESTAMP ` value. 
 
-Syntax
+In the optional argument, *precision* specifies the fractional second precision of the time value returned. 
 
-![Description of current_timestamp.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/current_timestamp.gif)[Description of the illustration current_timestamp.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/current_timestamp.html)
+> **note:** See Also: 
 
-Purpose
+[ LOCALTIMESTAMP ](LOCALTIMESTAMP.md#GUID-3C3D1F29-5F53-41F2-B2D6-A3767DFB22CA)
 
-`CURRENT_TIMESTAMP` returns the current date and time in the session time zone, in a value of data type `TIMESTAMP` `WITH` `TIME` `ZONE`. The time zone offset reflects the current local time of the SQL session. If you omit precision, then the default is 6. The difference between this function and `LOCALTIMESTAMP` is that `CURRENT_TIMESTAMP` returns a `TIMESTAMP` `WITH` `TIME` `ZONE` value while `LOCALTIMESTAMP` returns a `TIMESTAMP` value. 
+Examples 
 
-In the optional argument, `precision` specifies the fractional second precision of the time value returned. 
-
-See Also:
-
-[LOCALTIMESTAMP](LOCALTIMESTAMP.html#GUID-3C3D1F29-5F53-41F2-B2D6-A3767DFB22CA)
-
-Examples
-
-The following example illustrates that `CURRENT_TIMESTAMP` is sensitive to the session time zone: 
+The following example illustrates that ` CURRENT_TIMESTAMP ` is sensitive to the session time zone: 
     
     
+    ```
     ALTER SESSION SET TIME_ZONE = '-5:0';
     ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YYYY HH24:MI:SS';
     SELECT SESSIONTIMEZONE, CURRENT_TIMESTAMP FROM DUAL;
@@ -42,26 +35,29 @@ The following example illustrates that `CURRENT_TIMESTAMP` is sensitive to the s
     --------------- ----------------------------------------------------
     -08:00          04-APR-00 10.18.21.366065 AM -08:00
     
+    ```
 
-When you use the `CURRENT_TIMESTAMP` with a format mask, take care that the format mask matches the value returned by the function. For example, consider the following table: 
+When you use the ` CURRENT_TIMESTAMP ` with a format mask, take care that the format mask matches the value returned by the function. For example, consider the following table: 
     
     
+    ```
     CREATE TABLE current_test (col1 TIMESTAMP WITH TIME ZONE);
     
+    ```
 
-The following statement fails because the mask does not include the `TIME` `ZONE` portion of the type returned by the function: 
+The following statement fails because the mask does not include the ` TIME ` ` ZONE ` portion of the type returned by the function: 
     
     
+    ```
     INSERT INTO current_test VALUES
       (TO_TIMESTAMP_TZ(CURRENT_TIMESTAMP, 'DD-MON-RR HH.MI.SSXFF PM'));
     
+    ```
 
-The following statement uses the correct format mask to match the return type of `CURRENT_TIMESTAMP`: 
+The following statement uses the correct format mask to match the return type of ` CURRENT_TIMESTAMP ` : 
     
     
+    ```
     INSERT INTO current_test VALUES
       (TO_TIMESTAMP_TZ(CURRENT_TIMESTAMP, 'DD-MON-RR HH.MI.SSXFF PM TZH:TZM'));
-
-[← Previous](CURRENT_DATE.md)
-
-[Next →](CV.md)
+    ```

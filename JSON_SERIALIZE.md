@@ -1,102 +1,94 @@
-[Previous](json_scalar.html) [Next](JSON_TABLE.html) JavaScript must be enabled to correctly display this content 
+##  JSON_SERIALIZE {#GUID-01B769C6-A7B3-4136-977F-63CA05963D21} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. JSON_SERIALIZE
+Syntax 
 
-
-
-## JSON_SERIALIZE
-
-Syntax
-
-json_serialize
+*json_serialize* 
 
   
 
 
-![Description of json_serialize.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_serialize.gif)[Description of the illustration json_serialize.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_serialize.html)
+![Description of json_serialize.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_serialize.gif)[ Description of the illustration json_serialize.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_serialize.md)
 
   
 
 
-json_returning_clause
+*json_returning_clause* 
 
-![Description of json_returning_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_returning_clause.gif)[Description of the illustration json_returning_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_returning_clause.html)
+![Description of json_returning_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_returning_clause.gif)[ Description of the illustration json_returning_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_returning_clause.md)
 
-Purpose
+Purpose 
 
-`json_serialize` takes JSON data of any SQL data type ( `BLOB`,`CLOB`, `JSON`, or `VARCHAR2` ) as input and returns a textual representation of it. You typically use it to transform the result of a query. 
+` json_serialize ` takes JSON data of any SQL data type ( ` BLOB ` , ` CLOB ` , ` JSON ` , or ` VARCHAR2 ` ) as input and returns a textual representation of it. You typically use it to transform the result of a query. 
 
-You can use `json_serialize` to convert binary JSON data to textual form (`CLOB` or `VARCHAR2`), or to transform textual JSON data by pretty-printing it or escaping non-ASCII Unicode characters in it. 
+You can use ` json_serialize ` to convert binary JSON data to textual form ( ` CLOB ` or ` VARCHAR2 ` ), or to transform textual JSON data by pretty-printing it or escaping non-ASCII Unicode characters in it. 
 
-When Oracle SQL function `vector_serialize` is applied to a JSON type instance, any non- standard Oracle scalar JSON value is returned as a standard JSON scalar value. 
+When Oracle SQL function *vector_serialize* is applied to a JSON type instance, any non- standard Oracle scalar JSON value is returned as a standard JSON scalar value. 
 
-When you apply `vector_serialize` to a `VECTOR` type instance, it returns a textual JSON array of numbers. 
+When you apply *vector_serialize* to a ` VECTOR ` type instance, it returns a textual JSON array of numbers. 
 
-Note:
+> **note:** 
 
-You can serialize a `VECTOR` instance to a textual JSON array of numbers using SQL function` vector_serialize`. (Function json_serialize serializes only JSON data.) See [VECTOR_SERIALIZE](vector_serialize.html#GUID-9E3FFB34-F924-4C02-B35D-30B9FA1DA1A3 "VECTOR_SERIALIZE is synonymous with FROM_VECTOR.")
+You can serialize a ` VECTOR ` instance to a textual JSON array of numbers using SQL function *vector_serialize* . (Function json_serialize serializes only JSON data.) See [ VECTOR_SERIALIZE ](vector_serialize.md#GUID-9E3FFB34-F924-4C02-B35D-30B9FA1DA1A3)
 
-See Also:
+> **note:** See Also: 
 
-[Oracle SQL Function JSON_SERIALIZE](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADJSN-GUID-667D37FF-F5FB-465D-B8AE-DAE88F191B2F) of the JSON Developer's Guide.
+[ Oracle SQL Function JSON_SERIALIZE ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADJSN-GUID-667D37FF-F5FB-465D-B8AE-DAE88F191B2F) of the *JSON Developer's Guide.* 
 
-expr
+*expr* 
 
-`expr` is the input expression. Can be any one of type `JSON`, `VARCHAR2`, `CLOB`, or `BLOB`. 
+*expr* is the input expression. Can be any one of type ` JSON ` , ` VARCHAR2 ` , ` CLOB ` , or ` BLOB ` . 
 
-JSON_returning_clause::= 
+*JSON_returning_clause* ::= 
 
-You can use the `JSON_returning_clause` to specify the return type of the function. One of `BOOLEAN`, `BLOB`, `CLOB`, `JSON`, or `VARCHAR2`. 
+You can use the *JSON_returning_clause* to specify the return type of the function. One of ` BOOLEAN ` , ` BLOB ` , ` CLOB ` , ` JSON ` , or ` VARCHAR2 ` . 
 
-The default return type is `VARCHAR2(4000)`. 
+The default return type is ` VARCHAR2(4000) ` . 
 
-If the return type is `RAW` or `BLOB`, it contains `UTF8` encoded JSON text. 
+If the return type is ` RAW ` or ` BLOB ` , it contains ` UTF8 ` encoded JSON text. 
 
-PRETTY
+PRETTY 
 
-Specify `PRETTY` if you want the result to be formatted for human readability. 
+Specify ` PRETTY ` if you want the result to be formatted for human readability. 
 
-ASCII
+ASCII 
 
-Specify `ASCII` if you want non-ASCII characters to be output using JSON escape sequences. 
+Specify ` ASCII ` if you want non-ASCII characters to be output using JSON escape sequences. 
 
-ORDERED
+ORDERED 
 
-Specify `ORDERED` if you want to reorder key-value pairs alphabetically in ascending order. You can combine `ORDERED` with `PRETTY` and `ASCII`. 
+Specify ` ORDERED ` if you want to reorder key-value pairs alphabetically in ascending order. You can combine ` ORDERED ` with ` PRETTY ` and ` ASCII ` . 
 
-Example
+Example 
     
     
-    SELECT JSON_SERIALIZE('{price:20, currency:" â¬"}' ASCII PRETTY ORDERED) from dual;
+    ```
+    SELECT JSON_SERIALIZE('{price:20, currency:" €"}' ASCII PRETTY ORDERED) from dual;
     {
       "currency" : "\u20AC",
       "price" : 20
     }
     
+    ```
 
-TRUNCATE
+TRUNCATE 
 
-Specify `TRUNCATE`, if you want the textual output in the result document to fit into the buffer of the specified return type . 
+Specify ` TRUNCATE ` , if you want the textual output in the result document to fit into the buffer of the specified return type . 
 
-JSON_on_error_clause::= 
+*JSON_on_error_clause* ::= 
 
-Specify `JSON_on_error_clause` to control the handling of processing errors. 
+Specify *JSON_on_error_clause* to control the handling of processing errors. 
 
-`ERROR ON ERROR` is the default. 
+` ERROR ON ERROR ` is the default. 
 
-`EMPTY ON ERROR` is not supported. 
+` EMPTY ON ERROR ` is not supported. 
 
-If you specify `TRUNCATE` with `JSON_on_error_clause`, then a value too large for the return type will be truncated to fit into the buffer instead of raising an error. 
+If you specify ` TRUNCATE ` with ` JSON_on_error_clause ` , then a value too large for the return type will be truncated to fit into the buffer instead of raising an error. 
 
 Example 
     
     
+    ```
     SELECT JSON_SERIALIZE ('{a:[1,2,3,4]}' RETURNING VARCHAR2(3) TRUNCATE ERROR ON ERROR) from dual
     –-------
     {"a 
-
-[← Previous](json_scalar.md)
-
-[Next →](JSON_TABLE.md)
+    ```

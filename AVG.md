@@ -1,56 +1,51 @@
-[Previous](ATAN2.html) [Next](BFILENAME.html) JavaScript must be enabled to correctly display this content 
+##  AVG {#GUID-B64BCBF1-DAA0-4D88-9821-2C4D3FDE5E4A} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. AVG 
+Syntax 
 
+![Description of avg.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/avg.gif)[ Description of the illustration avg.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/avg.md)
 
+> **note:** See Also: 
 
-## AVG 
+[ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of avg.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/avg.gif)[Description of the illustration avg.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/avg.html)
-
-See Also:
-
-[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056) for information on syntax, semantics, and restrictions 
-
-Purpose
-
-`AVG` returns average value of `expr`. 
+` AVG ` returns average value of *expr* . 
 
 It takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type or an interval data type. 
 
-The function returns the same data type as the numeric data type of the argument. If the input is an interval, this returns an interval with the same units as the input.
+The function returns the same data type as the numeric data type of the argument. If the input is an interval, this returns an interval with the same units as the input. 
 
-See Also:
+> **note:** See Also: 
 
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion 
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion 
 
-If you specify `DISTINCT`, then you can specify only the `query_partition_clause` of the `analytic_clause`. The `order_by_clause` and `windowing_clause` are not allowed. 
+If you specify ` DISTINCT ` , then you can specify only the *query_partition_clause* of the *analytic_clause* . The *order_by_clause* and *windowing_clause* are not allowed. 
 
-See Also:
+> **note:** See Also: 
 
-[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) for information on valid forms of `expr` and [Aggregate Functions](Aggregate-Functions.html#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)
+[ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) for information on valid forms of *expr* and [ Aggregate Functions ](Aggregate-Functions.md#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)
 
-Aggregate Example
+Aggregate Example 
 
-The following example calculates the average salary of all employees in the `hr.employees` table: 
+The following example calculates the average salary of all employees in the ` hr.employees ` table: 
     
     
+    ```
     SELECT AVG(salary) "Average"
       FROM employees;
     
            Average
     --------------
         6461.83178
+    ```
 
-Analytic Example
+Analytic Example 
 
-The following example calculates, for each employee in the `employees` table, the average salary of the employees reporting to the same manager who were hired in the range just before through just after the employee: 
+The following example calculates, for each employee in the ` employees ` table, the average salary of the employees reporting to the same manager who were hired in the range just before through just after the employee: 
     
     
+    ```
     SELECT manager_id, last_name, hire_date, salary,
            AVG(salary) OVER (PARTITION BY manager_id ORDER BY hire_date 
       ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS c_mavg
@@ -68,7 +63,4 @@ The following example calculates, for each employee in the `employees` table, th
            100 Partners                  05-JAN-05      13500 13166.6667
            100 Errazuriz                 10-MAR-05      12000 11233.3333
     . . .
-
-[← Previous](ATAN2.md)
-
-[Next →](BFILENAME.md)
+    ```

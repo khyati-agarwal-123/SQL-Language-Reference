@@ -1,60 +1,55 @@
-[Previous](NLS_COLLATION_ID.html) [Next](NLS_INITCAP.html) JavaScript must be enabled to correctly display this content 
+##  NLS_COLLATION_NAME {#GUID-24848987-2A02-4B09-A690-D3C87308FB3A} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. NLS_COLLATION_NAME 
+Syntax 
 
+![Description of nls_collation_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/nls_collation_name.gif)[ Description of the illustration nls_collation_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/nls_collation_name.md)
 
+Purpose 
 
-## NLS_COLLATION_NAME 
+` NLS_COLLATION_NAME ` takes as its argument a collation ID number and returns the corresponding collation name. Collation IDs are used in the data dictionary tables and in Oracle Call Interface (OCI). Collation names are used in SQL statements and data dictionary views 
 
-Syntax
+For *expr* , specify the collation ID as a ` NUMBER ` value. 
 
-![Description of nls_collation_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/nls_collation_name.gif)[Description of the illustration nls_collation_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/nls_collation_name.html)
+This function returns a ` VARCHAR2 ` value. If you specify an invalid collation ID, then this function returns null. 
 
-Purpose
+The optional *flag* parameter applies only to Unicode Collation Algorithm (UCA) collations. This parameter determines whether the function returns the short form or long form of the collation name. The parameter must be a character expression evaluating to the value ` 'S' ` , ` 's' ` , ` 'L' ` , or ` 'l' ` , with the following meaning: 
 
-`NLS_COLLATION_NAME` takes as its argument a collation ID number and returns the corresponding collation name. Collation IDs are used in the data dictionary tables and in Oracle Call Interface (OCI). Collation names are used in SQL statements and data dictionary views 
+  * ` 'S' ` or ` 's' ` – Returns the short form of the collation name 
 
-For `expr`, specify the collation ID as a `NUMBER` value. 
-
-This function returns a `VARCHAR2` value. If you specify an invalid collation ID, then this function returns null. 
-
-The optional `flag` parameter applies only to Unicode Collation Algorithm (UCA) collations. This parameter determines whether the function returns the short form or long form of the collation name. The parameter must be a character expression evaluating to the value `'S'`, `'s'`, `'L'`, or `'l'`, with the following meaning: 
-
-  * `'S'` or `'s'` – Returns the short form of the collation name 
-
-  * `'L'` or `'l'` – Returns the long form of the collation name 
+  * ` 'L' ` or ` 'l' ` – Returns the long form of the collation name 
 
 
 
 
-If you omit `flag`, then the default is `'L'`. 
+If you omit *flag* , then the default is ` 'L' ` . 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG1005) for more information on UCA collations 
+  * [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG1005) for more information on UCA collations 
 
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of `NLS_COLLATION_NAME`
-
-
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of ` NLS_COLLATION_NAME `
 
 
-Examples
 
-The following example returns the name of the collation corresponding to collation ID number 81919:
+
+Examples 
+
+The following example returns the name of the collation corresponding to collation ID number 81919: 
     
     
+    ```
     SELECT NLS_COLLATION_NAME(81919)
       FROM DUAL;
     
     NLS_COLLA
     ---------
     BINARY_AI
+    ```
 
-The following example returns the short form of the name of the UCA collation corresponding to collation ID number 208897:
+The following example returns the short form of the name of the UCA collation corresponding to collation ID number 208897: 
     
     
+    ```
     SELECT NLS_COLLATION_NAME(208897,'S')
       FROM DUAL;
     
@@ -62,10 +57,12 @@ The following example returns the short form of the name of the UCA collation co
     -------------
     UCA0610_DUCET
     
+    ```
 
-The following example returns the long form of the name of the UCA collation corresponding to collation ID number 208897:
+The following example returns the long form of the name of the UCA collation corresponding to collation ID number 208897: 
     
     
+    ```
     SELECT NLS_COLLATION_NAME(208897,'L')
       FROM DUAL;
     
@@ -73,7 +70,4 @@ The following example returns the long form of the name of the UCA collation cor
     ----------------------------------------
     UCA0610_DUCET_S4_VS_BN_NY_EN_FN_HN_DN_MN
     
-
-[← Previous](NLS_COLLATION_ID.md)
-
-[Next →](NLS_INITCAP.md)
+    ```

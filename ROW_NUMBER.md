@@ -1,32 +1,25 @@
-[Previous](ROUND_TIES_TO_EVEN-number.html) [Next](ROWIDTOCHAR.html) JavaScript must be enabled to correctly display this content 
+##  ROW_NUMBER {#GUID-D5A157F8-0F53-45BD-BF8C-AE79B1DB8C41} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. ROW_NUMBER 
+Syntax 
 
+![Description of row_number.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_number.gif)[ Description of the illustration row_number.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_number.md)
 
+> **note:** See Also: 
 
-## ROW_NUMBER 
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of row_number.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_number.gif)[Description of the illustration row_number.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_number.html)
+` ROW_NUMBER ` is an analytic function. It assigns a unique number to each row to which it is applied (either each row in the partition or each row returned by the query), in the ordered sequence of rows specified in the *order_by_clause* , beginning with 1. 
 
-See Also:
+By nesting a subquery using ` ROW_NUMBER ` inside a query that retrieves the ` ROW_NUMBER ` values for a specified range, you can find a precise subset of rows from the results of the inner query. This use of the function lets you implement top-N, bottom-N, and inner-N reporting. For consistent results, the query must ensure a deterministic sort order. 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions 
+Examples 
 
-Purpose
-
-`ROW_NUMBER` is an analytic function. It assigns a unique number to each row to which it is applied (either each row in the partition or each row returned by the query), in the ordered sequence of rows specified in the `order_by_clause`, beginning with 1. 
-
-By nesting a subquery using `ROW_NUMBER` inside a query that retrieves the `ROW_NUMBER` values for a specified range, you can find a precise subset of rows from the results of the inner query. This use of the function lets you implement top-N, bottom-N, and inner-N reporting. For consistent results, the query must ensure a deterministic sort order. 
-
-Examples
-
-The following example finds the three highest paid employees in each department in the `hr.employees` table. Fewer than three rows are returned for departments with fewer than three employees. 
+The following example finds the three highest paid employees in each department in the ` hr.employees ` table. Fewer than three rows are returned for departments with fewer than three employees. 
     
     
+    ```
     SELECT department_id, first_name, last_name, salary
     FROM
     (
@@ -38,10 +31,12 @@ The following example finds the three highest paid employees in each department 
     WHERE rn <= 3
     ORDER BY department_id, salary DESC, last_name;
     
+    ```
 
-The following example is a join query on the `sh.sales` table. It finds the sales amounts in 2000 of the five top-selling products in 1999 and compares the difference between 2000 and 1999. The ten top-selling products are calculated within each distribution channel. 
+The following example is a join query on the ` sh.sales ` table. It finds the sales amounts in 2000 of the five top-selling products in 1999 and compares the difference between 2000 and 1999. The ten top-selling products are calculated within each distribution channel. 
     
     
+    ```
     SELECT sales_2000.channel_desc, sales_2000.prod_name,
            sales_2000.amt amt_2000,  top_5_prods_1999_year.amt amt_1999,
            sales_2000.amt  - top_5_prods_1999_year.amt amt_diff
@@ -94,7 +89,4 @@ The following example is a join query on the `sh.sales` table. It finds the sale
     Partners         Unix/Windows 1-user pack                         374002.51  340123.02   33879.49
     
     15 rows selected.
-
-[← Previous](ROUND_TIES_TO_EVEN-number.md)
-
-[Next →](ROWIDTOCHAR.md)
+    ```

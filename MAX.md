@@ -1,51 +1,46 @@
-[Previous](MAKE_REF.html) [Next](MEDIAN.html) JavaScript must be enabled to correctly display this content 
+##  MAX {#GUID-E5372020-A6DA-44BF-93BE-DA8C3F74CD01} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. MAX 
+Syntax 
 
+![Description of max.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/max.gif)[ Description of the illustration max.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/max.md)
 
+> **note:** See Also: 
 
-## MAX 
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of max.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/max.gif)[Description of the illustration max.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/max.html)
+` MAX ` returns maximum value of *expr* . You can use it as an aggregate or analytic function. 
 
-See Also:
+> **note:** See Also: 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions 
+  * " [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  for information on valid forms of *expr* ,  " [ Floating-Point Numbers ](Data-Types.md#GUID-F579F4B8-EF13-4CAF-9B06-03B076861C41) "  for information on binary-float comparison semantics, and  " [ Aggregate Functions ](Aggregate-Functions.md#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848) " 
 
-Purpose
-
-`MAX` returns maximum value of `expr`. You can use it as an aggregate or analytic function. 
-
-See Also:
-
-  * "[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" for information on valid forms of `expr`, "[Floating-Point Numbers](Data-Types.html#GUID-F579F4B8-EF13-4CAF-9B06-03B076861C41)" for information on binary-float comparison semantics, and "[Aggregate Functions](Aggregate-Functions.html#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)"
-
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules, which define the collation `MAX` uses to compare character values for `expr`, and for the collation derivation rules, which define the collation assigned to the return value of this function when it is a character value 
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules, which define the collation ` MAX ` uses to compare character values for *expr* , and for the collation derivation rules, which define the collation assigned to the return value of this function when it is a character value 
 
 
 
 
 Aggregate Example 
 
-The following example determines the highest salary in the `hr.employees` table: 
+The following example determines the highest salary in the ` hr.employees ` table: 
     
     
+    ```
     SELECT MAX(salary) "Maximum"
       FROM employees;
      
        Maximum
     ----------
          24000
+    ```
 
-Analytic Examples
+Analytic Examples 
 
-The following example calculates, for each employee, the highest salary of the employees reporting to the same manager as the employee.
+The following example calculates, for each employee, the highest salary of the employees reporting to the same manager as the employee. 
     
     
+    ```
     SELECT manager_id, last_name, salary,
            MAX(salary) OVER (PARTITION BY manager_id) AS mgr_max
       FROM employees
@@ -62,10 +57,12 @@ The following example calculates, for each employee, the highest salary of the e
            100 Kochhar                        17000      17000
     . . .
     
+    ```
 
-If you enclose this query in the parent query with a predicate, then you can determine the employee who makes the highest salary in each department:
+If you enclose this query in the parent query with a predicate, then you can determine the employee who makes the highest salary in each department: 
     
     
+    ```
     SELECT manager_id, last_name, salary
       FROM (SELECT manager_id, last_name, salary, 
                    MAX(salary) OVER (PARTITION BY manager_id) AS rmax_sal
@@ -99,7 +96,4 @@ If you enclose this query in the parent query with a predicate, then you can det
                King                           24000
      
     22 rows selected.
-
-[← Previous](MAKE_REF.md)
-
-[Next →](MEDIAN.md)
+    ```

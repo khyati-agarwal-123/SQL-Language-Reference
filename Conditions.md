@@ -1,51 +1,40 @@
-[Previous](boolean-expressions.html) [Next](About-SQL-Conditions.html) JavaScript must be enabled to correctly display this content 
+##  6Conditions {#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8} 
 
-  1. [SQL Language Reference ](index.html)
-  2. Conditions
+A  condition  specifies a combination of one or more expressions and logical (Boolean) operators and returns a value of ` TRUE ` , ` FALSE ` , or ` UNKNOWN ` . 
 
+This chapter contains the following sections: 
 
+  * [ About SQL Conditions ](About-SQL-Conditions.md#GUID-E9EC8434-CD48-4C01-B01B-85E5359D8DD7)
 
-## 6  Conditions 
+  * [ Comparison Conditions ](Comparison-Conditions.md#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927)
 
-A condition specifies a combination of one or more expressions and logical (Boolean) operators and returns a value of `TRUE`, `FALSE`, or `UNKNOWN`. 
+  * [ Floating-Point Conditions ](Floating-Point-Conditions.md#GUID-D7707649-2C93-4553-BF78-F461F17A634E)
 
-This chapter contains the following sections:
+  * [ Logical Conditions ](Logical-Conditions.md#GUID-C5E48AF2-3FF9-401D-A104-CDB5FC19E65F)
 
-  * [About SQL Conditions](About-SQL-Conditions.html#GUID-E9EC8434-CD48-4C01-B01B-85E5359D8DD7)
+  * [ Model Conditions ](Model-Conditions.md#GUID-1F5B08DB-2B7A-4ECE-B51A-C753A426928B)
 
-  * [Comparison Conditions](Comparison-Conditions.html#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927)
+  * [ Multiset Conditions ](Multiset-Conditions.md#GUID-E8164A15-715A-40A0-944D-26DF4C84DE3F)
 
-  * [Floating-Point Conditions](Floating-Point-Conditions.html#GUID-D7707649-2C93-4553-BF78-F461F17A634E)
+  * [ Pattern-matching Conditions ](Pattern-matching-Conditions.md#GUID-3FA7F5AB-AC64-4200-8F90-294101428C26)
 
-  * [Logical Conditions](Logical-Conditions.html#GUID-C5E48AF2-3FF9-401D-A104-CDB5FC19E65F)
+  * [ Null Conditions ](Null-Conditions.md#GUID-657F2BA6-5687-4A00-8C2F-57515FD2DAEB)
 
-  * [Model Conditions](Model-Conditions.html#GUID-1F5B08DB-2B7A-4ECE-B51A-C753A426928B)
+  * [ XML Conditions ](XML-Conditions.md#GUID-DE0B495D-F70A-4D37-AB8B-9376991E6081)
 
-  * [Multiset Conditions](Multiset-Conditions.html#GUID-E8164A15-715A-40A0-944D-26DF4C84DE3F)
+  * [ SQL For JSON Conditions ](SQL-JSON-Conditions.md#GUID-08C75404-6E58-4EBE-A8B4-0B6041B0DB63)
 
-  * [Pattern-matching Conditions](Pattern-matching-Conditions.html#GUID-3FA7F5AB-AC64-4200-8F90-294101428C26)
+  * [ Compound Conditions ](Compound-Conditions.md#GUID-D2A245F5-8071-4DF7-886E-A46F3D13AC80)
 
-  * [Null Conditions](Null-Conditions.html#GUID-657F2BA6-5687-4A00-8C2F-57515FD2DAEB)
+  * [ BETWEEN Condition ](BETWEEN-Condition.md#GUID-868A7C9D-EDF9-44E7-91B5-C3F69E503CCB)
 
-  * [XML Conditions](XML-Conditions.html#GUID-DE0B495D-F70A-4D37-AB8B-9376991E6081)
+  * [ EXISTS Condition ](EXISTS-Condition.md#GUID-20259A83-C42B-4E0D-8DF4-9A2A66ACA8E7)
 
-  * [SQL For JSON Conditions](SQL-JSON-Conditions.html#GUID-08C75404-6E58-4EBE-A8B4-0B6041B0DB63)
+  * [ IN Condition ](IN-Condition.md#GUID-C7961CB3-8F60-47E0-96EB-BDCF5DB1317C)
 
-  * [Compound Conditions](Compound-Conditions.html#GUID-D2A245F5-8071-4DF7-886E-A46F3D13AC80)
+  * [ IS OF type Condition ](IS-OF-type-Condition.md#GUID-7254E4C7-0194-4C1F-A3B2-2CFB0AD907CD)
 
-  * [BETWEEN Condition](BETWEEN-Condition.html#GUID-868A7C9D-EDF9-44E7-91B5-C3F69E503CCB)
-
-  * [EXISTS Condition](EXISTS-Condition.html#GUID-20259A83-C42B-4E0D-8DF4-9A2A66ACA8E7)
-
-  * [IN Condition](IN-Condition.html#GUID-C7961CB3-8F60-47E0-96EB-BDCF5DB1317C)
-
-  * [IS OF type Condition](IS-OF-type-Condition.html#GUID-7254E4C7-0194-4C1F-A3B2-2CFB0AD907CD)
-
-  * [BOOLEAN Test Condition](boolean-test-condition.html#GUID-E6611D82-5FC0-4466-A3F9-BA0E35F4103D)
+  * [ BOOLEAN Test Condition ](boolean-test-condition.md#GUID-E6611D82-5FC0-4466-A3F9-BA0E35F4103D)
 
 
 
-
-[← Previous](boolean-expressions.md)
-
-[Next →](About-SQL-Conditions.md)

@@ -1,79 +1,76 @@
-[Previous](REGEXP_SUBSTR.html) [Next](REMAINDER.html) JavaScript must be enabled to correctly display this content 
+##  REGR_ (Linear Regression) Functions {#GUID-A675B68F-2A88-4843-BE2C-FCDE9C65F9A9} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. REGR_ (Linear Regression) Functions 
+The linear regression functions are: 
 
+  * ` REGR_SLOPE `
 
+  * ` REGR_INTERCEPT `
 
-## REGR_ (Linear Regression) Functions 
+  * ` REGR_COUNT `
 
-The linear regression functions are:
+  * ` REGR_R2 `
 
-  * `REGR_SLOPE`
+  * ` REGR_AVGX `
 
-  * `REGR_INTERCEPT`
+  * ` REGR_AVGY `
 
-  * `REGR_COUNT`
+  * ` REGR_SXX `
 
-  * `REGR_R2`
+  * ` REGR_SYY `
 
-  * `REGR_AVGX`
-
-  * `REGR_AVGY`
-
-  * `REGR_SXX`
-
-  * `REGR_SYY`
-
-  * `REGR_SXY`
+  * ` REGR_SXY `
 
 
 
 
-Syntax
+Syntax 
 
-linear_regr::= 
+*linear_regr* ::= 
 
-![Description of linear_regr.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/linear_regr.gif)[Description of the illustration linear_regr.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/linear_regr.html)
+![Description of linear_regr.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/linear_regr.gif)[ Description of the illustration linear_regr.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/linear_regr.md)
 
-See Also:
+> **note:** See Also: 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions 
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions 
 
-Purpose
+Purpose 
 
 The linear regression functions fit an ordinary-least-squares regression line to a set of number pairs. You can use them as both aggregate and analytic functions. 
 
-See Also:
+> **note:** See Also: 
 
-"[Aggregate Functions](Aggregate-Functions.html#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)" and "[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" for information on valid forms of `expr`
+" [ Aggregate Functions ](Aggregate-Functions.md#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848) "  and  " [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  for information on valid forms of *expr* 
 
-These functions take as arguments any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. Oracle determines the argument with the highest numeric precedence, implicitly converts the remaining arguments to that data type, and returns that data type.
+These functions take as arguments any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. Oracle determines the argument with the highest numeric precedence, implicitly converts the remaining arguments to that data type, and returns that data type. 
 
-See Also:
+> **note:** See Also: 
 
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion and "[Numeric Precedence](Data-Types.html#GUID-4C0B65DB-E751-4957-A1ED-5044BAFA7812)" for information on numeric precedence 
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion and  " [ Numeric Precedence ](Data-Types.md#GUID-4C0B65DB-E751-4957-A1ED-5044BAFA7812) "  for information on numeric precedence 
 
-Oracle applies the function to the set of (`expr1`, `expr2`) pairs after eliminating all pairs for which either `expr1` or `expr2` is null. Oracle computes all the regression functions simultaneously during a single pass through the data. 
+Oracle applies the function to the set of ( *expr1* , *expr2* ) pairs after eliminating all pairs for which either *expr1* or *expr2* is null. Oracle computes all the regression functions simultaneously during a single pass through the data. 
 
-`expr1` is interpreted as a value of the dependent variable (a `y` value), and `expr2` is interpreted as a value of the independent variable (an `x` value). 
+*expr1* is interpreted as a value of the dependent variable (a ` y ` value), and *expr2* is interpreted as a value of the independent variable (an ` x ` value). 
 
-  * `REGR_SLOPE` returns the slope of the line. The return value is a numeric data type and can be null. After the elimination of null (`expr1`, `expr2`) pairs, it makes the following computation: 
+  * ` REGR_SLOPE ` returns the slope of the line. The return value is a numeric data type and can be null. After the elimination of null ( *expr1* , *expr2* ) pairs, it makes the following computation: 
     
-        COVAR_POP(expr1, expr2) / VAR_POP(expr2)
+        ```
+    COVAR_POP(expr1, expr2) / VAR_POP(expr2)
     
+    ```
 
-  * `REGR_INTERCEPT` returns the y-intercept of the regression line. The return value is a numeric data type and can be null. After the elimination of null (`expr1`, `expr2`) pairs, it makes the following computation: 
+  * ` REGR_INTERCEPT ` returns the y-intercept of the regression line. The return value is a numeric data type and can be null. After the elimination of null ( *expr1* , *expr2* ) pairs, it makes the following computation: 
     
-        AVG(expr1) - REGR_SLOPE(expr1, expr2) * AVG(expr2)
+        ```
+    AVG(expr1) - REGR_SLOPE(expr1, expr2) * AVG(expr2)
     
+    ```
 
-  * `REGR_COUNT` returns an integer that is the number of non-null number pairs used to fit the regression line. 
+  * ` REGR_COUNT ` returns an integer that is the number of non-null number pairs used to fit the regression line. 
 
-  * `REGR_R2` returns the coefficient of determination (also called R-squared or goodness of fit) for the regression. The return value is a numeric data type and can be null. `VAR_POP`(`expr1`) and `VAR_POP`(`expr2`) are evaluated after the elimination of null pairs. The return values are: 
+  * ` REGR_R2 ` returns the coefficient of determination (also called R-squared or goodness of fit) for the regression. The return value is a numeric data type and can be null. ` VAR_POP ` ( *expr1* ) and ` VAR_POP ` ( *expr2* ) are evaluated after the elimination of null pairs. The return values are: 
     
-                             NULL if VAR_POP(expr2)  = 0
+        ```
+                         NULL if VAR_POP(expr2)  = 0
     
                             1 if VAR_POP(expr1)  = 0 and 
                                  VAR_POP(expr2) != 0
@@ -81,52 +78,64 @@ Oracle applies the function to the set of (`expr1`, `expr2`) pairs after elimina
     POWER(CORR(expr1,expr),2) if VAR_POP(expr1)  > 0 and
                                  VAR_POP(expr2  != 0
     
+    ```
 
 
 
 
-All of the remaining regression functions return a numeric data type and can be null:
+All of the remaining regression functions return a numeric data type and can be null: 
 
-  * `REGR_AVGX` evaluates the average of the independent variable (`expr2`) of the regression line. It makes the following computation after the elimination of null (`expr1`, `expr2`) pairs: 
+  * ` REGR_AVGX ` evaluates the average of the independent variable ( *expr2* ) of the regression line. It makes the following computation after the elimination of null ( *expr1* , *expr2* ) pairs: 
     
-        AVG(expr2)
+        ```
+    AVG(expr2)
     
+    ```
 
-  * `REGR_AVGY` evaluates the average of the dependent variable (`expr1`) of the regression line. It makes the following computation after the elimination of null (`expr1`, `expr2`) pairs: 
+  * ` REGR_AVGY ` evaluates the average of the dependent variable ( *expr1* ) of the regression line. It makes the following computation after the elimination of null ( *expr1* , *expr2* ) pairs: 
     
-        AVG(expr1)
+        ```
+    AVG(expr1)
     
+    ```
 
 
 
 
-`REGR_SXY`, `REGR_SXX`, `REGR_SYY` are auxiliary functions that are used to compute various diagnostic statistics. 
+` REGR_SXY ` , ` REGR_SXX ` , ` REGR_SYY ` are auxiliary functions that are used to compute various diagnostic statistics. 
 
-  * `REGR_SXX` makes the following computation after the elimination of null (`expr1`, `expr2`) pairs: 
+  * ` REGR_SXX ` makes the following computation after the elimination of null ( *expr1* , *expr2* ) pairs: 
     
-        REGR_COUNT(expr1, expr2) * VAR_POP(expr2)
+        ```
+    REGR_COUNT(expr1, expr2) * VAR_POP(expr2)
     
+    ```
 
-  * `REGR_SYY` makes the following computation after the elimination of null (`expr1`, `expr2`) pairs: 
+  * ` REGR_SYY ` makes the following computation after the elimination of null ( *expr1* , *expr2* ) pairs: 
     
-        REGR_COUNT(expr1, expr2) * VAR_POP(expr1)
+        ```
+    REGR_COUNT(expr1, expr2) * VAR_POP(expr1)
     
+    ```
 
-  * `REGR_SXY` makes the following computation after the elimination of null (`expr1`, `expr2`) pairs: 
+  * ` REGR_SXY ` makes the following computation after the elimination of null ( *expr1* , *expr2* ) pairs: 
     
-        REGR_COUNT(expr1, expr2) * COVAR_POP(expr1, expr2)
+        ```
+    REGR_COUNT(expr1, expr2) * COVAR_POP(expr1, expr2)
     
+    ```
 
 
 
 
-The following examples are based on the sample tables `sh.sales` and `sh.products`. 
+The following examples are based on the sample tables ` sh.sales ` and ` sh.products ` . 
 
-General Linear Regression Example
+General Linear Regression Example 
 
-The following example provides a comparison of the various linear regression functions used in their analytic form. The analytic form of these functions can be useful when you want to use regression statistics for calculations such as finding the salary predicted for each employee by the model. The sections that follow on the individual linear regression functions contain examples of the aggregate form of these functions.
+The following example provides a comparison of the various linear regression functions used in their analytic form. The analytic form of these functions can be useful when you want to use regression statistics for calculations such as finding the salary predicted for each employee by the model. The sections that follow on the individual linear regression functions contain examples of the aggregate form of these functions. 
     
     
+    ```
     SELECT job_id, employee_id ID, salary,
     REGR_SLOPE(SYSDATE-hire_date, salary)
        OVER (PARTITION BY job_id) slope,
@@ -159,12 +168,14 @@ The following example provides a comparison of the various linear regression fun
     SA_REP       155       7000  .257   404.763  .647     29   8396.552  2561.244
     SA_REP       156      10000  .257   404.763  .647     29   8396.552  2561.244
     . . .
+    ```
 
-REGR_SLOPE and REGR_INTERCEPT Examples
+REGR_SLOPE and REGR_INTERCEPT Examples 
 
-The following example calculates the slope and regression of the linear regression model for time employed (`SYSDATE` \- `hire_date`) and salary using the sample table `hr.employees`. Results are grouped by `job_id`. 
+The following example calculates the slope and regression of the linear regression model for time employed ( ` SYSDATE ` \- ` hire_date ` ) and salary using the sample table ` hr.employees ` . Results are grouped by ` job_id ` . 
     
     
+    ```
     SELECT job_id,
     REGR_SLOPE(SYSDATE-hire_date, salary) slope,
     REGR_INTERCEPT(SYSDATE-hire_date, salary) intercept
@@ -180,12 +191,14 @@ The following example calculates the slope and regression of the linear regressi
     SH_CLERK    .745   159.015293
     ST_CLERK    .904   134.409050
     ST_MAN      .479  -570.077291
+    ```
 
-REGR_COUNT Examples
+REGR_COUNT Examples 
 
-The following example calculates the count of by `job_id` for time employed (`SYSDATE` \- `hire_date`) and salary using the sample table `hr.employees`. Results are grouped by `job_id`. 
+The following example calculates the count of by ` job_id ` for time employed ( ` SYSDATE ` \- ` hire_date ` ) and salary using the sample table ` hr.employees ` . Results are grouped by ` job_id ` . 
     
     
+    ```
     SELECT job_id,
     REGR_COUNT(SYSDATE-hire_date, salary) count
        FROM employees
@@ -200,12 +213,14 @@ The following example calculates the count of by `job_id` for time employed (`SY
     SH_CLERK           20
     ST_CLERK           20
     ST_MAN              5
+    ```
 
-REGR_R2 Examples
+REGR_R2 Examples 
 
-The following example calculates the coefficient of determination the linear regression of time employed (`SYSDATE` \- `hire_date`) and salary using the sample table `hr.employees`: 
+The following example calculates the coefficient of determination the linear regression of time employed ( ` SYSDATE ` \- ` hire_date ` ) and salary using the sample table ` hr.employees ` : 
     
     
+    ```
     SELECT job_id,
     REGR_R2(SYSDATE-hire_date, salary) Regr_R2
        FROM employees
@@ -220,12 +235,14 @@ The following example calculates the coefficient of determination the linear reg
     SH_CLERK   .879799698
     ST_CLERK   .742808493
     ST_MAN      .69418508
+    ```
 
-REGR_AVGY and REGR_AVGX Examples
+REGR_AVGY and REGR_AVGX Examples 
 
-The following example calculates the average values for time employed (`SYSDATE` \- `hire_date`) and salary using the sample table `hr.employees`. Results are grouped by `job_id`: 
+The following example calculates the average values for time employed ( ` SYSDATE ` \- ` hire_date ` ) and salary using the sample table ` hr.employees ` . Results are grouped by ` job_id ` : 
     
     
+    ```
     SELECT job_id,
     REGR_AVGY(SYSDATE-hire_date, salary) avgy,
     REGR_AVGX(SYSDATE-hire_date, salary) avgx
@@ -241,12 +258,14 @@ The following example calculates the average values for time employed (`SYSDATE`
     SH_CLERK    2773.0778       3215
     ST_CLERK    2872.7278       2785
     ST_MAN      3140.1778       7280
+    ```
 
-REGR_SXY, REGR_SXX, and REGR_SYY Examples
+REGR_SXY, REGR_SXX, and REGR_SYY Examples 
 
-The following example calculates three types of diagnostic statistics for the linear regression of time employed (`SYSDATE` \- `hire_date`) and salary using the sample table `hr.employees`: 
+The following example calculates three types of diagnostic statistics for the linear regression of time employed ( ` SYSDATE ` \- ` hire_date ` ) and salary using the sample table ` hr.employees ` : 
     
     
+    ```
     SELECT job_id,
     REGR_SXY(SYSDATE-hire_date, salary) regr_sxy,
     REGR_SXX(SYSDATE-hire_date, salary) regr_sxx,
@@ -263,7 +282,4 @@ The following example calculates three types of diagnostic statistics for the li
     SH_CLERK      4248650   5705500.0    3596039
     ST_CLERK      3531545   3905500.0 4299084.55
     ST_MAN        2180460   4548000.0  1505915.2
-
-[← Previous](REGEXP_SUBSTR.md)
-
-[Next →](REMAINDER.md)
+    ```

@@ -1,125 +1,118 @@
-[Previous](ITERATION_NUMBER.html) [Next](JSON_ARRAYAGG.html) JavaScript must be enabled to correctly display this content 
+##  JSON_ARRAY {#GUID-46CDB3AF-5795-455B-85A8-764528CEC43B} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. JSON_ARRAY
+Syntax 
 
+![Description of json_array.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array.gif)[ Description of the illustration json_array.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array.md)
 
-
-## JSON_ARRAY
-
-Syntax
-
-![Description of json_array.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array.gif)[Description of the illustration json_array.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array.html)
-
-JSON_ARRAY_content
+*JSON_ARRAY_content* 
 
   
 
 
-![Description of json_array_content.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_content.gif)[Description of the illustration json_array_content.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_content.html)
+![Description of json_array_content.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_content.gif)[ Description of the illustration json_array_content.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_content.md)
 
   
 
 
-JSON_ARRAY_enumeration_content::= 
+*JSON_ARRAY_enumeration_content* ::= 
 
-![Description of json_array_enumeration_content.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_enumeration_content.gif)[Description of the illustration json_array_enumeration_content.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_enumeration_content.html)
+![Description of json_array_enumeration_content.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_enumeration_content.gif)[ Description of the illustration json_array_enumeration_content.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_enumeration_content.md)
 
-JSON_ARRAY_element
-
-  
-
-
-![Description of json_array_element.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_element.gif)[Description of the illustration json_array_element.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_element.html)
+*JSON_ARRAY_element* 
 
   
 
 
-JSON_on_null_clause::= 
+![Description of json_array_element.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_element.gif)[ Description of the illustration json_array_element.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_element.md)
 
-![Description of json_on_null_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_on_null_clause.gif)[Description of the illustration json_on_null_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_on_null_clause.html)
-
-JSON_returning_clause::= 
-
-![Description of json_returning_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_returning_clause.gif)[Description of the illustration json_returning_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_returning_clause.html)
-
-JSON_ARRAY_query_content::= 
-
-![Description of json_array_query_content.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_query_content.gif)[Description of the illustration json_array_query_content.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_query_content.html)
-
-Purpose
-
-The SQL/JSON function `JSON_ARRAY` takes as its input a sequence of SQL scalar expressions or one collection type instance, `VARRAY` or `NESTED TABLE`. 
-
-It converts each expression to a JSON value, and returns a JSON array that contains those JSON values.
-
-If an ADT has a member which is a collection than the type mapping creates a JSON object for the ADT with a nested JSON array for the collection member.
-
-If a collection contains ADT instances then the type mapping will create a JSON array of JSON objects.
-
-Note:
-
-[Generation of JSON Data Using SQL](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADJSN-GUID-F942D202-E4BB-4ED8-997E-AEBD6D8ED8C1) of the JSON Developer's Guide. 
-
-JSON_ARRAY_content
-
-Use this clause to define the input to the `JSON_ARRAY` function. 
-
-JSON_ARRAY_element
-
-  * expr
-
-For `expr`, you can specify any SQL expression that evaluates to a JSON object, a JSON array, a numeric literal, a text literal, date, timestamp, or null. This function converts a numeric literal to a JSON number value, and a text literal to a JSON string value. The date and timestamp data types are printed in the generated JSON object or array as JSON Strings following the ISO 8601 date format. 
-
-  * format_clause
-
-You can specify `FORMAT JSON` to indicate that the input string is JSON, and will therefore not be quoted in the output. 
+  
 
 
+*JSON_on_null_clause* ::= 
 
+![Description of json_on_null_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_on_null_clause.gif)[ Description of the illustration json_on_null_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_on_null_clause.md)
 
-JSON_on_null_clause
+*JSON_returning_clause* ::= 
 
-Use this clause to specify the behavior of this function when `expr` evaluates to null. 
+![Description of json_returning_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_returning_clause.gif)[ Description of the illustration json_returning_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_returning_clause.md)
 
-  * `NULL` `ON` `NULL` \- If you specify this clause, then the function returns the JSON null value. 
+*JSON_ARRAY_query_content* ::= 
 
-  * `ABSENT` `ON` `NULL` \- If you specify this clause, then the function omits the value from the JSON array. This is the default. 
+![Description of json_array_query_content.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/json_array_query_content.gif)[ Description of the illustration json_array_query_content.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/json_array_query_content.md)
+
+Purpose 
+
+The SQL/JSON function ` JSON_ARRAY ` takes as its input a sequence of SQL scalar expressions or *one* collection type instance, ` VARRAY ` or ` NESTED TABLE ` . 
+
+It converts each expression to a JSON value, and returns a JSON array that contains those JSON values. 
+
+If an ADT has a member which is a collection than the type mapping creates a JSON object for the ADT with a nested JSON array for the collection member. 
+
+If a collection contains ADT instances then the type mapping will create a JSON array of JSON objects. 
+
+> **note:** 
+
+[ *Generation of JSON Data Using SQL* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADJSN-GUID-F942D202-E4BB-4ED8-997E-AEBD6D8ED8C1) of the *JSON Developer's Guide* . 
+
+*JSON_ARRAY_content* 
+
+Use this clause to define the input to the ` JSON_ARRAY ` function. 
+
+*JSON_ARRAY_element* 
+
+  * *expr* 
+
+For *expr* , you can specify any SQL expression that evaluates to a JSON object, a JSON array, a numeric literal, a text literal, date, timestamp, or null. This function converts a numeric literal to a JSON number value, and a text literal to a JSON string value. The date and timestamp data types are printed in the generated JSON object or array as JSON Strings following the ISO 8601 date format. 
+
+  * *format_clause* 
+
+You can specify ` FORMAT JSON ` to indicate that the input string is JSON, and will therefore not be quoted in the output. 
 
 
 
 
-JSON_returning_clause
+*JSON_on_null_clause* 
 
-Use this clause to specify the type of return value. One of :
+Use this clause to specify the behavior of this function when *expr* evaluates to null. 
 
-  * `BLOB` to return a binary large object of the `AL32UTF8` character set. 
+  * ` NULL ` ` ON ` ` NULL ` \- If you specify this clause, then the function returns the JSON null value. 
 
-  * `CLOB` to return a character large object containing single-byte or multi-byte characters. 
-
-  * `VARCHAR2` specifying the size as a number of bytes or characters. The default is bytes. If you omit this clause, or specify the clause without specifying the `size` value, then `JSON_ARRAY` returns a character string of type `VARCHAR2(4000)`. Refer to [VARCHAR2 Data Type](Data-Types.html#GUID-0DC7FFAA-F03F-4448-8487-F2592496A510) for more information. Note that when specifying the `VARCHAR2` data type elsewhere in SQL, you are required to specify a size. However, in the `JSON_returning_clause` you can omit the size. 
-
-  * `BOOLEAN`
-
-  * `JSON`
-
-  * `VECTOR`
+  * ` ABSENT ` ` ON ` ` NULL ` \- If you specify this clause, then the function omits the value from the JSON array. This is the default. 
 
 
 
 
-STRICT
+*JSON_returning_clause* 
 
-Specify the `STRICT` clause to verify that the output of the JSON generation function is correct JSON. If the check fails, a syntax error is raised. 
+Use this clause to specify the type of return value. One of : 
 
-Refer to [JSON_OBJECT](JSON_OBJECT.html#GUID-1EF347AE-7FDA-4B41-AFE0-DD5A49E8B370) for examples. 
+  * ` BLOB ` to return a binary large object of the ` AL32UTF8 ` character set. 
 
-Examples
+  * ` CLOB ` to return a character large object containing single-byte or multi-byte characters. 
 
-The following example constructs a JSON array from a JSON object, a JSON array, a numeric literal, a text literal, and null:
+  * ` VARCHAR2 ` specifying the size as a number of bytes or characters. The default is bytes. If you omit this clause, or specify the clause without specifying the *size* value, then ` JSON_ARRAY ` returns a character string of type ` VARCHAR2(4000) ` . Refer to [ VARCHAR2 Data Type ](Data-Types.md#GUID-0DC7FFAA-F03F-4448-8487-F2592496A510) for more information. Note that when specifying the ` VARCHAR2 ` data type elsewhere in SQL, you are required to specify a size. However, in the *JSON_returning_clause* you can omit the size. 
+
+  * ` BOOLEAN `
+
+  * ` JSON `
+
+  * ` VECTOR `
+
+
+
+
+STRICT 
+
+Specify the ` STRICT ` clause to verify that the output of the JSON generation function is correct JSON. If the check fails, a syntax error is raised. 
+
+Refer to [ JSON_OBJECT ](JSON_OBJECT.md#GUID-1EF347AE-7FDA-4B41-AFE0-DD5A49E8B370) for examples. 
+
+Examples 
+
+The following example constructs a JSON array from a JSON object, a JSON array, a numeric literal, a text literal, and null: 
     
     
+    ```
     SELECT JSON_ARRAY (     
         JSON_OBJECT('percentage' VALUE .50),
         JSON_ARRAY(1,2,3),
@@ -133,7 +126,4 @@ The following example constructs a JSON array from a JSON object, a JSON array, 
     JSON Array Example
     --------------------------------------------------------------------------------
     [{"percentage":0.5},[1,2,3],100,"California",null]
-
-[← Previous](ITERATION_NUMBER.md)
-
-[Next →](JSON_ARRAYAGG.md)
+    ```

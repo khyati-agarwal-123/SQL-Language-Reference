@@ -1,15 +1,3 @@
-[Previous](Oracle-Compliance-with-SQLPSM2011.html) [Next](Oracle-Compliance-with-SQLOLB2008.html) JavaScript must be enabled to correctly display this content 
+##  Oracle Compliance with SQL/MED {#GUID-F484CC68-C6DF-4587-ACAB-1ACD313DCE43} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Oracle and Standard SQL](Oracle-and-Standard-SQL.html)
-  3. Oracle Compliance with SQL/MED
-
-
-
-## Oracle Compliance with SQL/MED
-
-Oracle does not comply with SQL/MED.
-
-[← Previous](Oracle-Compliance-with-SQLPSM2011.md)
-
-[Next →](Oracle-Compliance-with-SQLOLB2008.md)
+Oracle does not comply with SQL/MED. 

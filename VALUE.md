@@ -1,26 +1,19 @@
-[Previous](VALIDATE_CONVERSION.html) [Next](VAR_POP.html) JavaScript must be enabled to correctly display this content 
+##  VALUE {#GUID-BEB129A5-525F-4EEF-A79C-261954056234} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. VALUE 
+Syntax 
 
+![Description of value.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/value.gif)[ Description of the illustration value.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/value.md)
 
+Purpose 
 
-## VALUE 
+` VALUE ` takes as its argument a correlation variable (table alias) associated with a row of an object table and returns object instances stored in the object table. The type of the object instances is the same type as the object table. 
 
-Syntax
+Examples 
 
-![Description of value.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/value.gif)[Description of the illustration value.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/value.html)
-
-Purpose
-
-`VALUE` takes as its argument a correlation variable (table alias) associated with a row of an object table and returns object instances stored in the object table. The type of the object instances is the same type as the object table. 
-
-Examples
-
-The following example uses the sample table `oe.persons`, which is created in "[Substitutable Table and Column Examples](CREATE-TABLE.html#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6__I2090577)": 
+The following example uses the sample table ` oe.persons ` , which is created in  " [ Substitutable Table and Column Examples ](CREATE-TABLE.md#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6__I2090577) "  : 
     
     
+    ```
     SELECT VALUE(p) FROM persons p;
     
     VALUE(P)(NAME, SSN)
@@ -28,11 +21,8 @@ The following example uses the sample table `oe.persons`, which is created in "[
     PERSON_T('Bob', 1234)
     EMPLOYEE_T('Joe', 32456, 12, 100000)
     PART_TIME_EMP_T('Tim', 5678, 13, 1000, 20)
+    ```
 
-See Also:
+> **note:** See Also: 
 
-"[IS OF type Condition](IS-OF-type-Condition.html#GUID-7254E4C7-0194-4C1F-A3B2-2CFB0AD907CD)" for information on using `IS` `OF` type conditions with the `VALUE` function 
-
-[← Previous](VALIDATE_CONVERSION.md)
-
-[Next →](VAR_POP.md)
+" [ IS OF type Condition ](IS-OF-type-Condition.md#GUID-7254E4C7-0194-4C1F-A3B2-2CFB0AD907CD) "  for information on using ` IS ` ` OF ` type conditions with the ` VALUE ` function 

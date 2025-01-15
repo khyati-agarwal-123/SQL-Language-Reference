@@ -1,2022 +1,2036 @@
-[Previous](SAVEPOINT.html) [Next](SET-CONSTRAINTS.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: MERGE to UPDATE](SQL-Statements-MERGE-to-UPDATE.html)
-  3. SELECT 
-
-
-
-## SELECT 
+##  SELECT {#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6} 
 
 Purpose 
 
-Use a `SELECT` statement or subquery to retrieve data from one or more tables, object tables, views, object views, materialized views, analytic views, or hierarchies. 
+Use a ` SELECT ` statement or subquery to retrieve data from one or more tables, object tables, views, object views, materialized views, analytic views, or hierarchies. 
 
-If part or all of the result of a `SELECT` statement is equivalent to an existing materialized view, then Oracle Database may use the materialized view in place of one or more tables specified in the `SELECT` statement. This substitution is called query rewrite. It takes place only if cost optimization is enabled and the `QUERY_REWRITE_ENABLED` parameter is set to `TRUE`. To determine whether query rewrite has occurred, use the `EXPLAIN` `PLAN` statement. 
+If part or all of the result of a ` SELECT ` statement is equivalent to an existing materialized view, then Oracle Database may use the materialized view in place of one or more tables specified in the ` SELECT ` statement. This substitution is called  query rewrite  . It takes place only if cost optimization is enabled and the ` QUERY_REWRITE_ENABLED ` parameter is set to ` TRUE ` . To determine whether query rewrite has occurred, use the ` EXPLAIN ` ` PLAN ` statement. 
 
-See Also:
+> **note:** See Also: 
 
-  * [SQL Queries and Subqueries](SQL-Queries-and-Subqueries.html#GUID-5937EB2B-D3EC-45D4-BF75-1FC02E45DAE2) for general information on queries and subqueries 
+  * [ SQL Queries and Subqueries ](SQL-Queries-and-Subqueries.md#GUID-5937EB2B-D3EC-45D4-BF75-1FC02E45DAE2) for general information on queries and subqueries 
 
-  * Oracle Database Data Warehousing Guide for more information on [materialized views](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG008), [query rewrite](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG018), and [analytic views and hierarchies](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG-GUID-D384C4EE-1671-4F89-BC69-2D3133194869)
+  * *Oracle Database Data Warehousing Guide* for more information on [ materialized views ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG008) , [ query rewrite ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG018) , and [ analytic views and hierarchies ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG-GUID-D384C4EE-1671-4F89-BC69-2D3133194869)
 
-  * If you are querying JSON data see [Query JSON Data](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADJSN-GUID-119E5069-77F2-45DC-B6F0-A1B312945590)
+  * If you are querying JSON data see [ *Query JSON Data* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADJSN-GUID-119E5069-77F2-45DC-B6F0-A1B312945590)
 
-  * If you are querying XML data see [Querying XML Content Stored in Oracle XML DB](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDB-GUID-D937B3D1-BA54-41D0-9428-4739DA805D75)
+  * If you are querying XML data see [ *Querying XML Content Stored in Oracle XML DB* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDB-GUID-D937B3D1-BA54-41D0-9428-4739DA805D75)
 
-  * [EXPLAIN PLAN](EXPLAIN-PLAN.html#GUID-FD540872-4ED3-4936-96A2-362539931BA0)
-
-
-
-
-Prerequisites
-
-For you to select data from a table, materialized view, analytic view, or hierarchy, the object must be in your own schema or you must have the `READ` or `SELECT` privilege on the table, materialized view, analytic view, or hierarchy. 
-
-For you to select rows from the base tables of a view:
-
-  * The object must be in your own schema or you must have the `READ` or `SELECT` privilege on it, and 
-
-  * Whoever owns the schema containing the object must have the `READ` or `SELECT` privilege on the base tables. 
+  * [ EXPLAIN PLAN ](EXPLAIN-PLAN.md#GUID-FD540872-4ED3-4936-96A2-362539931BA0)
 
 
 
 
-The `READ` `ANY` `TABLE` or `SELECT` `ANY` `TABLE` system privilege also allows you to select data from any table, materialized view, analytic view, or hierarchy, or the base table of any materialized view, analytic view, or hierarchy. 
+Prerequisites 
 
-To specify the `FOR` `UPDATE` clause, the preceding prerequisites apply with the following exception: The `READ` and `READ` `ANY` `TABLE` privileges, where mentioned, do not allow you to specify the `FOR` `UPDATE` clause. 
+For you to select data from a table, materialized view, analytic view, or hierarchy, the object must be in your own schema or you must have the ` READ ` or ` SELECT ` privilege on the table, materialized view, analytic view, or hierarchy. 
 
-To issue an Oracle Flashback Query using the `flashback_query_clause`, you must have the `READ` or `SELECT` privilege on the objects in the select list. In addition, either you must have `FLASHBACK` object privilege on the objects in the select list, or you must have `FLASHBACK` `ANY` `TABLE` system privilege. 
+For you to select rows from the base tables of a view: 
 
-Syntax
+  * The object must be in your own schema or you must have the ` READ ` or ` SELECT ` privilege on it, and 
 
-select::= 
-
-![Description of select.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/select.gif)[Description of the illustration select.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/select.html)([subquery::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126435), [for_update_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126016)) 
-
-subquery::= 
-
-![Description of subquery.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subquery.gif)[Description of the illustration subquery.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subquery.html)([query_block::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDDCHGF), [order_by_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168299), [row_limiting_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBADDD)) 
-
-query_block::= 
-
-![Description of query_block.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_block.gif)[Description of the illustration query_block.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_block.html)([with_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFAFID), [select_list::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126854), [table_reference::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126863), [join_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDIJFDJ), [inline_analytic_view](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__INLINE_AV-F00C4103), [where_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDIFBBI), [hierarchical_query_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126079), [group_by_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2065777), [model_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161264), [window_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__SECTION_XZB_MTC_4YB)) 
-
-with_clause::= 
-
-![Description of with_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/with_clause.gif)[Description of the illustration with_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/with_clause.html)
-
-Note:
-
-You cannot specify only the `WITH` keyword. You must specify at least one of the clauses `plsql_declarations`, `subquery_factoring_clause`, or `subav_factoring_clause`. 
-
-plsql_declarations::= 
-
-![Description of plsql_declarations.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/plsql_declarations.gif)[Description of the illustration plsql_declarations.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/plsql_declarations.html)
-
-subquery_factoring_clause::= 
-
-![Description of subquery_factoring_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subquery_factoring_clause.gif)[Description of the illustration subquery_factoring_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subquery_factoring_clause.html)
-
-search_clause::= 
-
-![Description of search_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/search_clause.gif)[Description of the illustration search_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/search_clause.html)
-
-cycle_clause::= 
-
-![Description of cycle_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cycle_clause.gif)[Description of the illustration cycle_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cycle_clause.html)
-
-subav_factoring_clause::= 
-
-![Description of subav_factoring_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subav_factoring_clause.gif)[Description of the illustration subav_factoring_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subav_factoring_clause.html)
-
-sub_av_clause::= 
-
-  
+  * Whoever owns the schema containing the object must have the ` READ ` or ` SELECT ` privilege on the base tables. 
 
 
-![Description of sub_av_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sub_av_clause.gif)[Description of the illustration sub_av_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sub_av_clause.html)
+
+
+The ` READ ` ` ANY ` ` TABLE ` or ` SELECT ` ` ANY ` ` TABLE ` system privilege also allows you to select data from any table, materialized view, analytic view, or hierarchy, or the base table of any materialized view, analytic view, or hierarchy. 
+
+To specify the ` FOR ` ` UPDATE ` clause, the preceding prerequisites apply with the following exception: The ` READ ` and ` READ ` ` ANY ` ` TABLE ` privileges, where mentioned, do not allow you to specify the ` FOR ` ` UPDATE ` clause. 
+
+To issue an Oracle Flashback Query using the *flashback_query_clause* , you must have the ` READ ` or ` SELECT ` privilege on the objects in the select list. In addition, either you must have ` FLASHBACK ` object privilege on the objects in the select list, or you must have ` FLASHBACK ` ` ANY ` ` TABLE ` system privilege. 
+
+Syntax 
+
+*select* ::= 
+
+![Description of select.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/select.gif)[ Description of the illustration select.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/select.md)( *subquery::=* , *for_update_clause::=* ) 
+
+*subquery* ::= 
+
+![Description of subquery.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subquery.gif)[ Description of the illustration subquery.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subquery.md)( *query_block::=* , *order_by_clause::=* , *row_limiting_clause::=* ) 
+
+*query_block* ::= 
+
+![Description of query_block.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_block.gif)[ Description of the illustration query_block.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_block.md)( *with_clause::=* , *select_list::=* , *table_reference::=* , *join_clause::=* , *inline_analytic_view* , *where_clause::=* , *hierarchical_query_clause::=* , *group_by_clause::=* , *model_clause::=* , *window_clause::=* ) 
+
+*with_clause* ::= 
+
+![Description of with_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/with_clause.gif)[ Description of the illustration with_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/with_clause.md)
+
+> **note:** 
+
+You cannot specify only the ` WITH ` keyword. You must specify at least one of the clauses *plsql_declarations* , ` subquery_factoring_clause  ` , or *subav_factoring_clause* . 
+
+*plsql_declarations* ::= 
+
+![Description of plsql_declarations.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/plsql_declarations.gif)[ Description of the illustration plsql_declarations.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/plsql_declarations.md)
+
+*subquery_factoring_clause* ::= 
+
+![Description of subquery_factoring_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subquery_factoring_clause.gif)[ Description of the illustration subquery_factoring_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subquery_factoring_clause.md)
+
+*search_clause* ::= 
+
+![Description of search_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/search_clause.gif)[ Description of the illustration search_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/search_clause.md)
+
+*cycle_clause* ::= 
+
+![Description of cycle_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cycle_clause.gif)[ Description of the illustration cycle_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cycle_clause.md)
+
+*subav_factoring_clause* ::= 
+
+![Description of subav_factoring_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subav_factoring_clause.gif)[ Description of the illustration subav_factoring_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subav_factoring_clause.md)
+
+*sub_av_clause* ::= 
 
   
 
 
-hierarchies_clause::= 
-
-![Description of hierarchies_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hierarchies_clause.gif)[Description of the illustration hierarchies_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hierarchies_clause.html)
-
-filter_clauses::= 
-
-![Description of filter_clauses.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/filter_clauses.gif)[Description of the illustration filter_clauses.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/filter_clauses.html)
-
-filter_clause::= 
-
-![Description of filter_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/filter_clause.gif)[Description of the illustration filter_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/filter_clause.html)
-
-hier_ids::= 
+![Description of sub_av_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sub_av_clause.gif)[ Description of the illustration sub_av_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sub_av_clause.md)
 
   
 
 
-![Description of hier_ids.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hier_ids.gif)[Description of the illustration hier_ids.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hier_ids.html)
+*hierarchies_clause* ::= 
+
+![Description of hierarchies_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hierarchies_clause.gif)[ Description of the illustration hierarchies_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hierarchies_clause.md)
+
+*filter_clauses* ::= 
+
+![Description of filter_clauses.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/filter_clauses.gif)[ Description of the illustration filter_clauses.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/filter_clauses.md)
+
+*filter_clause* ::= 
+
+![Description of filter_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/filter_clause.gif)[ Description of the illustration filter_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/filter_clause.md)
+
+*hier_ids* ::= 
 
   
 
 
-hier_id::= 
+![Description of hier_ids.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hier_ids.gif)[ Description of the illustration hier_ids.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hier_ids.md)
 
   
 
 
-![Description of hier_id.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hier_id.gif)[Description of the illustration hier_id.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hier_id.html)
+*hier_id* ::= 
 
   
 
 
-add_meas_clause::= 
+![Description of hier_id.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hier_id.gif)[ Description of the illustration hier_id.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hier_id.md)
 
   
 
 
-![Description of add_meas_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/add_meas_clause.gif)[Description of the illustration add_meas_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/add_meas_clause.html)
+*add_meas_clause* ::= 
 
   
 
 
-cube_meas::= 
+![Description of add_meas_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/add_meas_clause.gif)[ Description of the illustration add_meas_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/add_meas_clause.md)
 
   
 
 
-![Description of cube_meas_.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cube_meas_.gif)[Description of the illustration cube_meas_.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cube_meas_.html)
+*cube_meas* ::= 
 
   
 
 
-base_meas_clause::= 
+![Description of cube_meas_.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cube_meas_.gif)[ Description of the illustration cube_meas_.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cube_meas_.md)
 
   
 
 
-![Description of base_meas_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/base_meas_clause.gif)[Description of the illustration base_meas_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/base_meas_clause.html)
+*base_meas_clause* ::= 
 
   
 
 
-calc_meas_clause::= 
-
-![Description of calc_meas_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/calc_meas_clause.gif)[Description of the illustration calc_meas_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/calc_meas_clause.html)
-
-select_list::= 
-
-![Description of select_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/select_list.gif)[Description of the illustration select_list.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/select_list.html)
-
-table_reference::= 
-
-![Description of table_reference.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/table_reference.gif)[Description of the illustration table_reference.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/table_reference.html)([query_table_expression::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126073), [flashback_query_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126134), [pivot_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDCEJJE), [unpivot_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDJBHHI), [row_pattern_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFAJHB), [containers_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BCEGGHJC), [shards_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__GUID-DA9E9038-9A56-417B-934F-36083EB17AB0), [values_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__GUID-27159C8E-617B-4ECE-AA4C-1800287F0C9D)) 
-
-flashback_query_clause::= 
-
-![Description of flashback_query_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/flashback_query_clause.gif)[Description of the illustration flashback_query_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/flashback_query_clause.html)
-
-query_table_expression::= 
-
-![Description of query_table_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_table_expression.gif)[Description of the illustration query_table_expression.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_table_expression.html)([analytic_view](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__ANALYTIC_VIEW-F117119F), [hierarchy](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__HIERARCHY-F1175778), [subquery_restriction_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126149), [table_collection_expression::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2065746)) 
-
-inline_external_table::= 
-
-![Description of inline_external_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inline_external_table.gif)[Description of the illustration inline_external_table.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inline_external_table.html)
-
-inline_external_table_properties::= 
-
-![Description of inline_external_table_properties.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inline_external_table_properties.gif)[Description of the illustration inline_external_table_properties.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inline_external_table_properties.html)
-
-modified_external_table::= 
-
-![Description of modified_external_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/modified_external_table.gif)[Description of the illustration modified_external_table.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/modified_external_table.html)
-
-modify_external_table_properties::= 
-
-![Description of modify_external_table_properties.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/modify_external_table_properties.gif)[Description of the illustration modify_external_table_properties.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/modify_external_table_properties.html)
-
-pivot_clause::= 
-
-![Description of pivot_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/pivot_clause.gif)[Description of the illustration pivot_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/pivot_clause.html)
-
-pivot_for_clause::= 
-
-![Description of pivot_for_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/pivot_for_clause.gif)[Description of the illustration pivot_for_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/pivot_for_clause.html)
-
-pivot_in_clause::= 
-
-![Description of pivot_in_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/pivot_in_clause.gif)[Description of the illustration pivot_in_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/pivot_in_clause.html)
-
-unpivot_clause::= 
-
-![Description of unpivot_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/unpivot_clause.gif)[Description of the illustration unpivot_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/unpivot_clause.html)
-
-unpivot_in_clause::= 
-
-![Description of unpivot_in_clause.edx follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/unpivot_in_clause.gif)[Description of the illustration unpivot_in_clause.edx](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/unpivot_in_clause.html)
-
-sample_clause::= 
-
-![Description of sample_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sample_clause.gif)[Description of the illustration sample_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sample_clause.html)
-
-partition_extension_clause::= 
-
-![Description of partition_extension_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/partition_extension_clause.gif)[Description of the illustration partition_extension_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/partition_extension_clause.html)
-
-subquery_restriction_clause::= 
-
-![Description of subquery_restriction_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subquery_restriction_clause.gif)[Description of the illustration subquery_restriction_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subquery_restriction_clause.html)
-
-table_collection_expression::= 
-
-![Description of table_collection_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/table_collection_expression.gif)[Description of the illustration table_collection_expression.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/table_collection_expression.html)
-
-containers_clause::= 
-
-![Description of containers_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/containers_clause.gif)[Description of the illustration containers_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/containers_clause.html)
-
-shards_clause::= 
-
-![Description of shards_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/shards_clause.gif)[Description of the illustration shards_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/shards_clause.html)
-
-values_clause::= 
-
-![Description of values_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/values_clause.gif)[Description of the illustration values_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/values_clause.html)
-
-join_clause::= 
-
-![Description of join_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/join_clause.gif)[Description of the illustration join_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/join_clause.html)([inner_cross_join_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABCGEDH), [outer_join_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBCHJA), [cross_outer_apply_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJHDDA)) 
-
-inner_cross_join_clause::= 
-
-![Description of inner_cross_join_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inner_cross_join_clause.gif)[Description of the illustration inner_cross_join_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inner_cross_join_clause.html)([table_reference::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126863)) 
-
-outer_join_clause::= 
-
-![Description of outer_join_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/outer_join_clause.gif)[Description of the illustration outer_join_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/outer_join_clause.html)([query_partition_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2197413), [outer_join_type::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABIBHAJ), [table_reference::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126863)) 
-
-query_partition_clause::= 
-
-![Description of query_partition_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_partition_clause.gif)[Description of the illustration query_partition_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_partition_clause.html)
-
-outer_join_type::= 
-
-![Description of outer_join_type.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/outer_join_type.gif)[Description of the illustration outer_join_type.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/outer_join_type.html)
-
-cross_outer_apply_clause::= 
-
-![Description of cross_outer_apply_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cross_outer_apply_clause.gif)[Description of the illustration cross_outer_apply_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cross_outer_apply_clause.html)([table_reference::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126863), [query_partition_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2197413)) 
-
-inline_analytic_view
+![Description of base_meas_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/base_meas_clause.gif)[ Description of the illustration base_meas_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/base_meas_clause.md)
 
   
 
 
-![Description of inline_analytic_view.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inline_analytic_view.gif)[Description of the illustration inline_analytic_view.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inline_analytic_view.html)([sub_av_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__SUB_AV_CLAUSE-F01CACDC)) 
+*calc_meas_clause* ::= 
 
-where_clause::= 
+![Description of calc_meas_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/calc_meas_clause.gif)[ Description of the illustration calc_meas_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/calc_meas_clause.md)
 
-![Description of where_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/where_clause.gif)[Description of the illustration where_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/where_clause.html)
+*select_list* ::= 
 
-hierarchical_query_clause::= 
+![Description of select_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/select_list.gif)[ Description of the illustration select_list.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/select_list.md)
 
-![Description of hierarchical_query_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hierarchical_query_clause.gif)[Description of the illustration hierarchical_query_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hierarchical_query_clause.html)(`condition` can be any condition as described in [Conditions](Conditions.html#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8)) 
+*table_reference* ::= 
 
-group_by_clause::= 
+![Description of table_reference.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/table_reference.gif)[ Description of the illustration table_reference.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/table_reference.md)( *query_table_expression::=* , *flashback_query_clause::=* , *pivot_clause::=* , *unpivot_clause::=* , *row_pattern_clause::=* , *containers_clause::=* , *shards_clause::=* , *values_clause::=* ) 
 
-![Description of group_by_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/group_by_clause.gif)[Description of the illustration group_by_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/group_by_clause.html)([rollup_cube_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126291), [grouping_sets_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126297)) 
+*flashback_query_clause* ::= 
 
-rollup_cube_clause::= 
+![Description of flashback_query_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/flashback_query_clause.gif)[ Description of the illustration flashback_query_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/flashback_query_clause.md)
 
-![Description of rollup_cube_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/rollup_cube_clause.gif)[Description of the illustration rollup_cube_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/rollup_cube_clause.html)([grouping_expression_list::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2189804)) 
+*query_table_expression* ::= 
 
-grouping_sets_clause::= 
+![Description of query_table_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_table_expression.gif)[ Description of the illustration query_table_expression.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_table_expression.md)( *analytic_view* , *hierarchy* , *subquery_restriction_clause::=* , *table_collection_expression::=* ) 
 
-![Description of grouping_sets_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/grouping_sets_clause.gif)[Description of the illustration grouping_sets_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/grouping_sets_clause.html)([rollup_cube_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2126291), [grouping_expression_list::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2189804)) 
+*inline_external_table* ::= 
 
-grouping_expression_list::= 
+![Description of inline_external_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inline_external_table.gif)[ Description of the illustration inline_external_table.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inline_external_table.md)
 
-![Description of grouping_expression_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/grouping_expression_list.gif)[Description of the illustration grouping_expression_list.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/grouping_expression_list.html)
+*inline_external_table_properties* ::= 
 
-expression_list::= 
+![Description of inline_external_table_properties.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inline_external_table_properties.gif)[ Description of the illustration inline_external_table_properties.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inline_external_table_properties.md)
 
-![Description of expression_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/expression_list.gif)[Description of the illustration expression_list.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/expression_list.html)
+*modified_external_table* ::= 
 
-model_clause::= 
+![Description of modified_external_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/modified_external_table.gif)[ Description of the illustration modified_external_table.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/modified_external_table.md)
 
-![Description of model_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_clause.gif)[Description of the illustration model_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_clause.html)([cell_reference_options::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161331), [return_rows_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171032), [reference_model::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161349), [main_model::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161360)) 
+*modify_external_table_properties* ::= 
 
-cell_reference_options::= 
+![Description of modify_external_table_properties.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/modify_external_table_properties.gif)[ Description of the illustration modify_external_table_properties.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/modify_external_table_properties.md)
 
-![Description of cell_reference_options.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cell_reference_options.gif)[Description of the illustration cell_reference_options.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cell_reference_options.html)
+*pivot_clause* ::= 
 
-return_rows_clause::= 
+![Description of pivot_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/pivot_clause.gif)[ Description of the illustration pivot_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/pivot_clause.md)
 
-![Description of return_rows_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/return_rows_clause.gif)[Description of the illustration return_rows_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/return_rows_clause.html)
+*pivot_for_clause* ::= 
 
-reference_model::= 
+![Description of pivot_for_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/pivot_for_clause.gif)[ Description of the illustration pivot_for_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/pivot_for_clause.md)
 
-![Description of reference_model.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/reference_model.gif)[Description of the illustration reference_model.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/reference_model.html)([model_column_clauses::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161363), [cell_reference_options::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161331)) 
+*pivot_in_clause* ::= 
 
-main_model::= 
+![Description of pivot_in_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/pivot_in_clause.gif)[ Description of the illustration pivot_in_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/pivot_in_clause.md)
 
-![Description of main_model.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/main_model.gif)[Description of the illustration main_model.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/main_model.html)([model_column_clauses::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161363), [cell_reference_options::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161331), [model_rules_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161401)) 
+*unpivot_clause* ::= 
 
-model_column_clauses::= 
+![Description of unpivot_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/unpivot_clause.gif)[ Description of the illustration unpivot_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/unpivot_clause.md)
 
-![Description of model_column_clauses.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_column_clauses.gif)[Description of the illustration model_column_clauses.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_column_clauses.html)
+*unpivot_in_clause* ::= 
 
-model_rules_clause::= 
+![Description of unpivot_in_clause.edx follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/unpivot_in_clause.gif)[ Description of the illustration unpivot_in_clause.edx ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/unpivot_in_clause.md)
 
-![Description of model_rules_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_rules_clause.gif)[Description of the illustration model_rules_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_rules_clause.html)([model_iterate_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDJAAEF), [cell_assignment::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2161423), [order_by_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168299)) 
+*sample_clause* ::= 
 
-model_iterate_clause::= 
+![Description of sample_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sample_clause.gif)[ Description of the illustration sample_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sample_clause.md)
 
-![Description of model_iterate_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_iterate_clause.gif)[Description of the illustration model_iterate_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_iterate_clause.html)
+*partition_extension_clause* ::= 
 
-cell_assignment::= 
+![Description of partition_extension_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/partition_extension_clause.gif)[ Description of the illustration partition_extension_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/partition_extension_clause.md)
 
-![Description of cell_assignment.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cell_assignment.gif)[Description of the illustration cell_assignment.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cell_assignment.html)([single_column_for_loop::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168318), [multi_column_for_loop::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168325)) 
+*subquery_restriction_clause* ::= 
 
-single_column_for_loop::= 
+![Description of subquery_restriction_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/subquery_restriction_clause.gif)[ Description of the illustration subquery_restriction_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/subquery_restriction_clause.md)
 
-![Description of single_column_for_loop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/single_column_for_loop.gif)[Description of the illustration single_column_for_loop.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/single_column_for_loop.html)
+*table_collection_expression* ::= 
 
-multi_column_for_loop::= 
+![Description of table_collection_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/table_collection_expression.gif)[ Description of the illustration table_collection_expression.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/table_collection_expression.md)
 
-![Description of multi_column_for_loop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/multi_column_for_loop.gif)[Description of the illustration multi_column_for_loop.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/multi_column_for_loop.html)
+*containers_clause* ::= 
 
-order_by_clause::= 
+![Description of containers_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/containers_clause.gif)[ Description of the illustration containers_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/containers_clause.md)
 
-![Description of order_by_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/order_by_clause.gif)[Description of the illustration order_by_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/order_by_clause.html)
+*shards_clause* ::= 
 
-window_clause::= 
+![Description of shards_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/shards_clause.gif)[ Description of the illustration shards_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/shards_clause.md)
 
-  
+*values_clause* ::= 
 
+![Description of values_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/values_clause.gif)[ Description of the illustration values_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/values_clause.md)
 
-![Description of window_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/window_clause.gif)[Description of the illustration window_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/window_clause.html)
+*join_clause* ::= 
 
-  
+![Description of join_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/join_clause.gif)[ Description of the illustration join_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/join_clause.md)( *inner_cross_join_clause::=* , *outer_join_clause::=* , *cross_outer_apply_clause::=* ) 
 
+*inner_cross_join_clause* ::= 
 
-window_specification::= 
+![Description of inner_cross_join_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inner_cross_join_clause.gif)[ Description of the illustration inner_cross_join_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inner_cross_join_clause.md)( *table_reference::=* ) 
 
-  
+*outer_join_clause* ::= 
 
+![Description of outer_join_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/outer_join_clause.gif)[ Description of the illustration outer_join_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/outer_join_clause.md)( *query_partition_clause::=* , *outer_join_type::=* , *table_reference::=* ) 
 
-![Description of window_specification.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/window_specification.gif)[Description of the illustration window_specification.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/window_specification.html)[query_partition_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2197413), [order_by_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168299), [windowing_clause](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056__I97640)
+*query_partition_clause* ::= 
 
-row_limiting_clause::= 
+![Description of query_partition_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_partition_clause.gif)[ Description of the illustration query_partition_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_partition_clause.md)
 
-![Description of row_limiting_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_limiting_clause.gif)[Description of the illustration row_limiting_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_limiting_clause.html)([fetch_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__SECTION_BNG_WZ3_QBC), [row_limiting_partition_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__SECTION_FKP_WZ3_QBC), [row_specification::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__SECTION_DMW_WZ3_QBC), [accuracy_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__SECTION_SV2_XZ3_QBC)) 
+*outer_join_type* ::= 
 
-fetch_clause::= 
+![Description of outer_join_type.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/outer_join_type.gif)[ Description of the illustration outer_join_type.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/outer_join_type.md)
 
-  
+*cross_outer_apply_clause* ::= 
 
+![Description of cross_outer_apply_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cross_outer_apply_clause.gif)[ Description of the illustration cross_outer_apply_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cross_outer_apply_clause.md)( *table_reference::=* , *query_partition_clause::=* ) 
 
-![Description of fetch_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/fetch_clause.gif)[Description of the illustration fetch_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/fetch_clause.html)
-
-  
-
-
-row_limiting_partition_clause::= 
-
-  
-
-
-![Description of row_limiting_partition_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_limiting_partition_clause.gif)[Description of the illustration row_limiting_partition_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_limiting_partition_clause.html)
+*inline_analytic_view* 
 
   
 
 
-row_specification::= 
+![Description of inline_analytic_view.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/inline_analytic_view.gif)[ Description of the illustration inline_analytic_view.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/inline_analytic_view.md)( *sub_av_clause::=* ) 
+
+*where_clause* ::= 
+
+![Description of where_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/where_clause.gif)[ Description of the illustration where_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/where_clause.md)
+
+*hierarchical_query_clause* ::= 
+
+![Description of hierarchical_query_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/hierarchical_query_clause.gif)[ Description of the illustration hierarchical_query_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/hierarchical_query_clause.md)( *condition* can be any condition as described in [ Conditions ](Conditions.md#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8) ) 
+
+*group_by_clause* ::= 
+
+![Description of group_by_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/group_by_clause.gif)[ Description of the illustration group_by_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/group_by_clause.md)( *rollup_cube_clause::=* , *grouping_sets_clause::=* ) 
+
+*rollup_cube_clause* ::= 
+
+![Description of rollup_cube_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/rollup_cube_clause.gif)[ Description of the illustration rollup_cube_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/rollup_cube_clause.md)( *grouping_expression_list::=* ) 
+
+*grouping_sets_clause* ::= 
+
+![Description of grouping_sets_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/grouping_sets_clause.gif)[ Description of the illustration grouping_sets_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/grouping_sets_clause.md)( *rollup_cube_clause::=* , *grouping_expression_list::=* ) 
+
+*grouping_expression_list* ::= 
+
+![Description of grouping_expression_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/grouping_expression_list.gif)[ Description of the illustration grouping_expression_list.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/grouping_expression_list.md)
+
+*expression_list* ::= 
+
+![Description of expression_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/expression_list.gif)[ Description of the illustration expression_list.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/expression_list.md)
+
+*model_clause* ::= 
+
+![Description of model_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_clause.gif)[ Description of the illustration model_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_clause.md)( *cell_reference_options::=* , *return_rows_clause::=* , *reference_model::=* , *main_model::=* ) 
+
+*cell_reference_options* ::= 
+
+![Description of cell_reference_options.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cell_reference_options.gif)[ Description of the illustration cell_reference_options.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cell_reference_options.md)
+
+*return_rows_clause* ::= 
+
+![Description of return_rows_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/return_rows_clause.gif)[ Description of the illustration return_rows_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/return_rows_clause.md)
+
+*reference_model* ::= 
+
+![Description of reference_model.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/reference_model.gif)[ Description of the illustration reference_model.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/reference_model.md)( *model_column_clauses::=* , *cell_reference_options::=* ) 
+
+*main_model* ::= 
+
+![Description of main_model.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/main_model.gif)[ Description of the illustration main_model.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/main_model.md)( *model_column_clauses::=* , *cell_reference_options::=* , *model_rules_clause::=* ) 
+
+*model_column_clauses* ::= 
+
+![Description of model_column_clauses.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_column_clauses.gif)[ Description of the illustration model_column_clauses.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_column_clauses.md)
+
+*model_rules_clause* ::= 
+
+![Description of model_rules_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_rules_clause.gif)[ Description of the illustration model_rules_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_rules_clause.md)( *model_iterate_clause::=* , *cell_assignment::=* , *order_by_clause::=* ) 
+
+*model_iterate_clause* ::= 
+
+![Description of model_iterate_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/model_iterate_clause.gif)[ Description of the illustration model_iterate_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/model_iterate_clause.md)
+
+*cell_assignment* ::= 
+
+![Description of cell_assignment.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/cell_assignment.gif)[ Description of the illustration cell_assignment.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/cell_assignment.md)( *single_column_for_loop::=* , *multi_column_for_loop::=* ) 
+
+*single_column_for_loop* ::= 
+
+![Description of single_column_for_loop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/single_column_for_loop.gif)[ Description of the illustration single_column_for_loop.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/single_column_for_loop.md)
+
+*multi_column_for_loop* ::= 
+
+![Description of multi_column_for_loop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/multi_column_for_loop.gif)[ Description of the illustration multi_column_for_loop.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/multi_column_for_loop.md)
+
+*order_by_clause* ::= 
+
+![Description of order_by_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/order_by_clause.gif)[ Description of the illustration order_by_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/order_by_clause.md)
+
+*window_clause* ::= 
 
   
 
 
-![Description of row_specification.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_specification.gif)[Description of the illustration row_specification.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_specification.html)
+![Description of window_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/window_clause.gif)[ Description of the illustration window_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/window_clause.md)
 
   
 
 
-accuracy_clause::= 
+*window_specification* ::= 
 
   
 
 
-![Description of accuracy_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/accuracy_clause.gif)[Description of the illustration accuracy_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/accuracy_clause.html)
+![Description of window_specification.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/window_specification.gif)[ Description of the illustration window_specification.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/window_specification.md)
 
   
 
 
-for_update_clause::= 
+*query_partition_clause::=* , *order_by_clause::=* , *windowing_clause* 
 
-![Description of for_update_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/for_update_clause.gif)[Description of the illustration for_update_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/for_update_clause.html)
+*row_limiting_clause* ::= 
 
-row_pattern_clause::= 
+![Description of row_limiting_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_limiting_clause.gif)[ Description of the illustration row_limiting_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_limiting_clause.md)( *fetch_clause::=* , *row_limiting_partition_clause::=* , *row_specification::=* , *accuracy_clause::=* ) 
 
-![Description of row_pattern_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_clause.gif)[Description of the illustration row_pattern_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_clause.html)([row_pattern_partition_by::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABDAJEE), [row_pattern_order_by::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABDHDEB), [row_pattern_measures::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABIAAGF), [row_pattern_rows_per_match::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABEGCAD), [row_pattern_skip_to::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJAEDA), [row_pattern::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABDACDD), [row_pattern_subset_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABEGIDD), [row_pattern_definition_list::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABGCICD)) 
+*fetch_clause* ::= 
 
-row_pattern_partition_by::= 
+  
 
-![Description of row_pattern_partition_by.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_partition_by.gif)[Description of the illustration row_pattern_partition_by.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_partition_by.html)
 
-row_pattern_order_by::= 
+![Description of fetch_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/fetch_clause.gif)[ Description of the illustration fetch_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/fetch_clause.md)
 
-![Description of row_pattern_order_by.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_order_by.gif)[Description of the illustration row_pattern_order_by.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_order_by.html)
+  
 
-row_pattern_measures::= 
 
-![Description of row_pattern_measures.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_measures.gif)[Description of the illustration row_pattern_measures.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_measures.html)
+*row_limiting_partition_clause* ::= 
 
-row_pattern_measure_column::= 
+  
 
-![Description of row_pattern_measure_column.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_measure_column.gif)[Description of the illustration row_pattern_measure_column.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_measure_column.html)
 
-row_pattern_rows_per_match::= 
+![Description of row_limiting_partition_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_limiting_partition_clause.gif)[ Description of the illustration row_limiting_partition_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_limiting_partition_clause.md)
 
-![Description of row_pattern_rows_per_match.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_rows_per_match.gif)[Description of the illustration row_pattern_rows_per_match.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_rows_per_match.html)
+  
 
-row_pattern_skip_to::= 
 
-![Description of row_pattern_skip_to.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_skip_to.gif)[Description of the illustration row_pattern_skip_to.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_skip_to.html)
+*row_specification* ::= 
 
-row_pattern::= 
+  
 
-![Description of row_pattern.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern.gif)[Description of the illustration row_pattern.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern.html)
 
-row_pattern_term::= 
+![Description of row_specification.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_specification.gif)[ Description of the illustration row_specification.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_specification.md)
 
-![Description of row_pattern_term.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_term.gif)[Description of the illustration row_pattern_term.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_term.html)
+  
 
-row_pattern_factor::= 
 
-![Description of row_pattern_factor.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_factor.gif)[Description of the illustration row_pattern_factor.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_factor.html)
+*accuracy_clause* ::= 
 
-row_pattern_primary::= 
+  
 
-![Description of row_pattern_primary.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_primary.gif)[Description of the illustration row_pattern_primary.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_primary.html)
 
-row_pattern_permute::= 
+![Description of accuracy_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/accuracy_clause.gif)[ Description of the illustration accuracy_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/accuracy_clause.md)
 
-![Description of row_pattern_permute.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_permute.gif)[Description of the illustration row_pattern_permute.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_permute.html)
+  
 
-row_pattern_quantifier::= 
 
-![Description of row_pattern_quantifier.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_quantifier.gif)[Description of the illustration row_pattern_quantifier.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_quantifier.html)
+*for_update_clause* ::= 
 
-row_pattern_subset_clause::= 
+![Description of for_update_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/for_update_clause.gif)[ Description of the illustration for_update_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/for_update_clause.md)
 
-![Description of row_pattern_subset_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_subset_clause.gif)[Description of the illustration row_pattern_subset_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_subset_clause.html)
+*row_pattern_clause* ::= 
 
-row_pattern_subset_item::= 
+![Description of row_pattern_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_clause.gif)[ Description of the illustration row_pattern_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_clause.md)( *row_pattern_partition_by::=* , *row_pattern_order_by::=* , *row_pattern_measures::=* , *row_pattern_rows_per_match::=* , *row_pattern_skip_to::=* , *row_pattern::=* , *row_pattern_subset_clause::=* , *row_pattern_definition_list::=* ) 
 
-![Description of row_pattern_subset_item.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_subset_item.gif)[Description of the illustration row_pattern_subset_item.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_subset_item.html)
+*row_pattern_partition_by* ::= 
 
-row_pattern_definition_list::= 
+![Description of row_pattern_partition_by.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_partition_by.gif)[ Description of the illustration row_pattern_partition_by.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_partition_by.md)
 
-![Description of row_pattern_definition_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_definition_list.gif)[Description of the illustration row_pattern_definition_list.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_definition_list.html)
+*row_pattern_order_by* ::= 
 
-row_pattern_definition::= 
+![Description of row_pattern_order_by.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_order_by.gif)[ Description of the illustration row_pattern_order_by.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_order_by.md)
 
-![Description of row_pattern_definition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_definition.gif)[Description of the illustration row_pattern_definition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_definition.html)
+*row_pattern_measures* ::= 
 
-row_pattern_rec_func::= 
+![Description of row_pattern_measures.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_measures.gif)[ Description of the illustration row_pattern_measures.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_measures.md)
 
-![Description of row_pattern_rec_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_rec_func.gif)[Description of the illustration row_pattern_rec_func.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_rec_func.html)([row_pattern_classifier_func::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABEGGCJ), [row_pattern_match_num_func::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBDBGI), [row_pattern_navigation_func::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABDHIEA), [row_pattern_aggregate_func::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBDCFA)) 
+*row_pattern_measure_column* ::= 
 
-row_pattern_classifier_func::= 
+![Description of row_pattern_measure_column.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_measure_column.gif)[ Description of the illustration row_pattern_measure_column.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_measure_column.md)
 
-![Description of row_pattern_classifier_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_classifier_func.gif)[Description of the illustration row_pattern_classifier_func.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_classifier_func.html)
+*row_pattern_rows_per_match* ::= 
 
-row_pattern_match_num_func::= 
+![Description of row_pattern_rows_per_match.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_rows_per_match.gif)[ Description of the illustration row_pattern_rows_per_match.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_rows_per_match.md)
 
-![Description of row_pattern_match_num_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_match_num_func.gif)[Description of the illustration row_pattern_match_num_func.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_match_num_func.html)
+*row_pattern_skip_to* ::= 
 
-row_pattern_navigation_func::= 
+![Description of row_pattern_skip_to.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_skip_to.gif)[ Description of the illustration row_pattern_skip_to.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_skip_to.md)
 
-![Description of row_pattern_navigation_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_navigation_func.gif)[Description of the illustration row_pattern_navigation_func.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_navigation_func.html)([row_pattern_nav_logical::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFDCHF), [row_pattern_nav_physical::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABGEACD), [row_pattern_nav_compound::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABCFIDG)) 
+*row_pattern* ::= 
 
-row_pattern_nav_logical::= 
+![Description of row_pattern.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern.gif)[ Description of the illustration row_pattern.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern.md)
 
-![Description of row_pattern_nav_logical.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_nav_logical.gif)[Description of the illustration row_pattern_nav_logical.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_nav_logical.html)
+*row_pattern_term* ::= 
 
-row_pattern_nav_physical::= 
+![Description of row_pattern_term.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_term.gif)[ Description of the illustration row_pattern_term.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_term.md)
 
-![Description of row_pattern_nav_physical.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_nav_physical.gif)[Description of the illustration row_pattern_nav_physical.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_nav_physical.html)
+*row_pattern_factor* ::= 
 
-row_pattern_nav_compound::= 
+![Description of row_pattern_factor.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_factor.gif)[ Description of the illustration row_pattern_factor.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_factor.md)
 
-![Description of row_pattern_nav_compound.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_nav_compound.gif)[Description of the illustration row_pattern_nav_compound.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_nav_compound.html)
+*row_pattern_primary* ::= 
 
-row_pattern_aggregate_func::= 
+![Description of row_pattern_primary.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_primary.gif)[ Description of the illustration row_pattern_primary.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_primary.md)
 
-![Description of row_pattern_aggregate_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_aggregate_func.gif)[Description of the illustration row_pattern_aggregate_func.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_aggregate_func.html)
+*row_pattern_permute* ::= 
+
+![Description of row_pattern_permute.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_permute.gif)[ Description of the illustration row_pattern_permute.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_permute.md)
+
+*row_pattern_quantifier* ::= 
+
+![Description of row_pattern_quantifier.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_quantifier.gif)[ Description of the illustration row_pattern_quantifier.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_quantifier.md)
+
+*row_pattern_subset_clause* ::= 
+
+![Description of row_pattern_subset_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_subset_clause.gif)[ Description of the illustration row_pattern_subset_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_subset_clause.md)
+
+*row_pattern_subset_item* ::= 
+
+![Description of row_pattern_subset_item.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_subset_item.gif)[ Description of the illustration row_pattern_subset_item.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_subset_item.md)
+
+*row_pattern_definition_list* ::= 
+
+![Description of row_pattern_definition_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_definition_list.gif)[ Description of the illustration row_pattern_definition_list.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_definition_list.md)
+
+*row_pattern_definition* ::= 
+
+![Description of row_pattern_definition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_definition.gif)[ Description of the illustration row_pattern_definition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_definition.md)
+
+*row_pattern_rec_func* ::= 
+
+![Description of row_pattern_rec_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_rec_func.gif)[ Description of the illustration row_pattern_rec_func.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_rec_func.md)( *row_pattern_classifier_func::=* , *row_pattern_match_num_func::=* , *row_pattern_navigation_func::=* , *row_pattern_aggregate_func::=* ) 
+
+*row_pattern_classifier_func* ::= 
+
+![Description of row_pattern_classifier_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_classifier_func.gif)[ Description of the illustration row_pattern_classifier_func.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_classifier_func.md)
+
+*row_pattern_match_num_func* ::= 
+
+![Description of row_pattern_match_num_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_match_num_func.gif)[ Description of the illustration row_pattern_match_num_func.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_match_num_func.md)
+
+*row_pattern_navigation_func* ::= 
+
+![Description of row_pattern_navigation_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_navigation_func.gif)[ Description of the illustration row_pattern_navigation_func.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_navigation_func.md)( *row_pattern_nav_logical::=* , *row_pattern_nav_physical::=* , *row_pattern_nav_compound::=* ) 
+
+*row_pattern_nav_logical* ::= 
+
+![Description of row_pattern_nav_logical.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_nav_logical.gif)[ Description of the illustration row_pattern_nav_logical.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_nav_logical.md)
+
+*row_pattern_nav_physical* ::= 
+
+![Description of row_pattern_nav_physical.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_nav_physical.gif)[ Description of the illustration row_pattern_nav_physical.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_nav_physical.md)
+
+*row_pattern_nav_compound* ::= 
+
+![Description of row_pattern_nav_compound.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_nav_compound.gif)[ Description of the illustration row_pattern_nav_compound.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_nav_compound.md)
+
+*row_pattern_aggregate_func* ::= 
+
+![Description of row_pattern_aggregate_func.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/row_pattern_aggregate_func.gif)[ Description of the illustration row_pattern_aggregate_func.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/row_pattern_aggregate_func.md)
 
 Semantics 
 
-with_clause
+*with_clause* 
 
-Use the `with_clause` to define the following: 
+Use the *with_clause* to define the following: 
 
-  * PL/SQL procedures and functions (using the `plsql_declarations` clause) 
+  * PL/SQL procedures and functions (using the *plsql_declarations* clause) 
 
-  * Subquery blocks (using `subquery_factoring_clause` or `subav_factoring_clause`, or both) 
+  * Subquery blocks (using *subquery_factoring_clause* or *subav_factoring_clause* , or both) 
 
 
 
 
-plsql_declarations
+*plsql_declarations* 
 
-The `plsql_declarations` clause lets you declare and define PL/SQL functions and procedures. You can then reference the PL/SQL functions in the query in which you specify this clause, as well as its subqueries, if any. For the purposes of name resolution, these function names have precedence over schema-level stored functions. 
+The *plsql_declarations* clause lets you declare and define PL/SQL functions and procedures. You can then reference the PL/SQL functions in the query in which you specify this clause, as well as its subqueries, if any. For the purposes of name resolution, these function names have precedence over schema-level stored functions. 
 
-If the query in which you specify this clause is not a top-level `SELECT` statement, then the following rules apply to the top-level SQL statement that contains the query: 
+If the query in which you specify this clause is not a top-level ` SELECT ` statement, then the following rules apply to the top-level SQL statement that contains the query: 
 
-  * If the top-level statement is a `SELECT` statement, then it must have either a `WITH` `plsql_declarations` clause or the `WITH_PLSQL` hint. 
+  * If the top-level statement is a ` SELECT ` statement, then it must have either a ` WITH ` *plsql_declarations* clause or the ` WITH_PLSQL ` hint. 
 
-  * If the top-level statement is a `DELETE`, `MERGE`, `INSERT`, or `UPDATE` statement, then it must have the `WITH_PLSQL` hint. 
+  * If the top-level statement is a ` DELETE ` , ` MERGE ` , ` INSERT ` , or ` UPDATE ` statement, then it must have the ` WITH_PLSQL ` hint. 
 
 
 
 
-The `WITH_PLSQL` hint only enables you to specify the `WITH` `plsql_declarations` clause within the statement. It is not an optimizer hint. 
+The ` WITH_PLSQL ` hint only enables you to specify the ` WITH ` *plsql_declarations* clause within the statement. It is not an optimizer hint. 
 
-See Also:
+> **note:** See Also: 
 
-  * Oracle Database PL/SQL Language Reference for syntax and restrictions for [`function_declaration`](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01322) and [`procedure_declaration`](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01336). 
+  * *Oracle Database PL/SQL Language Reference* for syntax and restrictions for [ *function_declaration* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01322) and [ *procedure_declaration* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01336) . 
 
-  * "[Using a PL/SQL Function in the WITH Clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJFIDC)"
+  * " [ Using a PL/SQL Function in the WITH Clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJFIDC) " 
 
 
 
 
-subquery_factoring_clause
+*subquery_factoring_clause* 
 
-The `subquery_factoring_clause` lets you assign a name (`query_name`) to a subquery block. You can then reference the subquery block multiple places in the query by specifying `query_name`. Oracle Database optimizes the query by treating the `query_name` as either an inline view or as a temporary table. The `query_name` is subject to the same naming conventions and restrictions as database schema objects. Refer to "[Database Object Naming Rules](Database-Object-Names-and-Qualifiers.html#GUID-75337742-67FD-4EC0-985F-741C93D918DA)" for information on database object names. 
+The *subquery_factoring_clause* lets you assign a name ( *query_name* ) to a subquery block. You can then reference the subquery block multiple places in the query by specifying *query_name* . Oracle Database optimizes the query by treating the *query_name* as either an inline view or as a temporary table. The *query_name* is subject to the same naming conventions and restrictions as database schema objects. Refer to  " [ Database Object Naming Rules ](Database-Object-Names-and-Qualifiers.md#GUID-75337742-67FD-4EC0-985F-741C93D918DA) "  for information on database object names. 
 
-The column aliases following the `query_name` and the set operators separating multiple subqueries in the `AS` clause are valid and required for recursive subquery factoring. The `search_clause` and `cycle_clause` are valid only for recursive subquery factoring but are not required. See "[Recursive Subquery Factoring](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BCEJGIBG)". 
+The column aliases following the *query_name* and the set operators separating multiple subqueries in the ` AS ` clause are valid and required for recursive subquery factoring. The *search_clause* and *cycle_clause* are valid only for recursive subquery factoring but are not required. See  " [ Recursive Subquery Factoring ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BCEJGIBG) "  . 
 
-You can specify this clause in any top-level `SELECT` statement and in most types of subqueries. The query name is visible to the main query and to all subsequent subqueries. For recursive subquery factoring, the query name is even visible to the subquery that defines the query name itself. 
+You can specify this clause in any top-level ` SELECT ` statement and in most types of subqueries. The query name is visible to the main query and to all subsequent subqueries. For recursive subquery factoring, the query name is even visible to the subquery that defines the query name itself. 
 
-Recursive Subquery Factoring
+Recursive Subquery Factoring 
 
-If a `subquery_factoring_clause` refers to its own `query_name` in the subquery that defines it, then the `subquery_factoring_clause` is said to be recursive. A recursive `subquery_factoring_clause` must contain two query blocks: the first is the anchor member and the second is the recursive member. The anchor member must appear before the recursive member, and it cannot reference `query_name`. The anchor member can be composed of one or more query blocks combined by the set operators: `UNION` `ALL`, `UNION`, `INTERSECT` or `MINUS`. The recursive member must follow the anchor member and must reference `query_name` exactly once. You must combine the recursive member with the anchor member using the `UNION` `ALL` set operator. 
+If a *subquery_factoring_clause* refers to its own *query_name* in the subquery that defines it, then the *subquery_factoring_clause* is said to be  recursive  . A recursive *subquery_factoring_clause* must contain two query blocks: the first is the  anchor member  and the second is the  recursive member  . The anchor member must appear before the recursive member, and it cannot reference *query_name* . The anchor member can be composed of one or more query blocks combined by the set operators: ` UNION ` ` ALL ` , ` UNION ` , ` INTERSECT ` or ` MINUS ` . The recursive member must follow the anchor member and must reference *query_name* exactly once. You must combine the recursive member with the anchor member using the ` UNION ` ` ALL ` set operator. 
 
-The number of column aliases following `WITH` `query_name` and the number of columns in the `SELECT` lists of the anchor and recursive query blocks must be the same. 
+The number of column aliases following ` WITH ` *query_name* and the number of columns in the ` SELECT ` lists of the anchor and recursive query blocks must be the same. 
 
-The recursive member cannot contain any of the following elements:
+The recursive member cannot contain any of the following elements: 
 
-  * The `DISTINCT` keyword or a `GROUP` `BY` clause 
+  * The ` DISTINCT ` keyword or a ` GROUP ` ` BY ` clause 
 
-  * The `model_clause`
+  * The *model_clause* 
 
-  * An aggregate function. However, analytic functions are permitted in the select list.
+  * An aggregate function. However, analytic functions are permitted in the select list. 
 
-  * Subqueries that refer to `query_name`. 
+  * Subqueries that refer to *query_name* . 
 
-  * Outer joins that refer to `query_name` as the right table. 
+  * Outer joins that refer to *query_name* as the right table. 
 
 
 
 
-In previous releases of Oracle Database, the recursive member of a recursive `WITH` clause ran serially regardless of the parallelism of the entire query (also known as the top-level `SELECT` statement). Beginning with Oracle Database 12c Release 2 (12.2), the recursive member runs in parallel if the optimizer determines that the top-level `SELECT` statement can be executed in parallel. 
+In previous releases of Oracle Database, the recursive member of a recursive ` WITH ` clause ran serially regardless of the parallelism of the entire query (also known as the top-level ` SELECT ` statement). Beginning with Oracle Database 12 *c* Release 2 (12.2), the recursive member runs in parallel if the optimizer determines that the top-level ` SELECT ` statement can be executed in parallel. 
 
-search_clause
+*search_clause* 
 
-Use the `SEARCH` clause to specify an ordering for the rows. 
+Use the ` SEARCH ` clause to specify an ordering for the rows. 
 
-  * Specify `BREADTH` `FIRST` `BY` if you want sibling rows returned before any child rows are returned. 
+  * Specify ` BREADTH ` ` FIRST ` ` BY ` if you want sibling rows returned before any child rows are returned. 
 
-  * Specify `DEPTH` `FIRST` `BY` if you want child rows returned before any siblings rows are returned. 
+  * Specify ` DEPTH ` ` FIRST ` ` BY ` if you want child rows returned before any siblings rows are returned. 
 
-  * Sibling rows are ordered by the columns listed after the `BY` keyword. 
+  * Sibling rows are ordered by the columns listed after the ` BY ` keyword. 
 
-  * The `c_alias` list following the `SEARCH` keyword must contain column names from the column alias list for `query_name`. 
+  * The *c_alias* list following the ` SEARCH ` keyword must contain column names from the column alias list for *query_name* . 
 
-  * The `ordering_column` is automatically added to the column list for the query name. The query that selects from `query_name` can include an `ORDER` `BY` on `ordering_column` to return the rows in the order that was specified by the `SEARCH` clause. 
+  * The *ordering_column* is automatically added to the column list for the query name. The query that selects from *query_name* can include an ` ORDER ` ` BY ` on *ordering_column* to return the rows in the order that was specified by the ` SEARCH ` clause. 
 
 
 
 
-cycle_clause
+*cycle_clause* 
 
-Use the `CYCLE` clause to mark cycles in the recursion. 
+Use the ` CYCLE ` clause to mark cycles in the recursion. 
 
-  * The `c_alias` list following the `CYCLE` keyword must contain column names from the column alias list for `query_name`. Oracle Database uses these columns to detect a cycle. 
+  * The *c_alias* list following the ` CYCLE ` keyword must contain column names from the column alias list for *query_name* . Oracle Database uses these columns to detect a cycle. 
 
-  * `cycle_value` and `no_cycle_value` should be character strings of length 1. 
+  * *cycle_value* and *no_cycle_value* should be character strings of length 1. 
 
-  * If a cycle is detected, then the cycle mark column specified by `cycle_mark_c_alias` for the row causing the cycle is set to the value specified for `cycle_value`. The recursion will then stop for this row. That is, it will not look for child rows for the offending row, but it will continue for other noncyclic rows. 
+  * If a cycle is detected, then the cycle mark column specified by *cycle_mark_c_alias* for the row causing the cycle is set to the value specified for *cycle_value* . The recursion will then stop for this row. That is, it will not look for child rows for the offending row, but it will continue for other noncyclic rows. 
 
-  * If no cycles are found, then the cycle mark column is set to the default value specified for `no_cycle_value`. 
+  * If no cycles are found, then the cycle mark column is set to the default value specified for *no_cycle_value* . 
 
-  * The cycle mark column is automatically added to the column list for the `query_name`. 
+  * The cycle mark column is automatically added to the column list for the *query_name* . 
 
-  * A row is considered to form a cycle if one of its ancestor rows has the same values for the cycle columns.
+  * A row is considered to form a cycle if one of its ancestor rows has the same values for the cycle columns. 
 
 
 
 
-If you omit the `CYCLE` clause, then the recursive `WITH` clause returns an error if cycles are discovered. In this case, a row forms a cycle if one of its ancestor rows has the same values for all the columns in the column alias list for `query_name` that are referenced in the `WHERE` clause of the recursive member. 
+If you omit the ` CYCLE ` clause, then the recursive ` WITH ` clause returns an error if cycles are discovered. In this case, a row forms a cycle if one of its ancestor rows has the same values for all the columns in the column alias list for *query_name* that are referenced in the ` WHERE ` clause of the recursive member. 
 
-Restrictions on Subquery Factoring
+Restrictions on Subquery Factoring 
 
-This clause is subject to the following restrictions:
+This clause is subject to the following restrictions: 
 
-  * You can specify only one `subquery_factoring_clause` in a single SQL statement. Any `query_name` defined in the `subquery_factoring_clause` can be used in any subsequent named query block in the `subquery_factoring_clause`. 
+  * You can specify only one *subquery_factoring_clause* in a single SQL statement. Any *query_name* defined in the *subquery_factoring_clause* can be used in any subsequent named query block in the *subquery_factoring_clause* . 
 
-  * In a compound query with set operators, you cannot use the `query_name` for any of the component queries, but you can use the `query_name` in the `FROM` clause of any of the component queries. 
+  * In a compound query with set operators, you cannot use the *query_name* for any of the component queries, but you can use the *query_name* in the ` FROM ` clause of any of the component queries. 
 
-  * You cannot specify duplicate names in the column alias list for `query_name`. 
+  * You cannot specify duplicate names in the column alias list for *query_name* . 
 
-  * The name used for the `ordering_column` has to be different from the name used for `cycle_mark_c_alias`. 
+  * The name used for the *ordering_column* has to be different from the name used for *cycle_mark_c_alias* . 
 
-  * The `ordering_column` and cycle mark column names cannot already be in the column alias list for `query_name`. 
+  * The *ordering_column* and cycle mark column names cannot already be in the column alias list for *query_name* . 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Concepts](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT010) for information about inline views 
+  * [ *Oracle Database Concepts* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT010) for information about inline views 
 
-  * "[Subquery Factoring: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2129904)"
+  * " [ Subquery Factoring: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2129904) " 
 
-  * "[Recursive Subquery Factoring: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABCDJDB)"
+  * " [ Recursive Subquery Factoring: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABCDJDB) " 
 
 
 
 
-subav_factoring_clause
+*subav_factoring_clause* 
 
-With the `subav_factoring_clause`, you can define a transitory analytic view that filters fact data prior to aggregation or adds calculated measures to a query of an analytic view. The `subav_name` argument assigns a name to the transitory analytic view. You can then reference the transitory analytic view multiple places in the query by specifying `subav_name`. The `subav_name` is subject to the same naming conventions and restrictions as database schema objects. Refer to "[Database Object Naming Rules](Database-Object-Names-and-Qualifiers.html#GUID-75337742-67FD-4EC0-985F-741C93D918DA)" for information on database object names. 
+With the *subav_factoring_clause* , you can define a transitory analytic view that filters fact data prior to aggregation or adds calculated measures to a query of an analytic view. The ` subav_name  ` argument assigns a name to the transitory analytic view. You can then reference the transitory analytic view multiple places in the query by specifying ` subav_name  ` . The ` subav_name  ` is subject to the same naming conventions and restrictions as database schema objects. Refer to  " [ Database Object Naming Rules ](Database-Object-Names-and-Qualifiers.md#GUID-75337742-67FD-4EC0-985F-741C93D918DA) "  for information on database object names. 
 
-You can specify this clause in any top-level `SELECT` statement and in most types of subqueries. The query name is visible to the main query and to all subsequent subqueries. 
+You can specify this clause in any top-level ` SELECT ` statement and in most types of subqueries. The query name is visible to the main query and to all subsequent subqueries. 
 
-The `sub_av_clause` argument defines a transitory analytic view. 
+The ` sub_av_clause  ` argument defines a transitory analytic view. 
 
-sub_av_clause
+*sub_av_clause* 
 
-With the `USING` keyword, specify the name of an analytic view, which may be a transitory analytic view previously defined in the `WITH` clause or it may be a persistent analytic view. A persistent analytic view is defined in a `CREATE` `ANALYTIC` `VIEW` statement. If the analytic view is a persistent one, then the current user must have select access on it. 
+With the ` USING ` keyword, specify the name of an analytic view, which may be a transitory analytic view previously defined in the ` WITH ` clause or it may be a persistent analytic view. A persistent analytic view is defined in a ` CREATE ` ` ANALYTIC ` ` VIEW ` statement. If the analytic view is a persistent one, then the current user must have select access on it. 
 
-See Also:
+> **note:** See Also: [ Analytic Views: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P-1314421-F3347731)
 
-[Analytic Views: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P-1314421-F3347731)
+*hierarchies_clause* 
 
-hierarchies_clause
+The ` hierarchies_clause  ` specifies the hierarchies of the base analytic view that the results of the transitory analytic view are dimensioned by. With the ` HIERARCHIES ` keyword, specify the alias of one or more hierarchies of the base analytic view. 
 
-The `hierarchies_clause` specifies the hierarchies of the base analytic view that the results of the transitory analytic view are dimensioned by. With the `HIERARCHIES` keyword, specify the alias of one or more hierarchies of the base analytic view. 
+If you do not specify a ` HIERARCHIES ` clause, then the default hierarchies of the base analytic view are used. 
 
-If you do not specify a `HIERARCHIES` clause, then the default hierarchies of the base analytic view are used. 
+*filter_clauses* 
 
-filter_clauses
+You may specify a given *hier_alias* in at most one *filter_clause* . 
 
-You may specify a given `hier_alias` in at most one `filter_clause`. 
+*filter_clause* 
 
-filter_clause
+The filter clause applies the specified predicate condition to the fact table, which reduces the number of rows returned from the table before aggregation of the measure values. The predicate may contain any SQL row function or operation. The predicate may refer to any attribute of the specified hierarchy or it may refer to a measure of the analytic view if you specify the ` MEASURES ` keyword. 
 
-The filter clause applies the specified predicate condition to the fact table, which reduces the number of rows returned from the table before aggregation of the measure values. The predicate may contain any SQL row function or operation. The predicate may refer to any attribute of the specified hierarchy or it may refer to a measure of the analytic view if you specify the `MEASURES` keyword. 
-
-For example, the following clause restricts the aggregation of measure values to those for the first and second quarters of every year of a time hierarchy.
+For example, the following clause restricts the aggregation of measure values to those for the first and second quarters of every year of a time hierarchy. 
     
     
+    ```
     FILTER FACT (time_hier TO quarter_of_year IN (1,2))
+    ```
 
-If you then select from the transitory analytic view the sales for the years 2000 and 2001, the values returned are the aggregated values of the first and second quarters only.
+If you then select from the transitory analytic view the sales for the years 2000 and 2001, the values returned are the aggregated values of the first and second quarters only. 
 
-An example of specifying a predicate for a measure in the filter clause is the following.
+An example of specifying a predicate for a measure in the filter clause is the following. 
     
     
+    ```
     FILTER FACT (MEASURES TO sales BETWEEN 100 AND 200)
+    ```
 
-attr_dim_alias
+*attr_dim_alias* 
 
-The alias of an attribute dimension in the base analytic view. The `USER_ANALYTIC_VIEW_DIMENSIONS` view contains the aliases of the attribute dimensions in an analytic view. 
+The alias of an attribute dimension in the base analytic view. The ` USER_ANALYTIC_VIEW_DIMENSIONS ` view contains the aliases of the attribute dimensions in an analytic view. 
 
-hier_alias
+*hier_alias* 
 
-The alias of a hierarchy in the base analytic view. The `USER_ANALYTIC_VIEW_HIERS` view contains the aliases of the hierarchies in an analytic view. 
+The alias of a hierarchy in the base analytic view. The ` USER_ANALYTIC_VIEW_HIERS ` view contains the aliases of the hierarchies in an analytic view. 
 
-add_meas_clause
+*add_meas_clause* 
 
-With the `ADD` `MEASURES` keywords, you may add calculated measures to the transitory analytic view. 
+With the ` ADD ` ` MEASURES ` keywords, you may add calculated measures to the transitory analytic view. 
 
-calc_meas_clause
+*calc_meas_clause* 
 
-Specify a name for the calculated measure and an analytic view expression that specifies values for the calculated measure. The analytic view expression can be any valid `calc_meas_expression` as described in [Analytic View Expressions](analytic-view-measure-expressions.html#GUID-F8C7ED67-A4EC-479C-975F-12F1F4B8CBA0 "You can use analytic view expressions to create calculated measures within the definition of an analytic view or in a query that selects from an analytic view."). For example, the following adds a calculated measure named âshare_sales.â 
+Specify a name for the calculated measure and an analytic view expression that specifies values for the calculated measure. The analytic view expression can be any valid ` calc_meas_expression  ` as described in [ Analytic View Expressions ](analytic-view-measure-expressions.md#GUID-F8C7ED67-A4EC-479C-975F-12F1F4B8CBA0) . For example, the following adds a calculated measure named “share_sales.” 
     
     
+    ```
     ADD MEASURES (share_sales AS (SHARE_OF(sales HIERARCHY time_hier PARENT)))
+    ```
 
-hint
+*hint* 
 
 Specify a comment that passes instructions to the optimizer on choosing an execution plan for the statement. 
 
-See Also:
+> **note:** See Also: 
 
-"[Hints](Comments.html#GUID-D316D545-89E2-4D54-977F-FC97815CD62E)" for the syntax and description of hints 
+" [ Hints ](Comments.md#GUID-D316D545-89E2-4D54-977F-FC97815CD62E) "  for the syntax and description of hints 
 
-DISTINCT | UNIQUE
+DISTINCT | UNIQUE 
 
-Specify `DISTINCT` or `UNIQUE` if you want the database to return only one copy of each set of duplicate rows selected. These two keywords are synonymous. Duplicate rows are those with matching values for each expression in the select list. 
+Specify ` DISTINCT ` or ` UNIQUE ` if you want the database to return only one copy of each set of duplicate rows selected. These two keywords are synonymous. Duplicate rows are those with matching values for each expression in the select list. 
 
-Restrictions on DISTINCT and UNIQUE Queries
+Restrictions on DISTINCT and UNIQUE Queries 
 
-These types of queries are subject to the following restrictions:
+These types of queries are subject to the following restrictions: 
 
-  * When you specify `DISTINCT` or `UNIQUE`, the total number of bytes in all select list expressions is limited to the size of a data block minus some overhead. This size is specified by the initialization parameter `DB_BLOCK_SIZE`. 
+  * When you specify ` DISTINCT ` or ` UNIQUE ` , the total number of bytes in all select list expressions is limited to the size of a data block minus some overhead. This size is specified by the initialization parameter ` DB_BLOCK_SIZE ` . 
 
-  * You cannot specify `DISTINCT` if the `select_list` contains LOB columns. 
-
-
+  * You cannot specify ` DISTINCT ` if the *select_list* contains LOB columns. 
 
 
-ALL
 
-Specify `ALL` if you want the database to return all rows selected, including all copies of duplicates. The default is `ALL`. 
 
-select_list
+ALL 
 
-The `select_list` lets you specify the columns you want to retrieve from the database. 
+Specify ` ALL ` if you want the database to return all rows selected, including all copies of duplicates. The default is ` ALL ` . 
 
-* (all-column wildcard)
+*select_list* 
 
-Specify the all-column wildcard (asterisk) to select all columns, excluding pseudocolumns and `INVISIBLE` columns, from all tables, views, or materialized views listed in the `FROM` clause. The columns are returned in the order indicated by the `COLUMN_ID` column of the `*_TAB_COLUMNS` data dictionary view for the table, view, or materialized view. 
+The *select_list* lets you specify the columns you want to retrieve from the database. 
 
-If you are selecting from a table rather than from a view or a materialized view, then columns that have been marked as `UNUSED` by the `ALTER` `TABLE` `SET` `UNUSED` statement are not selected. 
+* (all-column wildcard) 
 
-See Also:
+Specify the all-column wildcard (asterisk) to select all columns, excluding pseudocolumns and ` INVISIBLE ` columns, from all tables, views, or materialized views listed in the ` FROM ` clause. The columns are returned in the order indicated by the ` COLUMN_ID ` column of the ` *_TAB_COLUMNS ` data dictionary view for the table, view, or materialized view. 
 
-[ALTER TABLE](ALTER-TABLE.html#GUID-552E7373-BF93-477D-9DA3-B2C9386F2877), "[Simple Query Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2129937)", and "[Selecting from the DUAL Table: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130183)"
+If you are selecting from a table rather than from a view or a materialized view, then columns that have been marked as ` UNUSED ` by the ` ALTER ` ` TABLE ` ` SET ` ` UNUSED ` statement are not selected. 
 
-query_name.*
+> **note:** See Also: 
 
-Specify `query_name` followed by a period and the asterisk to select all columns from the specified subquery block. For `query_name`, specify a subquery block name already specified in the `subquery_factoring_clause`. You must have specified the `subquery_factoring_clause` in order to specify `query_name` in the `select_list`. If you specify `query_name` in the `select_list`, then you also must specify `query_name` in the `query_table_expression` (`FROM` clause). 
+[ ALTER TABLE ](ALTER-TABLE.md#GUID-552E7373-BF93-477D-9DA3-B2C9386F2877) ,  " [ Simple Query Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2129937) "  , and  " [ Selecting from the DUAL Table: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130183) " 
 
-table.* | view.* | materialized view.*
+*query_name*  .* 
+
+Specify *query_name* followed by a period and the asterisk to select all columns from the specified subquery block. For *query_name* , specify a subquery block name already specified in the *subquery_factoring_clause* . You must have specified the *subquery_factoring_clause* in order to specify *query_name* in the *select_list* . If you specify *query_name* in the *select_list* , then you also must specify *query_name* in the *query_table_expression* ( ` FROM ` clause). 
+
+*table.**  |  *view.**  |  *materialized view.** 
 
 Specify the object name followed by a period and the asterisk to select all columns from the specified table, view, or materialized view. Oracle Database returns a set of columns in the order in which the columns were specified when the object was created. A query that selects rows from two or more tables, views, or materialized views is a join. 
 
-You can use the schema qualifier to select from a table, view, or materialized view in a schema other than your own. If you omit `schema`, then the database assumes the table, view, or materialized view is in your own schema. 
+You can use the schema qualifier to select from a table, view, or materialized view in a schema other than your own. If you omit *schema* , then the database assumes the table, view, or materialized view is in your own schema. 
 
-See Also:
+> **note:** See Also: 
 
-"[Joins](Joins.html#GUID-39081984-8D38-4D64-A847-AA43F515D460)"
+" [ Joins ](Joins.md#GUID-39081984-8D38-4D64-A847-AA43F515D460) " 
 
-t_alias .*
+*t_alias*  .* 
 
-Specify a correlation name (alias) followed by a period and the asterisk to select all columns from the object with that correlation name specified in the `FROM` clause of the same subquery. The object can be a table, view, materialized view, or subquery. Oracle Database returns a set of columns in the order in which the columns were specified when the object was created. A query that selects rows from two or more objects is a join. 
+Specify a correlation name (alias) followed by a period and the asterisk to select all columns from the object with that correlation name specified in the ` FROM ` clause of the same subquery. The object can be a table, view, materialized view, or subquery. Oracle Database returns a set of columns in the order in which the columns were specified when the object was created. A query that selects rows from two or more objects is a join. 
 
-expr
+*expr* 
 
-Specify an expression representing the information you want to select. A column name in this list can be qualified with `schema` only if the table, view, or materialized view containing the column is qualified with `schema` in the `FROM` clause. If you specify a member method of an object type, then you must follow the method name with parentheses even if the method takes no arguments. 
+Specify an expression representing the information you want to select. A column name in this list can be qualified with *schema* only if the table, view, or materialized view containing the column is qualified with *schema* in the ` FROM ` clause. If you specify a member method of an object type, then you must follow the method name with parentheses even if the method takes no arguments. 
 
 The expression can also hold a scalar value that can be return values of PL/SQL functions, subqueries that return a single value per row, and SQL macros. 
 
-c_alias
+*c_alias* 
 
-Specify an alias for the column expression. Oracle Database will use this alias in the column heading of the result set. The `AS` keyword is optional. The alias effectively renames the select list item for the duration of the query. The alias can be used in the `order_by_clause` but not other clauses in the query. 
+Specify an alias for the column expression. Oracle Database will use this alias in the column heading of the result set. The ` AS ` keyword is optional. The alias effectively renames the select list item for the duration of the query. The alias can be used in the *order_by_clause* but not other clauses in the query. 
 
-From Release 23 you can use `c_alias` in `group_by_clause` . 
+From Release 23 you can use *c_alias* in *group_by_clause* . 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG080) for information on using the `expr` `AS` `c_alias` syntax with the `UNION` `ALL` operator in queries of multiple materialized views 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG080) for information on using the *expr* ` AS ` *c_alias* syntax with the ` UNION ` ` ALL ` operator in queries of multiple materialized views 
 
-  * "[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" for the syntax of `expr`
-
-
+  * " [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  for the syntax of *expr* 
 
 
-Restrictions on the Select List
 
-The select list is subject to the following restrictions:
 
-  * If you also specify a [group_by_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2182483) in this statement, then this select list can contain only the following types of expressions: 
+Restrictions on the Select List 
+
+The select list is subject to the following restrictions: 
+
+  * If you also specify a *group_by_clause* in this statement, then this select list can contain only the following types of expressions: 
 
     * Constants 
 
-    * Aggregate functions and the functions `USER`, `UID`, and `SYSDATE`
+    * Aggregate functions and the functions ` USER ` , ` UID ` , and ` SYSDATE `
 
-    * Expressions identical to those in the `group_by_clause`. If the `group_by_clause` is in a subquery, then all columns in the select list of the subquery must match the `GROUP` `BY` columns in the subquery. If the select list and `GROUP` `BY` columns of a top-level query or of a subquery do not match, then the statement results in `ORA-00979`. 
+    * Expressions identical to those in the *group_by_clause* . If the *group_by_clause* is in a subquery, then all columns in the select list of the subquery must match the ` GROUP ` ` BY ` columns in the subquery. If the select list and ` GROUP ` ` BY ` columns of a top-level query or of a subquery do not match, then the statement results in ` ORA-00979 ` . 
 
-From Release 23 you can group by `position` and `alias`. 
+From Release 23 you can group by *position* and *alias* . 
 
     * Expressions involving the preceding expressions that evaluate to the same value for all rows in a group 
 
   * You can select a rowid from a join view only if the join has one and only one key-preserved table. The rowid of that table becomes the rowid of the view. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Administrator's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN020) for information on key-preserved tables 
+[ *Oracle Database Administrator's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN020) for information on key-preserved tables 
 
-  * If two or more tables have some column names in common, and if you are specifying a join in the `FROM` clause, then you must qualify column names with names of tables or table aliases. 
-
-
-
-
-FROM Clause
-
-Use the optional `FROM` clause to specify the objects from which data is selected. 
-
-You can invoke a polymorphic table function (PTF) in the query block of the `FROM` clause like other existing table functions. A PTF is a table function whose operands can have more than one type. 
-
-With Oracle Database 21c, you can write SQL table macros and use them inside the `FROM` clause, where it would be legal to call a PL/SQL function. SQL table macros are expressions, typically used in a `FROM` clause, to act as a sort of polymorphic (parameterized) views. You must define these macro functions in PL/SQL and call them from SQL for them to function as macros. 
-
-With Oracle Database Release 23, you can use the `GRAPH_TABLE` operator as a table expression in the `FROM` clause. 
-
-See Also:
-
-  * [GRAPH_TABLE Operator](graph_table-operator.html#GUID-CA6A600E-2087-46F8-A081-C6F3F01CF305)
-
-  * [ PL/SQL Optimization and Tuning](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-981102A8-5204-4931-B10A-93486304B184)
-
-  * [Defining SQL Macros ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-292C3A17-2A4B-4EFB-AD38-68DF6380E5F7)
+  * If two or more tables have some column names in common, and if you are specifying a join in the ` FROM ` clause, then you must qualify column names with names of tables or table aliases. 
 
 
 
 
-ONLY
+FROM Clause 
 
-The `ONLY` clause applies only to views. Specify `ONLY` if the view in the `FROM` clause is a view belonging to a hierarchy and you do not want to include rows from any of its subviews. 
+Use the optional ` FROM ` clause to specify the objects from which data is selected. 
 
-query_table_expression
+You can invoke a polymorphic table function (PTF) in the query block of the ` FROM ` clause like other existing table functions. A PTF is a table function whose operands can have more than one type. 
 
-Use the `query_table_expression` clause to identify a subquery block, table, view, materialized view, analytic view, hierarchy, partition, or subpartition, or to specify a subquery that identifies the objects. In order to specify a subquery block, you must have specified the subquery block name (`query_name` in the `subquery_factoring_clause` or `subav_name` in the `subav_factoring_clause` ). 
+With Oracle Database 21c, you can write SQL table macros and use them inside the ` FROM ` clause, where it would be legal to call a PL/SQL function. SQL table macros are expressions, typically used in a ` FROM ` clause, to act as a sort of polymorphic (parameterized) views. You must define these macro functions in PL/SQL and call them from SQL for them to function as macros. 
 
-The analytic view in the expression may be a transitory analytic view defined in the `with_clause` or a persistent analytic view. 
+With Oracle Database Release 23, you can use the ` GRAPH_TABLE ` operator as a table expression in the ` FROM ` clause. 
 
-See Also:
+> **note:** See Also: 
 
-"[Using Subqueries: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130078)"
+  * [ GRAPH_TABLE Operator ](graph_table-operator.md#GUID-CA6A600E-2087-46F8-A081-C6F3F01CF305)
 
-LATERAL
+  * [ *PL/SQL Optimization and Tuning* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-981102A8-5204-4931-B10A-93486304B184)
 
-Specify `LATERAL` to designate `subquery` as a lateral inline view. Within a lateral inline view, you can specify tables that appear to the left of the lateral inline view in the `FROM` clause of a query. You can specify this left correlation anywhere within `subquery` (such as the `SELECT`, `FROM`, and `WHERE` clauses) and at any nesting level. 
-
-Restrictions on LATERAL
-
-Lateral inline views are subject to the following restrictions:
-
-  * If you specify `LATERAL`, then you cannot specify the `pivot_clause`, the `unpivot_clause`, or a pattern in the `table_reference` clause. 
-
-  * If a lateral inline view contains the `query_partition_clause`, and it is the right side of a join clause, then it cannot contain a left correlation to the left table in the join clause. However, it can contain a left correlation to a table to its left in the `FROM` clause that is not the left table. 
-
-  * A lateral inline view cannot contain a left correlation to the first table in a right outer join or full outer join.
+  * [ Defining SQL Macros ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-292C3A17-2A4B-4EFB-AD38-68DF6380E5F7)
 
 
 
 
-See Also:
+ONLY 
 
-"[Using Lateral Inline Views: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFDGIJ)"
+The ` ONLY ` clause applies only to views. Specify ` ONLY ` if the view in the ` FROM ` clause is a view belonging to a hierarchy and you do not want to include rows from any of its subviews. 
 
-inline_external_table
+*query_table_expression* 
+
+Use the *query_table_expression* clause to identify a subquery block, table, view, materialized view, analytic view, hierarchy, partition, or subpartition, or to specify a subquery that identifies the objects. In order to specify a subquery block, you must have specified the subquery block name ( *query_name* in the *subquery_factoring_clause* or *subav_name* in the *subav_factoring_clause* ). 
+
+The analytic view in the expression may be a transitory analytic view defined in the ` with_clause  ` or a persistent analytic view. 
+
+> **note:** See Also: 
+
+" [ Using Subqueries: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130078) " 
+
+LATERAL 
+
+Specify ` LATERAL ` to designate *subquery* as a lateral inline view. Within a lateral inline view, you can specify tables that appear to the left of the lateral inline view in the ` FROM ` clause of a query. You can specify this left correlation anywhere within *subquery* (such as the ` SELECT ` , ` FROM ` , and ` WHERE ` clauses) and at any nesting level. 
+
+Restrictions on LATERAL 
+
+Lateral inline views are subject to the following restrictions: 
+
+  * If you specify ` LATERAL ` , then you cannot specify the *pivot_clause* , the *unpivot_clause* , or a pattern in the *table_reference* clause. 
+
+  * If a lateral inline view contains the *query_partition_clause* , and it is the right side of a join clause, then it cannot contain a left correlation to the left table in the join clause. However, it can contain a left correlation to a table to its left in the ` FROM ` clause that is not the left table. 
+
+  * A lateral inline view cannot contain a left correlation to the first table in a right outer join or full outer join. 
+
+
+
+
+> **note:** See Also: 
+
+" [ Using Lateral Inline Views: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFDGIJ) " 
+
+*inline_external_table* 
 
 Specify this clause to inline an external table in a query. You must specify the table columns and properties for the external table that will be inlined in the query. 
 
-inline_external_table_properties
+*inline_external_table_properties* 
 
-This clause extends the `external_table_data_props` with the `REJECT LIMIT` and `access_driver_type` options. Use this clause to specify the properties of the external table. 
+This clause extends the ` external_table_data_props ` with the ` REJECT LIMIT ` and ` access_driver_type ` options. Use this clause to specify the properties of the external table. 
 
 In addition to supporting external data residing in operating file systems and Big Data sources and formats such as HDFS and Hive, Oracle supports external data residing in objects. 
 
-modified_external_table
+*modified_external_table* 
 
-You can use this clause to override some external table properties specified by the `CREATE TABLE` or `ALTER TABLE` statements from within a query. 
+You can use this clause to override some external table properties specified by the ` CREATE TABLE ` or ` ALTER TABLE ` statements from within a query. 
 
-You can override external table parameters at runtime.
+You can override external table parameters at runtime. 
 
-Restrictions
+Restrictions 
 
-  * You must specify the key words `EXTERNAL MODIFY` in the query. If you do not specify the keywords, you will see a `Missing or invalid option` error. 
+  * You must specify the key words ` EXTERNAL MODIFY ` in the query. If you do not specify the keywords, you will see a ` Missing or invalid option ` error. 
 
-  * You must reference an external table in the query. If you do not, you will see an error.
+  * You must reference an external table in the query. If you do not, you will see an error. 
 
-  * You must specify at least one property in the query. One of `DEFAULT DIRECTORY`, `LOCATION`, `ACCESS PARAMETERS`, or `REJECT LIMIT`. 
+  * You must specify at least *one* property in the query. One of ` DEFAULT DIRECTORY ` , ` LOCATION ` , ` ACCESS PARAMETERS ` , or ` REJECT LIMIT ` . 
 
-  * If you specify more than one external table properties, they must be listed in order. First the `DEFAULT DIRECTORY` must be specified, followed by the `ACCESS PARAMETERS`, `LOCATION` and `REJECT LIMIT`. Otherwise an error will be raised. 
+  * If you specify more than one external table properties, they must be listed in order. First the ` DEFAULT DIRECTORY ` must be specified, followed by the ` ACCESS PARAMETERS ` , ` LOCATION ` and ` REJECT LIMIT ` . Otherwise an error will be raised. 
 
-  * In the `DEFAULT DIRECTORY` clause, you must specify only one proper default directory. Otherwise a `Missing DEFAULT keyword` error will occur. 
+  * In the ` DEFAULT DIRECTORY ` clause, you must specify only one proper default directory. Otherwise a ` Missing DEFAULT keyword ` error will occur. 
 
-  * You must enclose a filename in the `LOCATION` clause within quotes. Otherwise a `Missing keyword` error will occur. Note that the access driver will decide whether or not to allow a `LOCATION` clause in the query. If the clause is disallowed for a particular access driver, an error will be raised. 
+  * You must enclose a filename in the ` LOCATION ` clause within quotes. Otherwise a ` Missing keyword ` error will occur. Note that the access driver will decide whether or not to allow a ` LOCATION ` clause in the query. If the clause is disallowed for a particular access driver, an error will be raised. 
 
-  * For `ORACLE_LOADER` and `ORACLE_DATAPUMP` access drivers, the external file location in the `LOCATION` clause must be specified in the following format: directory: location, i.e, the directory and location must be separated by a colon. Multiple locations in the clause must be separated by a comma. Otherwise, a `Missing keyword` error will occur. 
+  * For ` ORACLE_LOADER ` and ` ORACLE_DATAPUMP ` access drivers, the external file location in the ` LOCATION ` clause must be specified in the following format: directory: location, i.e, the directory and location must be separated by a colon. Multiple locations in the clause must be separated by a comma. Otherwise, a ` Missing keyword ` error will occur. 
 
-  * Note that `LOCATION` will be made optional in `CREATE TABLE`, and must be specified either when creating or querying the external table. Otherwise an error will be raised in the access driver. 
+  * Note that ` LOCATION ` will be made optional in ` CREATE TABLE ` , and must be specified either when creating or querying the external table. Otherwise an error will be raised in the access driver. 
 
-  * When populating external data using `ORACLE DATAPUMP` via `CTAS`, the external file location must be specified. This will be the only case where `LOCATION` clause is mandatory in `CREATE TABLE`. 
+  * When populating external data using ` ORACLE DATAPUMP ` via ` CTAS ` , the external file location must be specified. This will be the only case where ` LOCATION ` clause is mandatory in ` CREATE TABLE ` . 
 
-  * When overriding access parameters, a proper access parameter list must be provided in the `ACCESS PARAMETERS` clause, with enclosing parentheses. 
+  * When overriding access parameters, a proper access parameter list must be provided in the ` ACCESS PARAMETERS ` clause, with enclosing parentheses. 
 
-Note that the syntax and allowable values for the access parameters in the `modified_external_table` clause are the same as for the external table DDL for each access driver. For more see [Oracle Database Utilities](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=SUTIL) for additional details regarding syntax and permissible values. 
+Note that the syntax and allowable values for the access parameters in the *modified_external_table* clause are the same as for the external table DDL for each access driver. For more see [ *Oracle Database Utilities* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=SUTIL) for additional details regarding syntax and permissible values. 
 
-  * If you specify the `REJECT LIMIT`, then it must either be `UNLIMITED` or some valid value that is within range. Otherwise a `Reject limit out of range` error will be raised. 
-
-
+  * If you specify the ` REJECT LIMIT ` , then it must either be ` UNLIMITED ` or some valid value that is within range. Otherwise a ` Reject limit out of range ` error will be raised. 
 
 
-modify_external_table_properties
 
-You can specify the external table properties that you want to modify at run time using this clause. The parameters that you can modify are `DEFAULT DIRECTORY`, `LOCATION`, `ACCESS PARAMETERS (BADFILE, LOGFILE, DISCARDFILE)` and `REJECT LIMIT`. 
 
-Example: Overriding External Table Parameters in a Query
+*modify_external_table_properties* 
+
+You can specify the external table properties that you want to modify at run time using this clause. The parameters that you can modify are ` DEFAULT DIRECTORY ` , ` LOCATION ` , ` ACCESS PARAMETERS (BADFILE, LOGFILE, DISCARDFILE) ` and ` REJECT LIMIT ` . 
+
+Example: Overriding External Table Parameters in a Query 
     
     
+    ```
       SELECT * FROM
-      sales_external EXTERNAL MODIFY (LOCATION 'sales_9.csvâ REJECT LIMIT UNLIMITED);
+      sales_external EXTERNAL MODIFY (LOCATION 'sales_9.csv’ REJECT LIMIT UNLIMITED);
+    ```
 
-flashback_query_clause 
+*flashback_query_clause* 
 
-Use the `flashback_query_clause` to retrieve data from a table, view, or materialized view based on time dimensions associated with the data. 
+Use the *flashback_query_clause* to retrieve data from a table, view, or materialized view based on time dimensions associated with the data. 
 
-This clause implements SQL-driven Flashback, which lets you specify the following:
+This clause implements SQL-driven Flashback, which lets you specify the following: 
 
-  * A different system change number or timestamp for each object in the select list, using the clauses `VERSIONS` `BETWEEN` `{` `SCN` `|` `TIMESTAMP` `}` or `VERSIONS` `AS` `OF` `{` `SCN` `|` `TIMESTAMP` `}`. You can also implement session-level Flashback using the `DBMS_FLASHBACK` package. 
+  * A different system change number or timestamp for each object in the select list, using the clauses ` VERSIONS ` ` BETWEEN ` ` { ` ` SCN ` ` \| ` ` TIMESTAMP ` ` } ` or ` VERSIONS ` ` AS ` ` OF ` ` { ` ` SCN ` ` \| ` ` TIMESTAMP ` ` } ` . You can also implement session-level Flashback using the ` DBMS_FLASHBACK ` package. 
 
-  * A valid time period for each object in the select list, using the clauses `VERSIONS` `PERIOD` `FOR` or `AS` `OF` `PERIOD` `FOR`. You can also implement valid-time session-level Flashback using the `DBMS_FLASHBACK_ARCHIVE` package. 
+  * A valid time period for each object in the select list, using the clauses ` VERSIONS ` ` PERIOD ` ` FOR ` or ` AS ` ` OF ` ` PERIOD ` ` FOR ` . You can also implement valid-time session-level Flashback using the ` DBMS_FLASHBACK_ARCHIVE ` package. 
 
 
 
 
-A Flashback Query lets you retrieve a history of changes made to a row. You can retrieve the corresponding identifier of the transaction that made the change using the `VERSIONS_XID` pseudocolumn. You can also retrieve information about the transaction that resulted in a particular row version by issuing an Oracle Flashback Transaction Query. You do this by querying the `FLASHBACK_TRANSACTION_QUERY` data dictionary view for a particular transaction ID. 
+A Flashback Query lets you retrieve a history of changes made to a row. You can retrieve the corresponding identifier of the transaction that made the change using the ` VERSIONS_XID ` pseudocolumn. You can also retrieve information about the transaction that resulted in a particular row version by issuing an Oracle Flashback Transaction Query. You do this by querying the ` FLASHBACK_TRANSACTION_QUERY ` data dictionary view for a particular transaction ID. 
 
-VERSIONS BETWEEN { SCN | TIMESTAMP }
+VERSIONS BETWEEN { SCN \| TIMESTAMP } 
 
-Specify `VERSIONS` `BETWEEN` to retrieve multiple versions of the rows returned by the query. Oracle Database returns all committed versions of the rows that existed between two SCNs or between two timestamp values. The first specified SCN or timestamp must be earlier than the second specified SCN or timestamp. The rows returned include deleted and subsequently reinserted versions of the rows. 
+Specify ` VERSIONS ` ` BETWEEN ` to retrieve multiple versions of the rows returned by the query. Oracle Database returns all committed versions of the rows that existed between two SCNs or between two timestamp values. The first specified SCN or timestamp must be earlier than the second specified SCN or timestamp. The rows returned include deleted and subsequently reinserted versions of the rows. 
 
-  * Specify `VERSIONS` `BETWEEN` `SCN` ... to retrieve the versions of the row that existed between two SCNs. Both expressions must evaluate to a number and cannot evaluate to NULL. `MINVALUE` and `MAXVALUE` resolve to the SCN of the oldest and most recent data available, respectively. 
+  * Specify ` VERSIONS ` ` BETWEEN ` ` SCN ` ... to retrieve the versions of the row that existed between two SCNs. Both expressions must evaluate to a number and cannot evaluate to NULL. ` MINVALUE ` and ` MAXVALUE ` resolve to the SCN of the oldest and most recent data available, respectively. 
 
-  * Specify `VERSIONS` `BETWEEN` `TIMESTAMP` ... to retrieve the versions of the row that existed between two timestamps. Both expressions must evaluate to a timestamp value and cannot evaluate to NULL. `MINVALUE` and `MAXVALUE` resolve to the timestamp of the oldest and most recent data available, respectively. 
+  * Specify ` VERSIONS ` ` BETWEEN ` ` TIMESTAMP ` ... to retrieve the versions of the row that existed between two timestamps. Both expressions must evaluate to a timestamp value and cannot evaluate to NULL. ` MINVALUE ` and ` MAXVALUE ` resolve to the timestamp of the oldest and most recent data available, respectively. 
 
 
 
 
-AS OF { SCN | TIMESTAMP }
+AS OF { SCN \| TIMESTAMP } 
 
-Specify `AS` `OF` to retrieve the single version of the rows returned by the query at a particular change number (SCN) or timestamp. If you specify `SCN`, then `expr` must evaluate to a number. If you specify `TIMESTAMP`, then `expr` must evaluate to a timestamp value. In either case, `expr` cannot evaluate to NULL. Oracle Database returns rows as they existed at the specified system change number or time. 
+Specify ` AS ` ` OF ` to retrieve the single version of the rows returned by the query at a particular change number (SCN) or timestamp. If you specify ` SCN ` , then *expr* must evaluate to a number. If you specify ` TIMESTAMP ` , then *expr* must evaluate to a timestamp value. In either case, *expr* cannot evaluate to NULL. Oracle Database returns rows as they existed at the specified system change number or time. 
 
-Oracle Database provides a group of version query pseudocolumns that let you retrieve additional information about the various row versions. Refer to "[Version Query Pseudocolumns](Version-Query-Pseudocolumns.html#GUID-F4DB0235-43A9-4AA2-8E9C-F2D9699D4AAD)" for more information. 
+Oracle Database provides a group of version query pseudocolumns that let you retrieve additional information about the various row versions. Refer to  " [ Version Query Pseudocolumns ](Version-Query-Pseudocolumns.md#GUID-F4DB0235-43A9-4AA2-8E9C-F2D9699D4AAD) "  for more information. 
 
-When both clauses are used together, the `AS` `OF` clause determines the SCN or moment in time from which the database issues the query. The `VERSIONS` clause determines the versions of the rows as seen from the `AS` `OF` point. The database returns null for a row version if the transaction started before the first `BETWEEN` value or ended after the `AS` `OF` point. 
+When both clauses are used together, the ` AS ` ` OF ` clause determines the SCN or moment in time from which the database issues the query. The ` VERSIONS ` clause determines the versions of the rows as seen from the ` AS ` ` OF ` point. The database returns null for a row version if the transaction started before the first ` BETWEEN ` value or ended after the ` AS ` ` OF ` point. 
 
-VERSIONS PERIOD FOR
+VERSIONS PERIOD FOR 
 
-Specify `VERSIONS` `PERIOD` `FOR` to retrieve rows from `table` based on whether they are considered valid during the specified time period. In order to use this clause, `table` must support Temporal Validity. 
+Specify ` VERSIONS ` ` PERIOD ` ` FOR ` to retrieve rows from *table* based on whether they are considered valid during the specified time period. In order to use this clause, *table* must support Temporal Validity. 
 
-  * For `valid_time_column`, specify the name of the valid time dimension column for `table`. 
+  * For *valid_time_column* , specify the name of the valid time dimension column for *table* . 
 
-  * Use the `BETWEEN` clause to specify the time period during which rows are considered valid. Both expressions must evaluate to a timestamp value and cannot evaluate to NULL. `MINVALUE` resolves to the earliest date or timestamp in the start time column of `table`. `MAXVALUE` resolves to latest date or timestamp in the end time column of `table`. 
+  * Use the ` BETWEEN ` clause to specify the time period during which rows are considered valid. Both expressions must evaluate to a timestamp value and cannot evaluate to NULL. ` MINVALUE ` resolves to the earliest date or timestamp in the start time column of *table* . ` MAXVALUE ` resolves to latest date or timestamp in the end time column of *table* . 
 
 
 
 
-AS OF PERIOD FOR
+AS OF PERIOD FOR 
 
-Specify `AS` `OF` `PERIOD` `FOR` to retrieve rows from `table` based on whether they are considered valid as of the specified time. In order to use this clause, `table` must support Temporal Validity. 
+Specify ` AS ` ` OF ` ` PERIOD ` ` FOR ` to retrieve rows from *table* based on whether they are considered valid as of the specified time. In order to use this clause, *table* must support Temporal Validity. 
 
-  * For `valid_time_column`, specify the name of the valid time dimension column for `table`. 
+  * For *valid_time_column* , specify the name of the valid time dimension column for *table* . 
 
-  * Use `expr` to specify the time as of which rows are considered valid. The expression must evaluate to a timestamp value and cannot evaluate to NULL. 
+  * Use *expr* to specify the time as of which rows are considered valid. The expression must evaluate to a timestamp value and cannot evaluate to NULL. 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Development Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS967) for more information on Temporal Validity 
+  * [ *Oracle Database Development Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS967) for more information on Temporal Validity 
 
-  * `CREATE` `TABLE` [period_definition](CREATE-TABLE.html#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6__CJADHJHB) to learn how to configure a table to support Temporal Validity and for information about the `valid_time_column`, start time column, and end time column 
+  * ` CREATE ` ` TABLE ` *period_definition* to learn how to configure a table to support Temporal Validity and for information about the *valid_time_column* , start time column, and end time column 
 
 
 
 
-Note on Flashback Queries
+Note on Flashback Queries 
 
-When performing a flashback query, Oracle Database might not use query optimizations that it would use for other types of queries, which could have a negative impact on performance. In particular, this occurs when you specify multiple flashback queries in a hierarchical query.
+When performing a flashback query, Oracle Database might not use query optimizations that it would use for other types of queries, which could have a negative impact on performance. In particular, this occurs when you specify multiple flashback queries in a hierarchical query. 
 
-Restrictions on Flashback Queries
+Restrictions on Flashback Queries 
 
-These queries are subject to the following restrictions:
+These queries are subject to the following restrictions: 
 
-  * You cannot specify a column expression or a subquery in the expression of the `AS` `OF` clause. 
+  * You cannot specify a column expression or a subquery in the expression of the ` AS ` ` OF ` clause. 
 
-  * You cannot specify the `AS` `OF` clause if you have specified the `for_update_clause`. 
+  * You cannot specify the ` AS ` ` OF ` clause if you have specified the *for_update_clause* . 
 
-  * You cannot use the `AS` `OF` clause in the defining query of a materialized view. 
+  * You cannot use the ` AS ` ` OF ` clause in the defining query of a materialized view. 
 
-  * You cannot use the `VERSIONS` clause in flashback queries to temporary or external tables, or tables that are part of a cluster. 
+  * You cannot use the ` VERSIONS ` clause in flashback queries to temporary or external tables, or tables that are part of a cluster. 
 
-  * You cannot use the `VERSIONS` clause in flashback queries to views. However, you can use the `VERSIONS` syntax in the defining query of a view. 
+  * You cannot use the ` VERSIONS ` clause in flashback queries to views. However, you can use the ` VERSIONS ` syntax in the defining query of a view. 
 
-  * You cannot specify the `flashback_query_clause` if you have specified `query_name` in the `query_table_expression`. 
+  * You cannot specify the *flashback_query_clause* if you have specified *query_name* in the *query_table_expression* . 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Development Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS01003) for more information on Oracle Flashback Query 
+  * [ *Oracle Database Development Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS01003) for more information on Oracle Flashback Query 
 
-  * "[Using Flashback Queries: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2112847)"
+  * " [ Using Flashback Queries: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2112847) " 
 
-  * [Oracle Database Development Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS01009) and [Oracle Database PL/SQL Packages and Types Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ARPLS142) for information about session-level Flashback using the `DBMS_FLASHBACK` package 
+  * [ *Oracle Database Development Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS01009) and [ *Oracle Database PL/SQL Packages and Types Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ARPLS142) for information about session-level Flashback using the ` DBMS_FLASHBACK ` package 
 
-  * [Oracle Database Administrator's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN01513) and to the description of [`FLASHBACK_TRANSACTION_QUERY`](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=REFRN23379) in the Oracle Database Reference for more information about transaction history 
+  * [ *Oracle Database Administrator's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN01513) and to the description of [ ` FLASHBACK_TRANSACTION_QUERY ` ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=REFRN23379) in the *Oracle Database Reference* for more information about transaction history 
 
 
 
 
-partition_extension_clause
+*partition_extension_clause* 
 
-For `PARTITION` or `SUBPARTITION`, specify the name or key value of the partition or subpartition within `table` from which you want to retrieve data. 
+For ` PARTITION ` or ` SUBPARTITION ` , specify the name or key value of the partition or subpartition within *table* from which you want to retrieve data. 
 
-For range- and list-partitioned data, as an alternative to this clause, you can specify a condition in the `WHERE` clause that restricts the retrieval to one or more partitions of `table`. Oracle Database will interpret the condition and fetch data from only those partitions. It is not possible to formulate such a `WHERE` condition for hash-partitioned data. 
+For range- and list-partitioned data, as an alternative to this clause, you can specify a condition in the ` WHERE ` clause that restricts the retrieval to one or more partitions of *table* . Oracle Database will interpret the condition and fetch data from only those partitions. It is not possible to formulate such a ` WHERE ` condition for hash-partitioned data. 
 
-See Also:
+> **note:** See Also: 
 
-"[References to Partitioned Tables and Indexes](Syntax-for-Schema-Objects-and-Parts-in-SQL-Statements.html#GUID-FED2E424-3F06-4B2B-88D2-DE043CA6E0E4)" and "[Selecting from a Partition: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2105152)"
+" [ References to Partitioned Tables and Indexes ](Syntax-for-Schema-Objects-and-Parts-in-SQL-Statements.md#GUID-FED2E424-3F06-4B2B-88D2-DE043CA6E0E4) "  and  " [ Selecting from a Partition: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2105152) " 
 
-dblink
+*dblink* 
 
-For `dblink`, specify the complete or partial name for a database link to a remote database where the table, view, or materialized view is located. This database need not be an Oracle Database. 
+For *dblink* , specify the complete or partial name for a database link to a remote database where the table, view, or materialized view is located. This database need not be an Oracle Database. 
 
-See Also:
+> **note:** See Also: 
 
-  * "[References to Objects in Remote Databases](Syntax-for-Schema-Objects-and-Parts-in-SQL-Statements.html#GUID-61D0B206-A5EA-473F-AD04-7067D6E3914C)" for more information on referring to database links 
+  * " [ References to Objects in Remote Databases ](Syntax-for-Schema-Objects-and-Parts-in-SQL-Statements.md#GUID-61D0B206-A5EA-473F-AD04-7067D6E3914C) "  for more information on referring to database links 
 
-  * "[Distributed Queries](Distributed-Queries.html#GUID-DADE67A5-1C58-4132-9B2F-C14AE9B65508)" for more information about distributed queries and "[Using Distributed Queries: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130133)"
+  * " [ Distributed Queries ](Distributed-Queries.md#GUID-DADE67A5-1C58-4132-9B2F-C14AE9B65508) "  for more information about distributed queries and  " [ Using Distributed Queries: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130133) " 
 
 
 
 
-If you omit `dblink`, then the database assumes that the table, view, or materialized view is on the local database. 
+If you omit *dblink* , then the database assumes that the table, view, or materialized view is on the local database. 
 
-Restrictions on Database Links
+Restrictions on Database Links 
 
-Database links are subject to the following restrictions:
+Database links are subject to the following restrictions: 
 
-  * You cannot query a user-defined type or an object `REF` on a remote table. 
+  * You cannot query a user-defined type or an object ` REF ` on a remote table. 
 
-  * You cannot query columns of type `ANYTYPE`, `ANYDATA`, or `ANYDATASET` from remote tables. 
+  * You cannot query columns of type ` ANYTYPE ` , ` ANYDATA ` , or ` ANYDATASET ` from remote tables. 
 
 
 
 
-table | view | materialized_view | analytic_view | hierarchy
+*table* | *view* | *materialized_view* | *analytic_view* | *hierarchy* 
 
-Specify the name of a table, view, materialized view, analytic view, or hierarchy from which data is selected.
+Specify the name of a table, view, materialized view, analytic view, or hierarchy from which data is selected. 
 
-analytic_view
+*analytic_view* 
 
-A persistent analytic view defined with the `CREATE` `ANALYTIC` `VIEW` statement or a transitory analytic view defined in a `WITH` clause. 
+A persistent analytic view defined with the ` CREATE ` ` ANALYTIC ` ` VIEW ` statement or a transitory analytic view defined in a ` WITH ` clause. 
 
-See Also:
+> **note:** See Also: [ Analytic Views: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P-1314421-F3347731)
 
-[Analytic Views: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P-1314421-F3347731)
+*hierarchy* 
 
-hierarchy
+A hierarchy defined with the ` CREATE ` ` HIERARCHY ` statement. 
 
-A hierarchy defined with the `CREATE` `HIERARCHY` statement. 
+*sample_clause* 
 
-sample_clause
+The *sample_clause* lets you instruct the database to select from a random sample of data from the table, rather than from the entire table. 
 
-The `sample_clause` lets you instruct the database to select from a random sample of data from the table, rather than from the entire table. 
+> **note:** See Also: 
 
-See Also:
+" [ Selecting a Sample: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2105143) " 
 
-"[Selecting a Sample: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2105143)"
+BLOCK 
 
-BLOCK
+` BLOCK ` instructs the database to attempt to perform random block sampling instead of random row sampling. 
 
-`BLOCK` instructs the database to attempt to perform random block sampling instead of random row sampling. 
+Block sampling is possible only during full table scans or index fast full scans. If a more efficient execution path exists, then Oracle Database does not perform block sampling. If you want to guarantee block sampling for a particular table or index, then use the ` FULL ` or ` INDEX_FFS ` hint. 
 
-Block sampling is possible only during full table scans or index fast full scans. If a more efficient execution path exists, then Oracle Database does not perform block sampling. If you want to guarantee block sampling for a particular table or index, then use the `FULL` or `INDEX_FFS` hint. 
+Beginning with Oracle Database 12 *c* Release 2 (12.2.), you can specify block sampling for external tables. In earlier releases, specifying block sampling for external tables had no effect; row sampling was performed. 
 
-Beginning with Oracle Database 12c Release 2 (12.2.), you can specify block sampling for external tables. In earlier releases, specifying block sampling for external tables had no effect; row sampling was performed. 
+*sample_percent* 
 
-sample_percent
+For *sample_percent* , specify the percentage of the total row or block count to be included in the sample. The value must be in the range .000001 to, but not including, 100. This percentage indicates the probability of each row, or each cluster of rows in the case of block sampling, being selected as part of the sample. It does not mean that the database will retrieve exactly *sample_percent* of the rows of *table* . 
 
-For `sample_percent`, specify the percentage of the total row or block count to be included in the sample. The value must be in the range .000001 to, but not including, 100. This percentage indicates the probability of each row, or each cluster of rows in the case of block sampling, being selected as part of the sample. It does not mean that the database will retrieve exactly `sample_percent` of the rows of `table`. 
-
-WARNING:
+> **note:** WARNING: 
 
 The use of statistically incorrect assumptions when using this feature can lead to incorrect or undesirable results. 
 
-SEED seed_value
+SEED  *seed_value* 
 
-Specify this clause to instruct the database to attempt to return the same sample from one execution to the next. The `seed_value` must be an integer between 0 and 4294967295. If you omit this clause, then the resulting sample will change from one execution to the next. 
+Specify this clause to instruct the database to attempt to return the same sample from one execution to the next. The *seed_value* must be an integer between 0 and 4294967295. If you omit this clause, then the resulting sample will change from one execution to the next. 
 
-Restrictions on sample_clause
+Restrictions on  *sample_clause* 
 
-The following restrictions apply to the `SAMPLE` clause: 
+The following restrictions apply to the ` SAMPLE ` clause: 
 
-  * You cannot specify the `SAMPLE` clause in a subquery in a DML statement. 
+  * You cannot specify the ` SAMPLE ` clause in a subquery in a DML statement. 
 
-  * You can specify the `SAMPLE` clause in a query on a base table, a container table of a materialized view, or a view that is key preserving. You cannot specify this clause on a view that is not key preserving. 
+  * You can specify the ` SAMPLE ` clause in a query on a base table, a container table of a materialized view, or a view that is key preserving. You cannot specify this clause on a view that is not key preserving. 
 
 
 
 
-subquery_restriction_clause
+*subquery_restriction_clause* 
 
-The `subquery_restriction_clause` lets you restrict the subquery in one of the following ways: 
+The *subquery_restriction_clause* lets you restrict the subquery in one of the following ways: 
 
-WITH READ ONLY
+WITH READ ONLY 
 
-Specify `WITH READ ONLY` to indicate that the table or view cannot be updated. 
+Specify ` WITH READ ONLY ` to indicate that the table or view cannot be updated. 
 
-WITH CHECK OPTION
+WITH CHECK OPTION 
 
-Specify `WITH CHECK OPTION` to indicate that Oracle Database prohibits any changes to the table or view that would produce rows that are not included in the subquery. When used in the subquery of a DML statement, you can specify this clause in a subquery in the `FROM` clause but not in subquery in the `WHERE` clause. 
+Specify ` WITH CHECK OPTION ` to indicate that Oracle Database prohibits any changes to the table or view that would produce rows that are not included in the subquery. When used in the subquery of a DML statement, you can specify this clause in a subquery in the ` FROM ` clause but not in subquery in the ` WHERE ` clause. 
 
-CONSTRAINT constraint
+CONSTRAINT  *constraint* 
 
-Specify the name of the `CHECK OPTION` constraint. If you omit this identifier, then Oracle automatically assigns the constraint a name of the form `SYS_C``n`, where n is an integer that makes the constraint name unique within the database. 
+Specify the name of the ` CHECK OPTION ` constraint. If you omit this identifier, then Oracle automatically assigns the constraint a name of the form ` SYS_C ` *n* , where n is an integer that makes the constraint name unique within the database. 
 
-See Also:
+> **note:** See Also: 
 
-"[Using the WITH CHECK OPTION Clause: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066598)"
+" [ Using the WITH CHECK OPTION Clause: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066598) " 
 
-table_collection_expression
+*table_collection_expression* 
 
-The `table_collection_expression` lets you inform Oracle that the value of `collection_expression` should be treated as a table for purposes of query and DML operations. The `collection_expression` can be a subquery, a column, a function, or a collection constructor. Regardless of its form, it must return a collection valueâthat is, a value whose type is nested table or varray. This process of extracting the elements of a collection is called collection unnesting. 
+The *table_collection_expression* lets you inform Oracle that the value of *collection_expression* should be treated as a table for purposes of query and DML operations. The *collection_expression* can be a subquery, a column, a function, or a collection constructor. Regardless of its form, it must return a collection value—that is, a value whose type is nested table or varray. This process of extracting the elements of a collection is called  collection unnesting  . 
 
-The optional plus (+) is relevant if you are joining the `TABLE` collection expression with the parent table. The + creates an outer join of the two, so that the query returns rows from the outer table even if the collection expression is null. 
+The optional plus (+) is relevant if you are joining the ` TABLE ` collection expression with the parent table. The + creates an outer join of the two, so that the query returns rows from the outer table even if the collection expression is null. 
 
-Note:
+> **note:** 
 
-In earlier releases of Oracle, when `collection_expression` was a subquery, `table_collection_expression` was expressed as `THE` `subquery`. That usage is now deprecated. 
+In earlier releases of Oracle, when *collection_expression* was a subquery, *table_collection_expression* was expressed as ` THE ` *subquery* . That usage is now deprecated. 
 
-The `collection_expression` can reference columns of tables defined to its left in the `FROM` clause. This is called left correlation. Left correlation can occur only in `table_collection_expression`. Other subqueries cannot contains references to columns defined outside the subquery. 
+The *collection_expression* can reference columns of tables defined to its left in the ` FROM ` clause. This is called  left correlation  . Left correlation can occur only in *table_collection_expression* . Other subqueries cannot contains references to columns defined outside the subquery. 
 
-The optional `(+)` lets you specify that `table_collection_expression` should return a row with all fields set to null if the collection is null or empty. The `(+)` is valid only if `collection_expression` uses left correlation. The result is similar to that of an outer join. 
+The optional ` (+) ` lets you specify that *table_collection_expression* should return a row with all fields set to null if the collection is null or empty. The ` (+) ` is valid only if *collection_expression* uses left correlation. The result is similar to that of an outer join. 
 
-When you use the `(+)` syntax in the `WHERE` clause of a subquery in an `UPDATE` or `DELETE` operation, you must specify two tables in the `FROM` clause of the subquery. Oracle Database ignores the outer join syntax unless there is a join in the subquery itself. 
+When you use the ` (+) ` syntax in the ` WHERE ` clause of a subquery in an ` UPDATE ` or ` DELETE ` operation, you must specify two tables in the ` FROM ` clause of the subquery. Oracle Database ignores the outer join syntax unless there is a join in the subquery itself. 
 
-See Also:
+> **note:** See Also: 
 
-  * "[Outer Joins](Joins.html#GUID-29A4584C-0741-4E6A-A89B-DCFAA222994A)"
+  * " [ Outer Joins ](Joins.md#GUID-29A4584C-0741-4E6A-A89B-DCFAA222994A) " 
 
-  * "[Table Collections: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2071643)" and "[Collection Unnesting: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2071637)"
+  * " [ Table Collections: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2071643) "  and  " [ Collection Unnesting: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2071637) " 
 
 
 
 
-t_alias
+*t_alias* 
 
-Specify a correlation name, which is an alias for the table, view, materialized view, or subquery for evaluating the query. This alias is required if the select list references any object type attributes or object type methods. Correlation names are most often used in a correlated query. Other references to the table, view, or materialized view throughout the query must refer to this alias. 
+Specify a  correlation  name  , which is an alias for the table, view, materialized view, or subquery for evaluating the query. This alias is required if the select list references any object type attributes or object type methods. Correlation names are most often used in a correlated query. Other references to the table, view, or materialized view throughout the query must refer to this alias. 
 
-See Also:
+> **note:** See Also: 
 
-"[Using Correlated Subqueries: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066912)"
+" [ Using Correlated Subqueries: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066912) " 
 
-pivot_clause
+*pivot_clause* 
 
-The `pivot_clause` lets you write cross-tabulation queries that rotate rows into columns, aggregating data in the process of the rotation. The output of a pivot operation typically includes more columns and fewer rows than the starting data set. The `pivot_clause` performs the following steps: 
+The *pivot_clause* lets you write cross-tabulation queries that rotate rows into columns, aggregating data in the process of the rotation. The output of a pivot operation typically includes more columns and fewer rows than the starting data set. The *pivot_clause* performs the following steps: 
 
-  1. The `pivot_clause` computes the aggregation functions specified at the beginning of the clause. Aggregation functions must specify a `GROUP` `BY` clause to return multiple values, yet the `pivot_clause` does not contain an explicit `GROUP` `BY` clause. Instead, the `pivot_clause` performs an implicit `GROUP` `BY`. The implicit grouping is based on all the columns not referred to in the `pivot_clause`, along with the set of values specified in the `pivot_in_clause`.). If you specify more than one aggregation function, then you must provide aliases for at least all but one of the aggregation functions. 
+  1. The *pivot_clause* computes the aggregation functions specified at the beginning of the clause. Aggregation functions must specify a ` GROUP ` ` BY ` clause to return multiple values, yet the *pivot_clause* does not contain an explicit ` GROUP ` ` BY ` clause. Instead, the *pivot_clause* performs an implicit ` GROUP ` ` BY ` . The implicit grouping is based on all the columns not referred to in the *pivot_clause* , along with the set of values specified in the *pivot_in_clause* .). If you specify more than one aggregation function, then you must provide aliases for at least all but one of the aggregation functions. 
 
-  2. The grouping columns and aggregated values calculated in Step 1 are configured to produce the following cross-tabular output:
+  2. The grouping columns and aggregated values calculated in Step 1 are configured to produce the following cross-tabular output: 
 
-    1. All the implicit grouping columns not referred to in the `pivot_clause`, followed by 
+    1. All the implicit grouping columns not referred to in the *pivot_clause* , followed by 
 
-    2. New columns corresponding to values in the `pivot_in_clause`. Each aggregated value is transposed to the appropriate new column in the cross-tabulation. If you specify the `XML` keyword, then the result is a single new column that expresses the data as an XML string. The database generates a name for each new column. If you do not provide an alias for an aggregation function, then the database uses each pivot column value as the name for each new column to which that aggregated value is transposed. If you provide an alias for an aggregation function, then the database generates a name for each new column to which that aggregated value is transposed by concatenating the pivot column name, the underscore character (_), and the aggregation function alias. If a generated column name exceeds the maximum length of a column name, then an ORA-00918 error is returned. To avoid this issue, specify a shorter alias for the pivot column heading, the aggregation function, or both. 
+    2. New columns corresponding to values in the *pivot_in_clause* . Each aggregated value is transposed to the appropriate new column in the cross-tabulation. If you specify the ` XML ` keyword, then the result is a single new column that expresses the data as an XML string. The database generates a name for each new column. If you do not provide an alias for an aggregation function, then the database uses each pivot column value as the name for each new column to which that aggregated value is transposed. If you provide an alias for an aggregation function, then the database generates a name for each new column to which that aggregated value is transposed by concatenating the pivot column name, the underscore character (_), and the aggregation function alias. If a generated column name exceeds the maximum length of a column name, then an ORA-00918 error is returned. To avoid this issue, specify a shorter alias for the pivot column heading, the aggregation function, or both. 
 
 
 
 
-The subclauses of the `pivot_clause` have the following semantics: 
+The subclauses of the *pivot_clause* have the following semantics: 
 
-XML
+XML 
 
-The optional `XML` keyword generates XML output for the query. The `XML` keyword permits the `pivot_in_clause` to contain either a subquery or the wildcard keyword `ANY`. Subqueries and `ANY` wildcards are useful when the `pivot_in_clause` values are not known in advance. With XML output, the values of the pivot column are evaluated at execution time. You cannot specify `XML` when you specify explicit pivot values using expressions in the `pivot_in_clause`. 
+The optional ` XML ` keyword generates XML output for the query. The ` XML ` keyword permits the *pivot_in_clause* to contain either a subquery or the wildcard keyword ` ANY ` . Subqueries and ` ANY ` wildcards are useful when the *pivot_in_clause* values are not known in advance. With XML output, the values of the pivot column are evaluated at execution time. You cannot specify ` XML ` when you specify explicit pivot values using expressions in the *pivot_in_clause* . 
 
-When XML output is generated, the aggregate function is applied to each distinct pivot value, and the database returns a column of `XMLType` containing an XML string for all value and measure pairs. 
+When XML output is generated, the aggregate function is applied to each distinct pivot value, and the database returns a column of ` XMLType ` containing an XML string for all value and measure pairs. 
 
-expr
+*expr* 
 
-For `expr`, specify an expression that evaluates to a constant value of a pivot column. You can optionally provide an alias for each pivot column value. If there is no alias, the column heading becomes a quoted identifier. 
+For *expr* , specify an expression that evaluates to a constant value of a pivot column. You can optionally provide an alias for each pivot column value. If there is no alias, the column heading becomes a quoted identifier. 
 
-subquery
+*subquery* 
 
-A subquery is used only in conjunction with the `XML` keyword. When you specify a subquery, all values found by the subquery are used for pivoting. The output is not the same cross-tabular format returned by non-XML pivot queries. Instead of multiple columns specified in the `pivot_in_clause`, the subquery produces a single XML string column. The XML string for each row holds aggregated data corresponding to the implicit `GROUP` `BY` value of that row. The XML string for each output row includes all pivot values found by the subquery, even if there are no corresponding rows in the input data. 
+A subquery is used only in conjunction with the ` XML ` keyword. When you specify a subquery, all values found by the subquery are used for pivoting. The output is not the same cross-tabular format returned by non-XML pivot queries. Instead of multiple columns specified in the *pivot_in_clause* , the subquery produces a single XML string column. The XML string for each row holds aggregated data corresponding to the implicit ` GROUP ` ` BY ` value of that row. The XML string for each output row includes all pivot values found by the subquery, even if there are no corresponding rows in the input data. 
 
-The subquery must return a list of unique values at the execution time of the pivot query. If the subquery does not return a unique value, then Oracle Database raises a run-time error. Use the `DISTINCT` keyword in the subquery if you are not sure the query will return unique values. 
+The subquery must return a list of unique values at the execution time of the pivot query. If the subquery does not return a unique value, then Oracle Database raises a run-time error. Use the ` DISTINCT ` keyword in the subquery if you are not sure the query will return unique values. 
 
-ANY
+ANY 
 
-The `ANY` keyword is used only in conjunction with the `XML` keyword. The `ANY` keyword acts as a wildcard and is similar in effect to `subquery`. The output is not the same cross-tabular format returned by non-XML pivot queries. Instead of multiple columns specified in the `pivot_in_clause`, the `ANY` keyword produces a single XML string column. The XML string for each row holds aggregated data corresponding to the implicit `GROUP` `BY` value of that row. However, in contrast to the behavior when you specify `subquery`, the `ANY` wildcard produces an XML string for each output row that includes only the pivot values found in the input data corresponding to that row. 
+The ` ANY ` keyword is used only in conjunction with the ` XML ` keyword. The ` ANY ` keyword acts as a wildcard and is similar in effect to *subquery* . The output is not the same cross-tabular format returned by non-XML pivot queries. Instead of multiple columns specified in the *pivot_in_clause* , the ` ANY ` keyword produces a single XML string column. The XML string for each row holds aggregated data corresponding to the implicit ` GROUP ` ` BY ` value of that row. However, in contrast to the behavior when you specify *subquery* , the ` ANY ` wildcard produces an XML string for each output row that includes only the pivot values found in the input data corresponding to that row. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG0209) for more information about `PIVOT` and `UNPIVOT` and "[Using PIVOT and UNPIVOT: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDFIIDD)"
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG0209) for more information about ` PIVOT ` and ` UNPIVOT ` and  " [ Using PIVOT and UNPIVOT: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__CHDFIIDD) " 
 
-unpivot_clause
+*unpivot_clause* 
 
-The `unpivot_clause` rotates columns into rows. 
+The *unpivot_clause* rotates columns into rows. 
 
-  * The `INCLUDE` | `EXCLUDE` `NULLS` clause gives you the option of including or excluding null-valued rows. `INCLUDE` `NULLS` causes the unpivot operation to include null-valued rows; `EXCLUDE` `NULLS` eliminates null-values rows from the return set. If you omit this clause, then the unpivot operation excludes nulls. 
+  * The ` INCLUDE ` | ` EXCLUDE ` ` NULLS ` clause gives you the option of including or excluding null-valued rows. ` INCLUDE ` ` NULLS ` causes the unpivot operation to include null-valued rows; ` EXCLUDE ` ` NULLS ` eliminates null-values rows from the return set. If you omit this clause, then the unpivot operation excludes nulls. 
 
-  * For `column`, specify a name for each output column that will hold measure values, such as `sales_quantity`. 
+  * For *column* , specify a name for each output column that will hold measure values, such as ` sales_quantity ` . 
 
-  * In the `pivot_for_clause`, specify a name for each output column that will hold descriptor values, such as quarter or product. 
+  * In the *pivot_for_clause* , specify a name for each output column that will hold descriptor values, such as quarter or product. 
 
-  * In the `unpivot_in_clause`, specify the input data columns whose names will become values in the output columns of the `pivot_for_clause`. These input data columns have names specifying a category value, such as Q1, Q2, Q3, Q4. The optional `AS` clause lets you map the input data column names to the specified `literal` values in the output columns. 
+  * In the *unpivot_in_clause* , specify the input data columns whose names will become values in the output columns of the *pivot_for_clause* . These input data columns have names specifying a category value, such as Q1, Q2, Q3, Q4. The optional ` AS ` clause lets you map the input data column names to the specified *literal* values in the output columns. 
 
 
 
 
-The unpivot operation turns a set of value columns into one column. Therefore, the data types of all the value columns must be in the same data type group, such as numeric or character.
+The unpivot operation turns a set of value columns into one column. Therefore, the data types of all the value columns must be in the same data type group, such as numeric or character. 
 
-  * If all the value columns are `CHAR`, then the unpivoted column is `CHAR`. If any value column is `VARCHAR2`, then the unpivoted column is `VARCHAR2`. 
+  * If all the value columns are ` CHAR ` , then the unpivoted column is ` CHAR ` . If any value column is ` VARCHAR2 ` , then the unpivoted column is ` VARCHAR2 ` . 
 
-  * If all the value columns are `NUMBER`, then the unpivoted column is `NUMBER`. If any value column is `BINARY_DOUBLE`, then the unpivoted column is `BINARY_DOUBLE`. If no value column is `BINARY_DOUBLE` but any value column is `BINARY_FLOAT`, then the unpivoted column is `BINARY_FLOAT`. 
+  * If all the value columns are ` NUMBER ` , then the unpivoted column is ` NUMBER ` . If any value column is ` BINARY_DOUBLE ` , then the unpivoted column is ` BINARY_DOUBLE ` . If no value column is ` BINARY_DOUBLE ` but any value column is ` BINARY_FLOAT ` , then the unpivoted column is ` BINARY_FLOAT ` . 
 
 
 
 
-containers_clause
+*containers_clause* 
 
-The `CONTAINERS` clause is useful in a multitenant container database (CDB). This clause lets you query data in the specified table or view across all containers in a CDB. 
+The ` CONTAINERS ` clause is useful in a multitenant container database (CDB). This clause lets you query data in the specified table or view across all containers in a CDB. 
 
-  * To query data in a CDB, you must be a common user connected to the CDB root, and the table or view must exist in the root and all PDBs. The query returns all rows from the table or view in the CDB root and in all open PDBs.
+  * To query data in a CDB, you must be a common user connected to the CDB root, and the table or view must exist in the root and all PDBs. The query returns all rows from the table or view in the CDB root and in all open PDBs. 
 
-  * To query data in an application container, you must be a common user connected to the application root, and the table or view must exist in the application root and all PDBs in the application container. The query returns all rows from the table or view in the application root and in all open PDBs in the application container.
+  * To query data in an application container, you must be a common user connected to the application root, and the table or view must exist in the application root and all PDBs in the application container. The query returns all rows from the table or view in the application root and in all open PDBs in the application container. 
 
 
 
 
-The table or view must be in your own schema. It is not necessary to specify `schema`, but if you do then you must specify your own schema. 
+The table or view must be in your own schema. It is not necessary to specify *schema* , but if you do then you must specify your own schema. 
 
-The query returns all rows from the table or view in the root and in all open PDBs, except PDBs that are open in `RESTRICTED` mode. If the queried table or view does not already contain a `CON_ID` column, then the query adds a `CON_ID` column to the query result, which identifies the container whose data a given row represents. 
+The query returns all rows from the table or view in the root and in all open PDBs, except PDBs that are open in ` RESTRICTED ` mode. If the queried table or view does not already contain a ` CON_ID ` column, then the query adds a ` CON_ID ` column to the query result, which identifies the container whose data a given row represents. 
 
-See Also:
+> **note:** See Also: 
 
-  * [CONTAINERS Hint](Comments.html#GUID-28F7F1DB-E265-40CB-BF41-E07A1A755566)
+  * [ CONTAINERS Hint ](Comments.md#GUID-28F7F1DB-E265-40CB-BF41-E07A1A755566)
 
-  * [Oracle Database Administrator's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN14319) for more information on the `CONTAINERS` clause 
+  * [ *Oracle Database Administrator's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADMIN14319) for more information on the ` CONTAINERS ` clause 
 
 
 
 
-shards_clause
+*shards_clause* 
 
-Use the` shards_clause` to query Oracle supplied objects such as `V$`, `DBA/USER/ALL` views, and dictionary tables across shards. You can execute a query with the `shards_clause` only on the shard catalog database. 
+Use the *shards_clause* to query Oracle supplied objects such as ` V$ ` , ` DBA/USER/ALL ` views, and dictionary tables across shards. You can execute a query with the *shards_clause* only on the shard catalog database. 
 
-This feature enables easier centralized management by providing the ability to execute queries across all shards from a central shard catalog.
+This feature enables easier centralized management by providing the ability to execute queries across all shards from a central shard catalog. 
 
-values_clause
+*values_clause* 
 
-You can use the `values_clause` in the `FROM` and `with_clause` of `SELECT` as a table value constructor (TVC). 
+You can use the *values_clause* in the ` FROM ` and *with_clause* of ` SELECT ` as a table value constructor (TVC). 
 
-Each table value constructor contains a set of row value expressions (RVE). The elements in each row expression should be homogeneous in number and their type must be compatible.
+Each table value constructor contains a set of row value expressions (RVE). The elements in each row expression should be homogeneous in number and their type must be compatible. 
 
-The `c_alias` or column alias is the name of the column corresponding to each expression in an RVE. 
+The ` c_alias ` or column alias is the name of the column corresponding to each expression in an RVE. 
 
-TVCs in the `FROM` clause of select statements can be used as table expressions. 
+TVCs in the ` FROM ` clause of select statements can be used as table expressions. 
 
-Example: Using the Values Constructor in the FROM Clause of SELECT
+Example: Using the Values Constructor in the FROM Clause of SELECT 
     
     
+    ```
     SELECT * 
                 FROM ( VALUES (1,'SCOTT'), 
                               (2,'SMITH'), 
                               (3,'JOHN' ) 
                      ) t1 (employee_id, first_name);
+    ```
 
-The example above creates an in-line table `t1` with two columns `employee_id` and `first_name` and three rows. 
+The example above creates an in-line table ` t1 ` with two columns ` employee_id ` and ` first_name ` and three rows. 
 
-If you use the `values_clause` with the [with_clause::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFAFID), you must specify the column alias. Each column alias must correspond to the column produced by the TVC. In this case, the TVC replaces the subquery. 
+If you use the *values_clause* with the *with_clause::=* , you must specify the column alias. Each column alias must correspond to the column produced by the TVC. In this case, the TVC replaces the subquery. 
 
-Example: Using the Values Constructor in the With_Clause of SELECT: 
+Example: Using the Values Constructor in the With_Clause of SELECT  : 
     
     
+    ```
     WITH X(foo, bar, baz) AS (
              VALUES (0, 1, 2), (3, 4, 5), (6, 7, 8) ) SELECT * FROM X;
+    ```
 
-The table and column aliases (`t_alias` and `c_alias`) are required unless you use `values_clause` with `with_clause` in `SELECT`. 
+The table and column aliases ( ` t_alias ` and ` c_alias ` ) are required unless you use ` values_clause ` with ` with_clause ` in ` SELECT ` . 
 
-Restrictions
+Restrictions 
 
-  * If multiple RVEs are specified, then each RVE should have the same cardinality. This means that each RVE must have the same number of elements.
+  * If multiple RVEs are specified, then each RVE should have the same cardinality. This means that each RVE must have the same number of elements. 
 
-  * Each element of the RVE can be a valid SQL expression that includes a column name, scalar valued subquery, bind variable, or any other expression that evaluates to a single value.
+  * Each element of the RVE can be a valid SQL expression that includes a column name, scalar valued subquery, bind variable, or any other expression that evaluates to a single value. 
 
-  * The type of the expression or a constant at the corresponding positions of RVE in a TVC should be implicitly convertible to the most general type following normal SQL type conversion rules. The type of expression that will be inferred will be the most general type of expression at the same position in all RVEs that constitute the TVC.
+  * The type of the expression or a constant at the corresponding positions of RVE in a TVC should be implicitly convertible to the most general type following normal SQL type conversion rules. The type of expression that will be inferred will be the most general type of expression at the same position in all RVEs that constitute the TVC. 
 
-  * If a scalar valued subquery is used to compute the value of an element in a RVE then the select list of scalar valued subquery can contain exactly one expression.
+  * If a scalar valued subquery is used to compute the value of an element in a RVE then the select list of scalar valued subquery can contain exactly one expression. 
 
-  * If RVE is used in an `UPDATE`, or `MERGE` statement, then the keyword `DEFAULT` can be specified in a RVE for each position to indicate to the SQL engine that the default column value should be used for this column. 
+  * If RVE is used in an ` UPDATE ` , or ` MERGE ` statement, then the keyword ` DEFAULT ` can be specified in a RVE for each position to indicate to the SQL engine that the default column value should be used for this column. 
 
-  * The execution plan will have a new section that appears only when the TVC has RVEs consisting of constant values.
+  * The execution plan will have a new section that appears only when the TVC has RVEs consisting of constant values. 
 
-  * If the types of the corresponding elements in a RVE in a TVC have different constraints, then the type of the column will be the union of all the constraints or the most relaxed constraint.
+  * If the types of the corresponding elements in a RVE in a TVC have different constraints, then the type of the column will be the union of all the constraints or the most relaxed constraint. 
 
-  * An error will be thrown if a TVC, that consists of more than one RVE, is used in a place where a scalar valued subquery is expected.
+  * An error will be thrown if a TVC, that consists of more than one RVE, is used in a place where a scalar valued subquery is expected. 
 
-  * The parallel behavior will be similar to union all queries on `DUAL`. TVC will not impact parallel behavior. 
+  * The parallel behavior will be similar to union all queries on ` DUAL ` . TVC will not impact parallel behavior. 
 
-  * RVEs cannot be nested, that is, a RVE cannot contain another RVE.
+  * RVEs cannot be nested, that is, a RVE cannot contain another RVE. 
 
-  * The maximum number of columns produced by the `with_clause` will be the same as the maximum number of columns in a database table. 
+  * The maximum number of columns produced by the *with_clause* will be the same as the maximum number of columns in a database table. 
 
-  * NDV and other statistics that are computed by the optimizer will be similar to a union of all queries on `DUAL`. 
+  * NDV and other statistics that are computed by the optimizer will be similar to a union of all queries on ` DUAL ` . 
 
-  * The TVC clause will not have any restriction on number of RVEs other than the restriction imposed by available memory.
+  * The TVC clause will not have any restriction on number of RVEs other than the restriction imposed by available memory. 
 
-  * The elimination of `UNION ALL` branches on a predicate will be similar to `UNION ALL` queries with `DUAL`. 
-
-
+  * The elimination of ` UNION ALL ` branches on a predicate will be similar to ` UNION ALL ` queries with ` DUAL ` . 
 
 
-join_clause
 
-Use the appropriate `join_clause` syntax to identify tables that are part of a join from which to select data. The `inner_cross_join_clause` lets you specify an inner or cross join. The `outer_join_clause` lets you specify an outer join. The `cross_outer_apply_clause` lets you specify a variation of an ANSI `CROSS` `JOIN` or an ANSI `LEFT` `OUTER` `JOIN` with left correlation support. 
 
-When you join more than two row sources, you can use parentheses to override default precedence. For example, the following syntax:
+*join_clause* 
+
+Use the appropriate *join_clause* syntax to identify tables that are part of a join from which to select data. The *inner_cross_join_clause* lets you specify an inner or cross join. The *outer_join_clause* lets you specify an outer join. The *cross_outer_apply_clause* lets you specify a variation of an ANSI ` CROSS ` ` JOIN ` or an ANSI ` LEFT ` ` OUTER ` ` JOIN ` with left correlation support. 
+
+When you join more than two row sources, you can use parentheses to override default precedence. For example, the following syntax: 
     
     
+    ```
     SELECT ... FROM a JOIN (b JOIN c) ...
     
+    ```
 
-results in a join of `b` and `c`, and then a join of that result set with `a`. 
+results in a join of ` b ` and ` c ` , and then a join of that result set with ` a ` . 
 
-See Also:
+> **note:** See Also: 
 
-"[Joins](Joins.html#GUID-39081984-8D38-4D64-A847-AA43F515D460)" for more information on joins, "[Using Join Queries: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066611)", "[Using Self Joins: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066652)", and "[Using Outer Joins: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2107296)"
+" [ Joins ](Joins.md#GUID-39081984-8D38-4D64-A847-AA43F515D460) "  for more information on joins,  " [ Using Join Queries: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066611) "  ,  " [ Using Self Joins: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066652) "  , and  " [ Using Outer Joins: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2107296) " 
 
-inner_cross_join_clause
+*inner_cross_join_clause* 
 
-Inner joins return only those rows that satisfy the join condition.
+Inner joins return only those rows that satisfy the join condition. 
 
-INNER
+INNER 
 
-Specify `INNER` to explicitly specify an inner join. 
+Specify ` INNER ` to explicitly specify an inner join. 
 
-JOIN
+JOIN 
 
-The `JOIN` keyword explicitly states that a join is being performed. You can use this syntax to replace the comma-delimited table expressions used in `WHERE` clause joins with `FROM` clause join syntax. 
+The ` JOIN ` keyword explicitly states that a join is being performed. You can use this syntax to replace the comma-delimited table expressions used in ` WHERE ` clause joins with ` FROM ` clause join syntax. 
 
-ON condition
+ON  *condition* 
 
-Use the `ON` clause to specify a join condition. Doing so lets you specify join conditions separate from any search or filter conditions in the `WHERE` clause. 
+Use the ` ON ` clause to specify a join condition. Doing so lets you specify join conditions separate from any search or filter conditions in the ` WHERE ` clause. 
 
-USING (column)
+USING (  *column*  ) 
 
-When you are specifying an equijoin of columns that have the same name in both tables, the `USING` `column` clause indicates the columns to be used. You can use this clause only if the join columns in both tables have the same name. Within this clause, do not qualify the column name with a table name or table alias. 
+When you are specifying an equijoin of columns that have the same name in both tables, the ` USING ` *column* clause indicates the columns to be used. You can use this clause only if the join columns in both tables have the same name. Within this clause, do not qualify the column name with a table name or table alias. 
 
-CROSS
+CROSS 
 
-The `CROSS` keyword indicates that a cross join is being performed. A cross join produces the cross-product of two relations and is essentially the same as the comma-delimited Oracle Database notation. 
+The ` CROSS ` keyword indicates that a cross join is being performed. A cross join produces the cross-product of two relations and is essentially the same as the comma-delimited Oracle Database notation. 
 
-NATURAL
+NATURAL 
 
-The `NATURAL` keyword indicates that a natural join is being performed. Refer to [NATURAL](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABHGCAE) for the full semantics of this clause. 
+The ` NATURAL ` keyword indicates that a natural join is being performed. Refer to [ NATURAL ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABHGCAE) for the full semantics of this clause. 
 
-outer_join_clause
+*outer_join_clause* 
 
-Outer joins return all rows that satisfy the join condition and also return some or all of those rows from one table for which no rows from the other satisfy the join condition. You can specify two types of outer joins: a conventional outer join using the `table_reference` syntax on both sides of the join, or a partitioned outer join using the `query_partition_clause` on one side or the other. A partitioned outer join is similar to a conventional outer join except that the join takes place between the outer table and each partition of the inner table. This type of join lets you selectively make sparse data more dense along the dimensions of interest. This process is called data densification. 
+Outer joins return all rows that satisfy the join condition and also return some or all of those rows from one table for which no rows from the other satisfy the join condition. You can specify two types of outer joins: a conventional outer join using the *table_reference* syntax on both sides of the join, or a partitioned outer join using the *query_partition_clause* on one side or the other. A partitioned outer join is similar to a conventional outer join except that the join takes place between the outer table and each partition of the inner table. This type of join lets you selectively make sparse data more dense along the dimensions of interest. This process is called  data densification  . 
 
-query_partition_clause
+*query_partition_clause* 
 
-The `query_partition_clause` lets you define a partitioned outer join. Such a join extends the conventional outer join syntax by applying the outer join to partitions returned by the query. Oracle Database creates a partition of rows for each expression you specify in the `PARTITION` `BY` clause. The rows in each query partition have same value for the `PARTITION` `BY` expression. 
+The *query_partition_clause* lets you define a  partitioned outer join  . Such a join extends the conventional outer join syntax by applying the outer join to partitions returned by the query. Oracle Database creates a partition of rows for each expression you specify in the ` PARTITION ` ` BY ` clause. The rows in each query partition have same value for the ` PARTITION ` ` BY ` expression. 
 
-The `query_partition_clause` can be on either side of the outer join. The result of a partitioned outer join is a `UNION` of the outer joins of each of the partitions in the partitioned result set and the table on the other side of the join. This type of result is useful for filling gaps in sparse data, which simplifies analytic calculations. 
+The *query_partition_clause* can be on either side of the outer join. The result of a partitioned outer join is a ` UNION ` of the outer joins of each of the partitions in the partitioned result set and the table on the other side of the join. This type of result is useful for filling gaps in sparse data, which simplifies analytic calculations. 
 
-If you omit this clause, then the database treats the entire table expressionâeverything specified in `table_reference`âas a single partition, resulting in a conventional outer join. 
+If you omit this clause, then the database treats the entire table expression—everything specified in *table_reference* —as a single partition, resulting in a conventional outer join. 
 
-To use the `query_partition_clause` in an analytic function, use the upper branch of the syntax (without parentheses). To use this clause in a model query (in the `model_column_clauses`) or a partitioned outer join (in the `outer_join_clause`), use the lower branch of the syntax (with parentheses). 
+To use the *query_partition_clause* in an analytic function, use the upper branch of the syntax (without parentheses). To use this clause in a model query (in the *model_column_clauses* ) or a partitioned outer join (in the *outer_join_clause* ), use the lower branch of the syntax (with parentheses). 
 
-Restrictions on Partitioned Outer Joins
+Restrictions on Partitioned Outer Joins 
 
-Partitioned outer joins are subject to the following restrictions:
+Partitioned outer joins are subject to the following restrictions: 
 
-  * You can specify the `query_partition_clause` on either the right or left side of the join, but not both. 
+  * You can specify the *query_partition_clause* on either the right or left side of the join, but not both. 
 
-  * You cannot specify a `FULL` partitioned outer join. 
+  * You cannot specify a ` FULL ` partitioned outer join. 
 
-  * If you specify the `query_partition_clause` in an outer join with an `ON` clause, then you cannot specify a subquery in the `ON` condition. 
-
-
+  * If you specify the *query_partition_clause* in an outer join with an ` ON ` clause, then you cannot specify a subquery in the ` ON ` condition. 
 
 
-See Also:
 
-"[Using Partitioned Outer Joins: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2177515)"
 
-NATURAL
+> **note:** See Also: 
 
-The `NATURAL` keyword indicates that a natural join is being performed. A natural join is based on all columns in the two tables that have the same name. It selects rows from the two tables that have equal values in the relevant columns. If two columns with the same name do not have compatible data types, then an error is raised. When specifying columns that are involved in the natural join, do not qualify the column name with a table name or table alias. 
+" [ Using Partitioned Outer Joins: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2177515) " 
 
-On occasion, the table pairings in natural or cross joins may be ambiguous. For example, consider the following join syntax:
+NATURAL 
+
+The ` NATURAL ` keyword indicates that a natural join is being performed. A natural join is based on all columns in the two tables that have the same name. It selects rows from the two tables that have equal values in the relevant columns. If two columns with the same name do not have compatible data types, then an error is raised. When specifying columns that are involved in the natural join, do not qualify the column name with a table name or table alias. 
+
+On occasion, the table pairings in natural or cross joins may be ambiguous. For example, consider the following join syntax: 
     
     
+    ```
        a NATURAL LEFT JOIN b LEFT JOIN c ON b.c1 = c.c1
     
+    ```
 
-This example can be interpreted in either of the following ways:
+This example can be interpreted in either of the following ways: 
     
     
+    ```
        a NATURAL LEFT JOIN (b LEFT JOIN c ON b.c1 = c.c1) 
        (a NATURAL LEFT JOIN b) LEFT JOIN c ON b.c1 = c.c1
     
+    ```
 
-To avoid this ambiguity, you can use parentheses to specify the pairings of joined tables. In the absence of such parentheses, the database uses left associativity, pairing the tables from left to right.
+To avoid this ambiguity, you can use parentheses to specify the pairings of joined tables. In the absence of such parentheses, the database uses left associativity, pairing the tables from left to right. 
 
-Restriction on Natural Joins
+Restriction on Natural Joins 
 
-You cannot specify a LOB column, columns of `ANYTYPE`, `ANYDATA`, or `ANYDATASET`, or a collection column as part of a natural join. 
+You cannot specify a LOB column, columns of ` ANYTYPE ` , ` ANYDATA ` , or ` ANYDATASET ` , or a collection column as part of a natural join. 
 
-outer_join_type
+*outer_join_type* 
 
-The `outer_join_type` indicates the kind of outer join being performed: 
+The *outer_join_type* indicates the kind of outer join being performed: 
 
-  * Specify `RIGHT` to indicate a right outer join. 
+  * Specify ` RIGHT ` to indicate a right outer join. 
 
-  * Specify `LEFT` to indicate a left outer join. 
+  * Specify ` LEFT ` to indicate a left outer join. 
 
-  * Specify `FULL` to indicate a full or two-sided outer join. In addition to the inner join, rows from both tables that have not been returned in the result of the inner join will be preserved and extended with nulls. 
+  * Specify ` FULL ` to indicate a full or two-sided outer join. In addition to the inner join, rows from both tables that have not been returned in the result of the inner join will be preserved and extended with nulls. 
 
-  * You can specify the optional `OUTER` keyword following `RIGHT`, `LEFT`, or `FULL` to explicitly clarify that an outer join is being performed. 
-
-
+  * You can specify the optional ` OUTER ` keyword following ` RIGHT ` , ` LEFT ` , or ` FULL ` to explicitly clarify that an outer join is being performed. 
 
 
-ON condition
 
-Use the `ON` clause to specify a join condition. Doing so lets you specify join conditions separate from any search or filter conditions in the `WHERE` clause. 
 
-Restriction on the ON condition Clause
+ON  *condition* 
 
-You cannot specify this clause with a `NATURAL` outer join. 
+Use the ` ON ` clause to specify a join condition. Doing so lets you specify join conditions separate from any search or filter conditions in the ` WHERE ` clause. 
 
-USING column
+Restriction on the ON  *condition*  Clause 
 
-In an outer join with the `USING` clause, the query returns a single column that coalesces the two matching columns in the join. The coalesce function is as follows: 
+You cannot specify this clause with a ` NATURAL ` outer join. 
+
+USING  *column* 
+
+In an outer join with the ` USING ` clause, the query returns a single column that coalesces the two matching columns in the join. The coalesce function is as follows: 
     
     
+    ```
     COALESCE (a, b) = a if a NOT NULL, else b.
     
+    ```
 
-Therefore:
+Therefore: 
 
-  * A left outer join returns all the common column values from the left table in the `FROM` clause. 
+  * A left outer join returns all the common column values from the left table in the ` FROM ` clause. 
 
-  * A right outer join returns all the common column values from the right table in the `FROM` clause. 
+  * A right outer join returns all the common column values from the right table in the ` FROM ` clause. 
 
-  * A full outer join returns all the common column values from both joined tables.
-
-
-
-
-Restriction on the USING column Clause
-
-The `USING` `column` clause is subject to the following restrictions: 
-
-  * Within this clause, do not qualify the column name with a table name or table alias.
-
-  * You cannot specify a LOB column or a collection column in the `USING` `column` clause. 
-
-  * You cannot specify this clause with a `NATURAL` outer join. 
+  * A full outer join returns all the common column values from both joined tables. 
 
 
 
 
-See Also:
+Restriction on the USING  *column*  Clause 
 
-  * "[Outer Joins](Joins.html#GUID-29A4584C-0741-4E6A-A89B-DCFAA222994A)" for additional rules and restrictions pertaining to outer joins 
+The ` USING ` *column* clause is subject to the following restrictions: 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG02013) for a complete discussion of partitioned outer joins and data densification 
+  * Within this clause, do not qualify the column name with a table name or table alias. 
 
-  * "[Using Outer Joins: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2107296)"
+  * You cannot specify a LOB column or a collection column in the ` USING ` *column* clause. 
 
-
-
-
-cross_outer_apply_clause
-
-This clause allows you to perform a variation of an ANSI `CROSS` `JOIN` or an ANSI `LEFT` `OUTER` `JOIN` with left correlation support. You can specify a `table_reference` or `collection_expression` to the right of the `APPLY` keyword. The `table_reference` can be a table, inline view, or `TABLE` collection expression. The `collection_expression` can be a subquery, a column, a function, or a collection constructor. Regardless of its form, it must return a collection valueâthat is, a value whose type is nested table or varray. The `table_reference` or `collection_expression` can reference columns of tables defined in the `FROM` clause to the left of the `APPLY` keyword. This is called left correlation. 
-
-  * Specify `CROSS` `APPLY` to perform a variation of an ANSI `CROSS` `JOIN`. Only rows from the table on the left side of the join that produce a result set from `table_reference` or `collection_expression` are returned. 
-
-  * Specify `OUTER` `APPLY` to perform a variation of an ANSI `LEFT` `OUTER` `JOIN`. All rows from the table on the left side of the join are returned. Rows that do not produce a result set from `table_reference` or `collection_expression` have the NULL value in the corresponding column(s). 
+  * You cannot specify this clause with a ` NATURAL ` outer join. 
 
 
 
 
-Restriction on the cross_outer_apply_clause
+> **note:** See Also: 
 
-The `table_reference` cannot be a lateral inline view. 
+  * " [ Outer Joins ](Joins.md#GUID-29A4584C-0741-4E6A-A89B-DCFAA222994A) "  for additional rules and restrictions pertaining to outer joins 
 
-See Also:
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG02013) for a complete discussion of partitioned outer joins and data densification 
 
-[Using CROSS APPLY and OUTER APPLY Joins: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABDADCJ)
-
-inline_analytic_view
-
-An inline analytic view is a transitory analytic view that is specified in the `FROM` clause. To create an inline analytic view, use the `ANALYTIC` `VIEW` keyword and specify a `sub_av_clause` that defines the analytic view. Optionally, you may specify an `inline_av_alias`, which is an alias for the inline analytic view. The rules for the `inline_av_alias` are the same as the rules for an inline view alias. 
-
-See Also:
-
-[Analytic Views: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P-1314421-F3347731)
-
-where_clause
-
-The `WHERE` condition lets you restrict the rows selected to those that satisfy one or more conditions. For `condition`, specify any valid SQL condition. 
-
-If you omit this clause, then the database returns all rows from the tables, views, or materialized views in the `FROM` clause. 
-
-Note:
-
-If this clause refers to a `DATE` column of a partitioned table or index, then the database performs partition pruning only if: 
-
-  * You created the table or index partitions by fully specifying the year using the `TO_DATE` function with a 4-digit format mask, and
-
-  * You specify the date in the `where_clause` of the query using the `TO_DATE` function and either a 2- or 4-digit format mask. 
+  * " [ Using Outer Joins: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2107296) " 
 
 
 
 
-With Oracle Database 21c you can write macros for scalar expressions and use them inside the `where_clause` , where it would be legal to call a PLSQL function. 
+*cross_outer_apply_clause* 
+
+This clause allows you to perform a variation of an ANSI ` CROSS ` ` JOIN ` or an ANSI ` LEFT ` ` OUTER ` ` JOIN ` with left correlation support. You can specify a *table_reference* or *collection_expression* to the right of the ` APPLY ` keyword. The *table_reference* can be a table, inline view, or ` TABLE ` collection expression. The *collection_expression* can be a subquery, a column, a function, or a collection constructor. Regardless of its form, it must return a collection value—that is, a value whose type is nested table or varray. The *table_reference* or *collection_expression* can reference columns of tables defined in the ` FROM ` clause to the left of the ` APPLY ` keyword. This is called left correlation. 
+
+  * Specify ` CROSS ` ` APPLY ` to perform a variation of an ANSI ` CROSS ` ` JOIN ` . Only rows from the table on the left side of the join that produce a result set from *table_reference* or *collection_expression* are returned. 
+
+  * Specify ` OUTER ` ` APPLY ` to perform a variation of an ANSI ` LEFT ` ` OUTER ` ` JOIN ` . All rows from the table on the left side of the join are returned. Rows that do not produce a result set from *table_reference* or *collection_expression* have the NULL value in the corresponding column(s). 
+
+
+
+
+Restriction on the  *cross_outer_apply_clause* 
+
+The *table_reference* cannot be a lateral inline view. 
+
+> **note:** See Also: 
+
+[ Using CROSS APPLY and OUTER APPLY Joins: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABDADCJ)
+
+*inline_analytic_view* 
+
+An inline analytic view is a transitory analytic view that is specified in the ` FROM ` clause. To create an inline analytic view, use the ` ANALYTIC ` ` VIEW ` keyword and specify a *sub_av_clause* that defines the analytic view. Optionally, you may specify an *inline_av_alias* , which is an alias for the inline analytic view. The rules for the *inline_av_alias* are the same as the rules for an inline view alias. 
+
+> **note:** See Also: 
+
+[ Analytic Views: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P-1314421-F3347731)
+
+*where_clause* 
+
+The ` WHERE ` condition lets you restrict the rows selected to those that satisfy one or more conditions. For *condition* , specify any valid SQL condition. 
+
+If you omit this clause, then the database returns all rows from the tables, views, or materialized views in the ` FROM ` clause. 
+
+> **note:** 
+
+If this clause refers to a ` DATE ` column of a partitioned table or index, then the database performs partition pruning only if: 
+
+  * You created the table or index partitions by fully specifying the year using the ` TO_DATE ` function with a 4-digit format mask, *and* 
+
+  * You specify the date in the *where_clause* of the query using the ` TO_DATE ` function and either a 2- or 4-digit format mask. 
+
+
+
+
+With Oracle Database 21c you can write macros for scalar expressions and use them inside the *where_clause* , where it would be legal to call a PLSQL function. 
 
 You must define these macro functions in PL/SQL and call them from SQL for them to function as macros. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Conditions](Conditions.html#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8) for the syntax description of `condition`
+  * [ Conditions ](Conditions.md#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8) for the syntax description of *condition* 
 
-  * "[Selecting from a Partition: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2105152)"
+  * " [ Selecting from a Partition: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2105152) " 
 
-  * [Defining SQL Macros](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-292C3A17-2A4B-4EFB-AD38-68DF6380E5F7)
+  * [ Defining SQL Macros ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-292C3A17-2A4B-4EFB-AD38-68DF6380E5F7)
 
 
 
 
-hierarchical_query_clause
+*hierarchical_query_clause* 
 
-The `hierarchical_query_clause` lets you select rows in a hierarchical order. 
+The *hierarchical_query_clause* lets you select rows in a hierarchical order. 
 
-`SELECT` statements that contain hierarchical queries can contain the `LEVEL` pseudocolumn in the select list. `LEVEL` returns the value 1 for a root node, 2 for a child node of a root node, 3 for a grandchild, and so on. The number of levels returned by a hierarchical query may be limited by available user memory. 
+` SELECT ` statements that contain hierarchical queries can contain the ` LEVEL ` pseudocolumn in the select list. ` LEVEL ` returns the value 1 for a root node, 2 for a child node of a root node, 3 for a grandchild, and so on. The number of levels returned by a hierarchical query may be limited by available user memory. 
 
-Oracle processes hierarchical queries as follows:
+Oracle processes hierarchical queries as follows: 
 
-  * A join, if present, is evaluated first, whether the join is specified in the `FROM` clause or with `WHERE` clause predicates. 
+  * A join, if present, is evaluated first, whether the join is specified in the ` FROM ` clause or with ` WHERE ` clause predicates. 
 
-  * The `CONNECT` `BY` condition is evaluated. 
+  * The ` CONNECT ` ` BY ` condition is evaluated. 
 
-  * Any remaining `WHERE` clause predicates are evaluated. 
+  * Any remaining ` WHERE ` clause predicates are evaluated. 
 
 
 
 
-If you specify this clause, then do not specify either `ORDER` `BY` or `GROUP` `BY`, because they will destroy the hierarchical order of the `CONNECT` `BY` results. If you want to order rows of siblings of the same parent, then use the `ORDER` `SIBLINGS` `BY` clause. 
+If you specify this clause, then do not specify either ` ORDER ` ` BY ` or ` GROUP ` ` BY ` , because they will destroy the hierarchical order of the ` CONNECT ` ` BY ` results. If you want to order rows of siblings of the same parent, then use the ` ORDER ` ` SIBLINGS ` ` BY ` clause. 
 
-See Also:
+> **note:** See Also: 
 
-"[Hierarchical Queries](Hierarchical-Queries.html#GUID-0118DF1D-B9A9-41EB-8556-C6E7D6A5A84E)" for a discussion of hierarchical queries and "[Using the LEVEL Pseudocolumn: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130122)"
+" [ Hierarchical Queries ](Hierarchical-Queries.md#GUID-0118DF1D-B9A9-41EB-8556-C6E7D6A5A84E) "  for a discussion of hierarchical queries and  " [ Using the LEVEL Pseudocolumn: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130122) " 
 
-START WITH Clause
+START WITH Clause 
 
-Specify a condition that identifies the row(s) to be used as the root(s) of a hierarchical query. The `condition` can be any condition as described in [Conditions](Conditions.html#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8). Oracle Database uses as root(s) all rows that satisfy this condition. If you omit this clause, then the database uses all rows in the table as root rows. 
+Specify a condition that identifies the row(s) to be used as the root(s) of a hierarchical query. The *condition* can be any condition as described in [ Conditions ](Conditions.md#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8) . Oracle Database uses as root(s) all rows that satisfy this condition. If you omit this clause, then the database uses all rows in the table as root rows. 
 
-CONNECT BY Clause
+CONNECT BY Clause 
 
-Specify a condition that identifies the relationship between parent rows and child rows of the hierarchy. The `condition` can be any condition as described in [Conditions](Conditions.html#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8). However, it must use the `PRIOR` operator to refer to the parent row. 
+Specify a condition that identifies the relationship between parent rows and child rows of the hierarchy. The *condition* can be any condition as described in [ Conditions ](Conditions.md#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8) . However, it must use the ` PRIOR ` operator to refer to the parent row. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Pseudocolumns](Pseudocolumns.html#GUID-6C65C788-76AA-4A51-B011-51D53DD2521D) for more information on `LEVEL`
+  * [ Pseudocolumns ](Pseudocolumns.md#GUID-6C65C788-76AA-4A51-B011-51D53DD2521D) for more information on ` LEVEL `
 
-  * "[Hierarchical Queries](Hierarchical-Queries.html#GUID-0118DF1D-B9A9-41EB-8556-C6E7D6A5A84E)" for general information on hierarchical queries 
+  * " [ Hierarchical Queries ](Hierarchical-Queries.md#GUID-0118DF1D-B9A9-41EB-8556-C6E7D6A5A84E) "  for general information on hierarchical queries 
 
-  * "[Hierarchical Query: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130004)"
+  * " [ Hierarchical Query: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130004) " 
 
 
 
 
-group_by_clause
+*group_by_clause* 
 
-Specify the `GROUP` `BY` clause if you want the database to group the selected rows based on the value of `expr`(s) for each row and return a single row of summary information for each group. If this clause contains `CUBE` or `ROLLUP` extensions, then the database produces superaggregate groupings in addition to the regular groupings. 
+Specify the ` GROUP ` ` BY ` clause if you want the database to group the selected rows based on the value of *expr* (s) for each row and return a single row of summary information for each group. If this clause contains ` CUBE ` or ` ROLLUP ` extensions, then the database produces superaggregate groupings in addition to the regular groupings. 
 
-Expressions in the `GROUP` `BY` clause can contain any columns of the tables, views, or materialized views in the `FROM` clause, regardless of whether the columns appear in the select list. 
+Expressions in the ` GROUP ` ` BY ` clause can contain any columns of the tables, views, or materialized views in the ` FROM ` clause, regardless of whether the columns appear in the select list. 
 
-The `GROUP` `BY` clause groups rows but does not guarantee the order of the result set. To order the groupings, use the `ORDER` `BY` clause. 
+The ` GROUP ` ` BY ` clause groups rows but does not guarantee the order of the result set. To order the groupings, use the ` ORDER ` ` BY ` clause. 
 
-If a column name in the source tables and column alias in the `SELECT` list are the same, `GROUP BY` will interpret the identifier as the column name, not the alias. 
+If a column name in the source tables and column alias in the ` SELECT ` list are the same, ` GROUP BY ` will interpret the identifier as the column name, not the alias. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG020) for an expanded discussion and examples of using SQL grouping syntax for data aggregation 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG020) for an expanded discussion and examples of using SQL grouping syntax for data aggregation 
 
-  * the [GROUP_ID](GROUP_ID.html#GUID-3A5A9C15-1B67-4FD7-AC41-EE8349B2E834), [GROUPING](GROUPING.html#GUID-82E6084A-0BDF-4587-A40E-36899783F073), and [GROUPING_ID](GROUPING_ID.html#GUID-E20A5B8E-73B6-42FD-8AFB-DD3CD6D6DC61) functions for examples 
+  * the [ GROUP_ID ](GROUP_ID.md#GUID-3A5A9C15-1B67-4FD7-AC41-EE8349B2E834) , [ GROUPING ](GROUPING.md#GUID-82E6084A-0BDF-4587-A40E-36899783F073) , and [ GROUPING_ID ](GROUPING_ID.md#GUID-E20A5B8E-73B6-42FD-8AFB-DD3CD6D6DC61) functions for examples 
 
-  * "[Using the GROUP BY Clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066419)"
+  * " [ Using the GROUP BY Clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066419) " 
 
-  * [Restrictions for Linguistic Collations](Data-Type-Comparison-Rules.html#GUID-A114F1F4-A08D-4107-B679-323DC7FEA31C__P-13310-66248F0B) for information on implications of how `GROUP` `BY` character values are compared linguistically 
+  * [ Restrictions for Linguistic Collations ](Data-Type-Comparison-Rules.md#GUID-A114F1F4-A08D-4107-B679-323DC7FEA31C__P-13310-66248F0B) for information on implications of how ` GROUP ` ` BY ` character values are compared linguistically 
 
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules for the expressions in the `GROUP` `BY` clause 
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules for the expressions in the ` GROUP ` ` BY ` clause 
 
 
 
 
-ROLLUP
+ROLLUP 
 
-The `ROLLUP` operation in the `simple_grouping_clause` groups the selected rows based on the values of the first n, n-1, n-2, ... 0 expressions in the `GROUP` `BY` specification, and returns a single row of summary for each group. You can use the `ROLLUP` operation to produce subtotal values by using it with the `SUM` function. When used with `SUM`, `ROLLUP` generates subtotals from the most detailed level to the grand total. Aggregate functions such as `COUNT` can be used to produce other kinds of superaggregates. 
+The ` ROLLUP ` operation in the *simple_grouping_clause* groups the selected rows based on the values of the first n, n-1, n-2, ... 0 expressions in the ` GROUP ` ` BY ` specification, and returns a single row of summary for each group. You can use the ` ROLLUP ` operation to produce  subtotal values  by using it with the ` SUM ` function. When used with ` SUM ` , ` ROLLUP ` generates subtotals from the most detailed level to the grand total. Aggregate functions such as ` COUNT ` can be used to produce other kinds of superaggregates. 
 
-For example, given three expressions (n=3) in the `ROLLUP` clause of the `simple_grouping_clause`, the operation results in n+1 = 3+1 = 4 groupings. 
+For example, given three expressions (n=3) in the ` ROLLUP ` clause of the *simple_grouping_clause* , the operation results in n+1 = 3+1 = 4 groupings. 
 
-Rows grouped on the values of the first `n` expressions are called regular rows, and the others are called superaggregate rows. 
+Rows grouped on the values of the first *n* expressions are called  regular rows  , and the others are called  superaggregate rows  . 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG021) for information on using `ROLLUP` with materialized views 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG021) for information on using ` ROLLUP ` with materialized views 
 
-CUBE
+CUBE 
 
-The `CUBE` operation in the `simple_grouping_clause` groups the selected rows based on the values of all possible combinations of expressions in the specification. It returns a single row of summary information for each group. You can use the `CUBE` operation to produce cross-tabulation values. 
+The ` CUBE ` operation in the *simple_grouping_clause* groups the selected rows based on the values of all possible combinations of expressions in the specification. It returns a single row of summary information for each group. You can use the ` CUBE ` operation to produce  cross-tabulation values  . 
 
-For example, given three expressions (n=3) in the `CUBE` clause of the `simple_grouping_clause`, the operation results in 2n = 23 = 8 groupings. Rows grouped on the values of `n` expressions are called regular rows, and the rest are called superaggregate rows. 
+For example, given three expressions (n=3) in the ` CUBE ` clause of the *simple_grouping_clause* , the operation results in 2  n  = 2  3  = 8 groupings. Rows grouped on the values of *n* expressions are called  regular rows  , and the rest are called  superaggregate rows  . 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG021) for information on using `CUBE` with materialized views 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG021) for information on using ` CUBE ` with materialized views 
 
-  * "[Using the GROUP BY CUBE Clause: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066443)"
+  * " [ Using the GROUP BY CUBE Clause: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2066443) " 
 
 
 
 
-GROUPING SETS
+GROUPING SETS 
 
-`GROUPING` `SETS` are a further extension of the `GROUP` `BY` clause that let you specify multiple groupings of data. Doing so facilitates efficient aggregation by pruning the aggregates you do not need. You specify just the desired groups, and the database does not need to perform the full set of aggregations generated by `CUBE` or `ROLLUP`. Oracle Database computes all groupings specified in the `GROUPING` `SETS` clause and combines the results of individual groupings with a `UNION` `ALL` operation. The `UNION` `ALL` means that the result set can include duplicate rows. 
+` GROUPING ` ` SETS ` are a further extension of the ` GROUP ` ` BY ` clause that let you specify multiple groupings of data. Doing so facilitates efficient aggregation by pruning the aggregates you do not need. You specify just the desired groups, and the database does not need to perform the full set of aggregations generated by ` CUBE ` or ` ROLLUP ` . Oracle Database computes all groupings specified in the ` GROUPING ` ` SETS ` clause and combines the results of individual groupings with a ` UNION ` ` ALL ` operation. The ` UNION ` ` ALL ` means that the result set can include duplicate rows. 
 
-Within the `GROUP` `BY` clause, you can combine expressions in various ways: 
+Within the ` GROUP ` ` BY ` clause, you can combine expressions in various ways: 
 
-  * To specify composite columns, group columns within parentheses so that the database treats them as a unit while computing `ROLLUP` or `CUBE` operations. 
+  * To specify  composite columns  , group columns within parentheses so that the database treats them as a unit while computing ` ROLLUP ` or ` CUBE ` operations. 
 
-  * To specify concatenated grouping sets, separate multiple grouping sets, `ROLLUP`, and `CUBE` operations with commas so that the database combines them into a single `GROUP` `BY` clause. The result is a cross-product of groupings from each grouping set. 
+  * To specify  concatenated grouping sets  , separate multiple grouping sets, ` ROLLUP ` , and ` CUBE ` operations with commas so that the database combines them into a single ` GROUP ` ` BY ` clause. The result is a cross-product of groupings from each grouping set. 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-"[Using the GROUPING SETS Clause: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2091446)"
+" [ Using the GROUPING SETS Clause: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2091446) " 
 
-HAVING Clause
+HAVING Clause 
 
-Use the `HAVING` clause to restrict the groups of returned rows to those groups for which the specified `condition` is `TRUE`. If you omit this clause, then the database returns summary rows for all groups. 
+Use the ` HAVING ` clause to restrict the groups of returned rows to those groups for which the specified *condition* is ` TRUE ` . If you omit this clause, then the database returns summary rows for all groups. 
 
-Specify `GROUP` `BY` and `HAVING` after the `where_clause` and `hierarchical_query_clause`. If you specify both `GROUP` `BY` and `HAVING`, then they can appear in either order. 
+Specify ` GROUP ` ` BY ` and ` HAVING ` after the *where_clause* and *hierarchical_query_clause* . If you specify both ` GROUP ` ` BY ` and ` HAVING ` , then they can appear in either order. 
 
-With Oracle Database 21c you can write macros for scalar expressions and use them inside the `HAVING` clause, where it would be legal to call a PL/SQL function. 
+With Oracle Database 21c you can write macros for scalar expressions and use them inside the ` HAVING ` clause, where it would be legal to call a PL/SQL function. 
 
 You must define these macro functions in PL/SQL and call them from SQL for them to function as macros. 
 
-See Also:
+> **note:** See Also: 
 
-  * "[Using the HAVING Condition: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130020)"
+  * " [ Using the HAVING Condition: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130020) " 
 
-  * [Defining SQL Macros](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-292C3A17-2A4B-4EFB-AD38-68DF6380E5F7)
+  * [ Defining SQL Macros ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS-GUID-292C3A17-2A4B-4EFB-AD38-68DF6380E5F7)
 
 
 
 
-Restrictions on the GROUP BY Clause
+Restrictions on the GROUP BY Clause 
 
-This clause is subject to the following restrictions:
+This clause is subject to the following restrictions: 
 
-  * You cannot specify LOB columns, nested tables, or varrays as part of `expr`. 
+  * You cannot specify LOB columns, nested tables, or varrays as part of *expr* . 
 
-  * The expressions can be of any form except scalar subquery expressions.
+  * The expressions can be of any form except scalar subquery expressions. 
 
-  * If the `group_by_clause` references any object type columns, then the query will not be parallelized. 
+  * If the *group_by_clause* references any object type columns, then the query will not be parallelized. 
 
-  * To group by position, the parameter `group_by_position_enabled` must be set to true, this is false by default 
+  * To group by position, the parameter ` group_by_position_enabled ` must be set to true, this is false by default 
 
 
 
 
-model_clause
+*model_clause* 
 
-The `model_clause` lets you view selected rows as a multidimensional array and randomly access cells within that array. Using the `model_clause`, you can specify a series of cell assignments, referred to as rules, that invoke calculations on individual cells and ranges of cells. These rules operate on the results of a query and do not update any database tables. 
+The *model_clause* lets you view selected rows as a multidimensional array and randomly access cells within that array. Using the *model_clause* , you can specify a series of cell assignments, referred to as  rules  , that invoke calculations on individual cells and ranges of cells. These rules operate on the results of a query and do not update any database tables. 
 
-When using the `model_clause` in a query, the `SELECT` and `ORDER` `BY` clauses must refer only to those columns defined in the `model_column_clauses`. 
+When using the *model_clause* in a query, the ` SELECT ` and ` ORDER ` ` BY ` clauses must refer only to those columns defined in the *model_column_clauses* . 
 
-See Also:
+> **note:** See Also: 
 
-  * The syntax description of `expr` in "[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" and the syntax description of `condition` in [Conditions](Conditions.html#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8)
+  * The syntax description of *expr* in  " [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  and the syntax description of *condition* in [ Conditions ](Conditions.md#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8)
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG022) for an expanded discussion and examples 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG022) for an expanded discussion and examples 
 
-  * "[The MODEL clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160)"
+  * " [ The MODEL clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171160) " 
 
 
 
 
-main_model
+*main_model* 
 
-The `main_model` clause defines how the selected rows will be viewed in a multidimensional array and what rules will operate on which cells in that array. 
+The *main_model* clause defines how the selected rows will be viewed in a multidimensional array and what rules will operate on which cells in that array. 
 
-model_column_clauses
+*model_column_clauses* 
 
-The `model_column_clauses` define and classify the columns of a query into three groups: partition columns, dimension columns, and measure columns. For `expr`, you can specify a column, constant, host variable, single-row function, aggregate function, or any expression involving them. If `expr` is a column, then the column alias (`c_alias`) is optional. If `expr` is not a column, then the column alias is required. If you specify a column alias, then you must use the alias to refer to the column in the `model_rules_clause`, `SELECT` list, and the query `ORDER` `BY` clauses. 
+The *model_column_clauses* define and classify the columns of a query into three groups: partition columns, dimension columns, and measure columns. For *expr* , you can specify a column, constant, host variable, single-row function, aggregate function, or any expression involving them. If *expr* is a column, then the column alias ( *c_alias* ) is optional. If *expr* is not a column, then the column alias is required. If you specify a column alias, then you must use the alias to refer to the column in the *model_rules_clause* , ` SELECT ` list, and the query ` ORDER ` ` BY ` clauses. 
 
-PARTITION BY
+PARTITION BY 
 
-The `PARTITION` `BY` clause specifies the columns that will be used to divide the selected rows into partitions based on the values of the specified columns. 
+The ` PARTITION ` ` BY ` clause specifies the columns that will be used to divide the selected rows into partitions based on the values of the specified columns. 
 
-DIMENSION BY
+DIMENSION BY 
 
-The `DIMENSION` `BY` clause specifies the columns that will identify a row within a partition. The values of the dimension columns, along with those of the partition columns, serve as array indexes to the measure columns within a row. 
+The ` DIMENSION ` ` BY ` clause specifies the columns that will identify a row within a partition. The values of the dimension columns, along with those of the partition columns, serve as array indexes to the measure columns within a row. 
 
-MEASURES
+MEASURES 
 
-The `MEASURES` clause identifies the columns on which the calculations can be performed. Measure columns in individual rows are treated like cells that you can reference, by specifying the values for the partition and dimension columns, and update. 
+The ` MEASURES ` clause identifies the columns on which the calculations can be performed. Measure columns in individual rows are treated like cells that you can reference, by specifying the values for the partition and dimension columns, and update. 
 
-cell_reference_options
+*cell_reference_options* 
 
-Use the `cell_reference_options` clause to specify how null and absent values are treated in rules and how column uniqueness is constrained. 
+Use the *cell_reference_options* clause to specify how null and absent values are treated in rules and how column uniqueness is constrained. 
 
-IGNORE NAV
+IGNORE NAV 
 
-When you specify `IGNORE` `NAV`, the database returns the following values for the null and absent values of the data type specified: 
+When you specify ` IGNORE ` ` NAV ` , the database returns the following values for the null and absent values of the data type specified: 
 
-  * Zero for numeric data types
+  * Zero for numeric data types 
 
-  * 01-JAN-2000 for datetime data types
+  * 01-JAN-2000 for datetime data types 
 
-  * An empty string for character data types
+  * An empty string for character data types 
 
-  * Null for all other data types
+  * Null for all other data types 
 
 
 
 
-KEEP NAV
+KEEP NAV 
 
-When you specify `KEEP` `NAV`, the database returns null for both null and absent cell values. `KEEP` `NAV` is the default. 
+When you specify ` KEEP ` ` NAV ` , the database returns null for both null and absent cell values. ` KEEP ` ` NAV ` is the default. 
 
-UNIQUE SINGLE REFERENCE
+UNIQUE SINGLE REFERENCE 
 
-When you specify `UNIQUE` `SINGLE` `REFERENCE`, the database checks only single-cell references on the right-hand side of the rule for uniqueness, not the entire query result set. 
+When you specify ` UNIQUE ` ` SINGLE ` ` REFERENCE ` , the database checks only single-cell references on the right-hand side of the rule for uniqueness, not the entire query result set. 
 
-UNIQUE DIMENSION
+UNIQUE DIMENSION 
 
-When you specify `UNIQUE` `DIMENSION`, the database checks that the `PARTITION` `BY` and `DIMENSION` `BY` columns form a unique key to the query. `UNIQUE` `DIMENSION` is the default. 
+When you specify ` UNIQUE ` ` DIMENSION ` , the database checks that the ` PARTITION ` ` BY ` and ` DIMENSION ` ` BY ` columns form a unique key to the query. ` UNIQUE ` ` DIMENSION ` is the default. 
 
-model_rules_clause
+*model_rules_clause* 
 
-Use the `model_rules_clause` to specify the cells to be updated, the rules for updating those cells, and optionally, how the rules are to be applied and processed. 
+Use the *model_rules_clause* to specify the cells to be updated, the rules for updating those cells, and optionally, how the rules are to be applied and processed. 
 
-Each rule represents an assignment and consists of a left-hand side and right-hand side. The left-hand side of the rule identifies the cells to be updated by the right-hand side of the rule. The right-hand side of the rule evaluates to the values to be assigned to the cells specified on the left-hand side of the rule.
+Each rule represents an assignment and consists of a left-hand side and right-hand side. The left-hand side of the rule identifies the cells to be updated by the right-hand side of the rule. The right-hand side of the rule evaluates to the values to be assigned to the cells specified on the left-hand side of the rule. 
 
-UPSERT ALL 
+UPSERT AL  L 
 
-`UPSERT` `ALL` allows `UPSERT` behavior for a rule with both positional and symbolic references on the left-hand side of the rule. When evaluating an `UPSERT` `ALL` rule, Oracle performs the following steps to create a list of cell references to be upserted: 
+` UPSERT ` ` ALL ` allows ` UPSERT ` behavior for a rule with both positional and symbolic references on the left-hand side of the rule. When evaluating an ` UPSERT ` ` ALL ` rule, Oracle performs the following steps to create a list of cell references to be upserted: 
 
-  1. Find the existing cells that satisfy all the symbolic predicates of the cell reference.
+  1. Find the existing cells that satisfy all the symbolic predicates of the cell reference. 
 
-  2. Using just the dimensions that have symbolic references, find the distinct dimension value combinations of these cells.
+  2. Using just the dimensions that have symbolic references, find the distinct dimension value combinations of these cells. 
 
-  3. Perform a cross product of these value combinations with the dimension values specified by way of positional references.
+  3. Perform a cross product of these value combinations with the dimension values specified by way of positional references. 
 
 
 
 
-Refer to [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG0222) for more information on the semantics of `UPSERT` `ALL`. 
+Refer to [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG0222) for more information on the semantics of ` UPSERT ` ` ALL ` . 
 
-UPSERT
+UPSERT 
 
-When you specify `UPSERT`, the database applies the rules to those cells referenced on the left-hand side of the rule that exist in the multidimensional array, and inserts new rows for those that do not exist. `UPSERT` behavior applies only when positional referencing is used on the left-hand side and a single cell is referenced. `UPSERT` is the default. Refer to [cell_assignment](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168603) for more information on positional referencing and single-cell references. 
+When you specify ` UPSERT ` , the database applies the rules to those cells referenced on the left-hand side of the rule that exist in the multidimensional array, and inserts new rows for those that do not exist. ` UPSERT ` behavior applies only when positional referencing is used on the left-hand side and a single cell is referenced. ` UPSERT ` is the default. Refer to *cell_assignment* for more information on positional referencing and single-cell references. 
 
-`UPDATE` and `UPSERT` can be specified for individual rules as well. When either `UPDATE` or `UPSERT` is specified for a specific rule, it takes precedence over the option specified in the `RULES` clause. 
+` UPDATE ` and ` UPSERT ` can be specified for individual rules as well. When either ` UPDATE ` or ` UPSERT ` is specified for a specific rule, it takes precedence over the option specified in the ` RULES ` clause. 
 
-Note:
+> **note:** 
 
-If an `UPSERT` `ALL`, `UPSERT`, or `UPDATE` rule does not contain the appropriate predicates, then the database may implicitly convert it to a different type of rule: 
+If an ` UPSERT ` ` ALL ` , ` UPSERT ` , or ` UPDATE ` rule does not contain the appropriate predicates, then the database may implicitly convert it to a different type of rule: 
 
-  * If an `UPSERT` rule contains an existential predicate, then the rule is treated as an `UPDATE` rule. 
+  * If an ` UPSERT ` rule contains an existential predicate, then the rule is treated as an ` UPDATE ` rule. 
 
-  * An `UPSERT` `ALL` rule must have at least one existential predicate and one qualified predicate on its left side. If it has no existential predicate, then it is treated as an `UPSERT` rule. If it has no qualified predicate, then it is treated as an `UPDATE` rule 
+  * An ` UPSERT ` ` ALL ` rule must have at least one existential predicate and one qualified predicate on its left side. If it has no existential predicate, then it is treated as an ` UPSERT ` rule. If it has no qualified predicate, then it is treated as an ` UPDATE ` rule 
 
 
 
 
-UPDATE
+UPDATE 
 
-When you specify `UPDATE`, the database applies the rules to those cells referenced on the left-hand side of the rule that exist in the multidimensional array. If the cells do not exist, then the assignment is ignored. 
+When you specify ` UPDATE ` , the database applies the rules to those cells referenced on the left-hand side of the rule that exist in the multidimensional array. If the cells do not exist, then the assignment is ignored. 
 
-AUTOMATIC ORDER
+AUTOMATIC ORDER 
 
-When you specify `AUTOMATIC` `ORDER`, the database evaluates the rules based on their dependency order. In this case, a cell can be assigned a value once only. 
+When you specify ` AUTOMATIC ` ` ORDER ` , the database evaluates the rules based on their dependency order. In this case, a cell can be assigned a value once only. 
 
-SEQUENTIAL ORDER
+SEQUENTIAL ORDER 
 
-When you specify `SEQUENTIAL` `ORDER`, the database evaluates the rules in the order they appear. In this case, a cell can be assigned a value more than once. `SEQUENTIAL` `ORDER` is the default. 
+When you specify ` SEQUENTIAL ` ` ORDER ` , the database evaluates the rules in the order they appear. In this case, a cell can be assigned a value more than once. ` SEQUENTIAL ` ` ORDER ` is the default. 
 
-ITERATE ... [UNTIL]
+ITERATE ... [UNTIL] 
 
-Use `ITERATE` ... [`UNTIL`] to specify the number of times to cycle through the rules and, optionally, an early termination condition. The parentheses around the `UNTIL` condition are optional. 
+Use ` ITERATE ` ... [ ` UNTIL ` ] to specify the number of times to cycle through the rules and, optionally, an early termination condition. The parentheses around the ` UNTIL ` condition are optional. 
 
-When you specify `ITERATE` ... [`UNTIL`], rules are evaluated in the order in which they appear. Oracle Database returns an error if both `AUTOMATIC` `ORDER` and `ITERATE` ... `[UNTIL]` are specified in the `model_rules_clause`. 
+When you specify ` ITERATE ` ... [ ` UNTIL ` ], rules are evaluated in the order in which they appear. Oracle Database returns an error if both ` AUTOMATIC ` ` ORDER ` and ` ITERATE ` ... ` [UNTIL] ` are specified in the *model_rules_clause* . 
 
-cell_assignment
+*cell_assignment* 
 
-The `cell_assignment` clause, which is the left-hand side of the rule, specifies one or more cells to be updated. When a `cell_assignment` references a single cell, it is called a single-cell reference. When more than one cell is referenced, it is called a multiple-cell reference. 
+The *cell_assignment* clause, which is the left-hand side of the rule, specifies one or more cells to be updated. When a *cell_assignment* references a single cell, it is called a  single-cell reference  . When more than one cell is referenced, it is called a  multiple-cell reference  . 
 
-All dimension columns defined in the `model_clause` must be qualified in the `cell_assignment` clause. A dimension can be qualified using either symbolic or positional referencing. 
+All dimension columns defined in the *model_clause* must be qualified in the *cell_assignment* clause. A dimension can be qualified using either symbolic or positional referencing. 
 
-A symbolic reference qualifies a single dimension column using a Boolean condition like `dimension_column``=``constant`. A positional reference is one where the dimension column is implied by its position in the `DIMENSION` `BY` clause. The only difference between symbolic references and positional references is in the treatment of nulls. 
+A  symbolic reference  qualifies a single dimension column using a Boolean condition like *dimension_column* ` = ` *constant* . A  positional reference  is one where the dimension column is implied by its position in the ` DIMENSION ` ` BY ` clause. The only difference between symbolic references and positional references is in the treatment of nulls. 
 
-Using a single-cell symbolic reference such as `a[x=null,y=2000]`, no cells qualify because `x=null` evaluates to `FALSE`. However, using a single-cell positional reference such as `a[null,2000]`, a cell where `x` is null and `y` is 2000 qualifies because null = null evaluates to `TRUE`. With single-cell positional referencing, you can reference, update, and insert cells where dimension columns are null. 
+Using a single-cell symbolic reference such as ` a[x=null,y=2000] ` , no cells qualify because ` x=null ` evaluates to ` FALSE ` . However, using a single-cell positional reference such as ` a[null,2000] ` , a cell where ` x ` is null and ` y ` is 2000 qualifies because null = null evaluates to ` TRUE ` . With single-cell positional referencing, you can reference, update, and insert cells where dimension columns are null. 
 
-You can specify a condition or an expression representing a dimension column value using either symbolic or positional referencing. `condition` cannot contain aggregate functions or the `CV` function, and `condition` must reference a single dimension column. `expr` cannot contain a subquery. Refer to "[Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257)" for information on model expressions. 
+You can specify a condition or an expression representing a dimension column value using either symbolic or positional referencing. *condition* cannot contain aggregate functions or the ` CV ` function, and *condition* must reference a single dimension column. *expr* cannot contain a subquery. Refer to  " [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) "  for information on model expressions. 
 
-single_column_for_loop
+*single_column_for_loop* 
 
-The `single_column_for_loop` clause lets you specify a range of cells to be updated within a single dimension column. 
+The *single_column_for_loop* clause lets you specify a range of cells to be updated within a single dimension column. 
 
-The `IN` clause lets you specify the values of the dimension column as either a list of values or as a subquery. When using `subquery`, it cannot: 
+The ` IN ` clause lets you specify the values of the dimension column as either a list of values or as a subquery. When using *subquery* , it cannot: 
 
-  * Be a correlated query
+  * Be a correlated query 
 
   * Return more than 10,000 rows 
 
-  * Be a query defined in the `WITH` clause 
+  * Be a query defined in the ` WITH ` clause 
 
 
 
 
-The `FROM` clause lets you specify a range of values for a dimension column with discrete increments within the range. The `FROM` clause can only be used for those columns with a data type for which addition and subtraction is supported. The `INCREMENT` and `DECREMENT` values must be positive. 
+The ` FROM ` clause lets you specify a range of values for a dimension column with discrete increments within the range. The ` FROM ` clause can only be used for those columns with a data type for which addition and subtraction is supported. The ` INCREMENT ` and ` DECREMENT ` values must be positive. 
 
-Optionally, you can specify the `LIKE` clause within the `FROM` clause. In the `LIKE` clause, `pattern` is a character string containing a single pattern-matching character `%`. This character is replaced during execution with the current incremented or decremented value in the `FROM` clause. 
+Optionally, you can specify the ` LIKE ` clause within the ` FROM ` clause. In the ` LIKE ` clause, *pattern* is a character string containing a single pattern-matching character ` % ` . This character is replaced during execution with the current incremented or decremented value in the ` FROM ` clause. 
 
-If all dimensions other than those used by a `FOR` loop involve a single-cell reference, then the expressions can insert new rows. The number of dimension value combinations generated by `FOR` loops is counted as part of the 10,000 row limit of the `MODEL` clause. 
+If all dimensions other than those used by a ` FOR ` loop involve a single-cell reference, then the expressions can insert new rows. The number of dimension value combinations generated by ` FOR ` loops is counted as part of the 10,000 row limit of the ` MODEL ` clause. 
 
-multi_column_for_loop
+*multi_column_for_loop* 
 
-The `multi_column_for_loop` clause lets you specify a range of cells to be updated across multiple dimension columns. The `IN` clause lets you specify the values of the dimension columns as either multiple lists of values or as a subquery. When using `subquery`, it cannot: 
+The *multi_column_for_loop* clause lets you specify a range of cells to be updated across multiple dimension columns. The ` IN ` clause lets you specify the values of the dimension columns as either multiple lists of values or as a subquery. When using *subquery* , it cannot: 
 
-  * Be a correlated query
+  * Be a correlated query 
 
   * Return more than 10,000 rows 
 
-  * Be a query defined in the `WITH` clause 
+  * Be a query defined in the ` WITH ` clause 
 
 
 
 
-If all dimensions other than those used by a `FOR` loop involve a single-cell reference, then the expressions can insert new rows. The number of dimension value combinations generated by `FOR` loops is counted as part of the 10,000 row limit of the `MODEL` clause. 
+If all dimensions other than those used by a ` FOR ` loop involve a single-cell reference, then the expressions can insert new rows. The number of dimension value combinations generated by ` FOR ` loops is counted as part of the 10,000 row limit of the ` MODEL ` clause. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG0223) for more information about using `FOR` loops in the `MODEL` clause 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG0223) for more information about using ` FOR ` loops in the ` MODEL ` clause 
 
-order_by_clause
+*order_by_clause* 
 
-Use the `ORDER` `BY` clause to specify the order in which cells on the left-hand side of the rule are to be evaluated. The `expr` must resolve to a dimension or measure column. If the `ORDER` `BY` clause is not specified, then the order defaults to the order of the columns as specified in the `DIMENSION` `BY` clause. See [order_by_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2171079) for more information. 
+Use the ` ORDER ` ` BY ` clause to specify the order in which cells on the left-hand side of the rule are to be evaluated. The *expr* must resolve to a dimension or measure column. If the ` ORDER ` ` BY ` clause is not specified, then the order defaults to the order of the columns as specified in the ` DIMENSION ` ` BY ` clause. See *order_by_clause* for more information. 
 
-Restrictions on the order_by_clause
+Restrictions on the  *order_by_clause* 
 
-Use of the `ORDER` `BY` clause in the model rule is subject to the following restrictions: 
+Use of the ` ORDER ` ` BY ` clause in the model rule is subject to the following restrictions: 
 
-  * You cannot specify `SIBLINGS`, `position`, or `c_alias` in the `order_by_clause` of the `model_clause`. 
+  * You cannot specify ` SIBLINGS ` , *position* , or *c_alias* in the *order_by_clause* of the *model_clause* . 
 
-  * You cannot specify this clause on the left-hand side of the model rule and also specify a `FOR` loop on the right-hand side of the rule. 
-
-
-
-
-expr
-
-Specify an expression representing the value or values of the cell or cells specified on the right-hand side of the rule. `expr` cannot contain a subquery. Refer to "[Model Expressions](Model-Expressions.html#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257)" for information on model expressions. 
-
-return_rows_clause
-
-The `return_rows_clause` lets you specify whether to return all rows selected or only those rows updated by the model rules. `ALL` is the default. 
-
-reference_model
-
-Use the `reference_model` clause when you need to access multiple arrays from inside the `model_clause`. This clause defines a read-only multidimensional array based on the results of a query. 
-
-The subclauses of the `reference_model` clause have the same semantics as for the `main_model` clause. Refer to [model_column_clauses](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168561) and [cell_reference_options](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2168572). 
-
-Restrictions on the reference_model Clause
-
-This clause is subject to the following restrictions:
-
-  * `PARTITION` `BY` columns cannot be specified for reference models. 
-
-  * The subquery of the reference model cannot refer to columns in an outer subquery.
+  * You cannot specify this clause on the left-hand side of the model rule and also specify a ` FOR ` loop on the right-hand side of the rule. 
 
 
 
 
-Set Operators: (UNION, INTERSECT, MINUS, EXCEPT) ALL
+*expr* 
 
-The set operators combine the rows returned by two `SELECT` statements into a single result. The number and data types of the columns selected by each component query must be the same, but the column lengths can be different. The names of the columns in the result set are the names of the expressions in the select list preceding the set operator. 
+Specify an expression representing the value or values of the cell or cells specified on the right-hand side of the rule. *expr* cannot contain a subquery. Refer to  " [ Model Expressions ](Model-Expressions.md#GUID-83D3FD56-8346-4D3F-A49E-5FE41FE19257) "  for information on model expressions. 
 
-If you combine more than two queries with set operators, then the database evaluates adjacent queries from left to right. The parentheses around the subquery are optional. You can use them to specify a different order of evaluation.
+*return_rows_clause* 
 
-Refer to "[The Set Operators](The-UNION-ALL-INTERSECT-MINUS-Operators.html#GUID-B64FE747-586E-4513-945F-80CB197125EE)" for information on these operators, including restrictions on their use. 
+The *return_rows_clause* lets you specify whether to return all rows selected or only those rows updated by the model rules. ` ALL ` is the default. 
 
-order_by_clause
+*reference_model* 
 
-Use the `ORDER` `BY` clause to order rows returned by the statement. Without an `order_by_clause`, no guarantee exists that the same query executed more than once will retrieve rows in the same order. 
+Use the *reference_model* clause when you need to access multiple arrays from inside the *model_clause* . This clause defines a read-only multidimensional array based on the results of a query. 
 
-SIBLINGS
+The subclauses of the *reference_model* clause have the same semantics as for the *main_model* clause. Refer to *model_column_clauses* and *cell_reference_options* . 
 
-The `SIBLINGS` keyword is valid only if you also specify the `hierarchical_query_clause` (`CONNECT` `BY`). `ORDER` `SIBLINGS` `BY` preserves any ordering specified in the hierarchical query clause and then applies the `order_by_clause` to the siblings of the hierarchy. 
+Restrictions on the  *reference_model*  Clause 
 
-expr
+This clause is subject to the following restrictions: 
 
-`expr` orders rows based on their value for `expr`. The expression is based on columns in the select list or columns in the tables, views, or materialized views in the `FROM` clause. 
+  * ` PARTITION ` ` BY ` columns cannot be specified for reference models. 
 
-position
+  * The subquery of the reference model cannot refer to columns in an outer subquery. 
 
-Specify `position` to order rows based on their value for the expression in this position of the select list. The `position` value must be an integer. 
 
-You can specify multiple expressions in the `order_by_clause`. Oracle Database first sorts rows based on their values for the first expression. Rows with the same value for the first expression are then sorted based on their values for the second expression, and so on. The database sorts nulls following all others in ascending order and preceding all others in descending order. Refer to "[Sorting Query Results](Sorting-Query-Results.html#GUID-E45EF993-20AC-4552-860C-4D74EADB5BF2)" for a discussion of ordering query results. 
 
-ASC | DESC
 
-Specify whether the ordering sequence is ascending or descending. `ASC` is the default. 
+Set Operators: (UNION, INTERSECT, MINUS, EXCEPT) ALL 
 
-NULLS FIRST | NULLS LAST
+The set operators combine the rows returned by two ` SELECT ` statements into a single result. The number and data types of the columns selected by each component query must be the same, but the column lengths can be different. The names of the columns in the result set are the names of the expressions in the select list preceding the set operator. 
+
+If you combine more than two queries with set operators, then the database evaluates adjacent queries from left to right. The parentheses around the subquery are optional. You can use them to specify a different order of evaluation. 
+
+Refer to  " [ The Set Operators ](The-UNION-ALL-INTERSECT-MINUS-Operators.md#GUID-B64FE747-586E-4513-945F-80CB197125EE) "  for information on these operators, including restrictions on their use. 
+
+*order_by_clause* 
+
+Use the ` ORDER ` ` BY ` clause to order rows returned by the statement. Without an *order_by_clause* , no guarantee exists that the same query executed more than once will retrieve rows in the same order. 
+
+SIBLINGS 
+
+The ` SIBLINGS ` keyword is valid only if you also specify the *hierarchical_query_clause* ( ` CONNECT ` ` BY ` ). ` ORDER ` ` SIBLINGS ` ` BY ` preserves any ordering specified in the hierarchical query clause and then applies the *order_by_clause* to the siblings of the hierarchy. 
+
+*expr* 
+
+*expr* orders rows based on their value for *expr* . The expression is based on columns in the select list or columns in the tables, views, or materialized views in the ` FROM ` clause. 
+
+*position* 
+
+Specify *position* to order rows based on their value for the expression in this position of the select list. The *position* value must be an integer. 
+
+You can specify multiple expressions in the *order_by_clause* . Oracle Database first sorts rows based on their values for the first expression. Rows with the same value for the first expression are then sorted based on their values for the second expression, and so on. The database sorts nulls following all others in ascending order and preceding all others in descending order. Refer to  " [ Sorting Query Results ](Sorting-Query-Results.md#GUID-E45EF993-20AC-4552-860C-4D74EADB5BF2) "  for a discussion of ordering query results. 
+
+ASC | DESC 
+
+Specify whether the ordering sequence is ascending or descending. ` ASC ` is the default. 
+
+NULLS FIRST | NULLS LAST 
 
 Specify whether returned rows containing null values should appear first or last in the ordering sequence. 
 
-`NULLS` `LAST` is the default for ascending order, and `NULLS` `FIRST` is the default for descending order. 
+` NULLS ` ` LAST ` is the default for ascending order, and ` NULLS ` ` FIRST ` is the default for descending order. 
 
-Restrictions on the ORDER BY Clause
+Restrictions on the ORDER BY Clause 
 
-The following restrictions apply to the `ORDER` `BY` clause: 
+The following restrictions apply to the ` ORDER ` ` BY ` clause: 
 
-  * If you have specified the `DISTINCT` operator in this statement, then this clause cannot refer to columns unless they appear in the select list. 
+  * If you have specified the ` DISTINCT ` operator in this statement, then this clause cannot refer to columns unless they appear in the select list. 
 
-  * An `order_by_clause` can contain no more than 255 expressions. 
+  * An *order_by_clause* can contain no more than 255 expressions. 
 
-  * You cannot order by a LOB, `LONG`, or `LONG` `RAW` column, nested table, or varray. 
+  * You cannot order by a LOB, ` LONG ` , or ` LONG ` ` RAW ` column, nested table, or varray. 
 
-  * If you specify a [group_by_clause](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2182483) in the same statement, then this `order_by_clause` is restricted to the following expressions: 
+  * If you specify a *group_by_clause* in the same statement, then this *order_by_clause* is restricted to the following expressions: 
 
     * Constants 
 
     * Aggregate functions 
 
-    * Analytic functions
+    * Analytic functions 
 
-    * The functions `USER`, `UID`, and `SYSDATE`
+    * The functions ` USER ` , ` UID ` , and ` SYSDATE `
 
-    * Expressions identical to those in the `group_by_clause`
+    * Expressions identical to those in the *group_by_clause* 
 
     * Expressions comprising the preceding expressions that evaluate to the same value for all rows in a group 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-  * "[Using the ORDER BY Clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130036)"
+  * " [ Using the ORDER BY Clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130036) " 
 
-  * [Restrictions for Linguistic Collations](Data-Type-Comparison-Rules.html#GUID-A114F1F4-A08D-4107-B679-323DC7FEA31C__P-13310-66248F0B) for information on implications of how `ORDER` `BY` character values are compared linguistically 
+  * [ Restrictions for Linguistic Collations ](Data-Type-Comparison-Rules.md#GUID-A114F1F4-A08D-4107-B679-323DC7FEA31C__P-13310-66248F0B) for information on implications of how ` ORDER ` ` BY ` character values are compared linguistically 
 
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules for the expressions in the `ORDER` `BY` clause 
-
-
-
-
-window_clause
-
-Oracle Database Release 21c supports the `window_clause` in the `query_block` clause. 
-
-Rules
-
-  * If you use a new `window_specification` to specify an `existing_window_name` then 
-
-    * `existing_window_name` must refer to an earlier entry in the `window_name` list 
-
-    * You cannot use `existing_window_name` with `windowing_clause`
-
-    * You cannot define a new window with the `query_partition_clause`. If `existing_window_name` has `order_by_clause`, then the new window definition cannot have `order_by_clause`. 
-
-  * Note that `OVER` `window_name` is not equivalent to `OVER` (`window_name` â¦). `OVER` (`window_name` â¦) implies copying and modifying the window specification, and will be rejected if the referenced window specification includes a `windowing_clause`. 
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation determination rules for the expressions in the ` ORDER ` ` BY ` clause 
 
 
 
 
-Example
+*window_clause* 
 
-The following query shows the usage of `window_clause` specified as part of table expression and window functions specified using the window name as defined in window clause. 
+Oracle Database Release 21c supports the *window_clause* in the *query_block* clause. 
+
+Rules 
+
+  * If you use a new *window_specification* to specify an *existing_window_name* then 
+
+    * *existing_window_name* must refer to an earlier entry in the *window_name* list 
+
+    * You cannot use *existing_window_name* with *windowing_clause* 
+
+    * You cannot define a new window with the *query_partition_clause* . If *existing_window_name* has *order_by_clause* , then the new window definition cannot have *order_by_clause* . 
+
+  * Note that ` OVER ` *window_name* is not equivalent to ` OVER ` ( *window_name* …). ` OVER ` ( *window_name* …) implies copying and modifying the window specification, and will be rejected if the referenced window specification includes a *windowing_clause* . 
+
+
+
+
+Example 
+
+The following query shows the usage of *window_clause* specified as part of table expression and window functions specified using the window name as defined in window clause. 
     
     
+    ```
     SELECT
           ename, mgr,
           FIRST_VALUE(sal) OVER w AS "first",
@@ -2025,751 +2039,771 @@ The following query shows the usage of `window_clause` specified as part of tabl
           NTH_VALUE(sal, 4) OVER w AS "fourth"
        FROM emp
        WINDOW w AS (PARTITION BY deptno ORDER BY sal ROWS UNBOUNDED PRECEDING);
+    ```
 
-row_limiting_clause
+*row_limiting_clause* 
 
-The `row_limiting_clause` allows you to limit the rows returned by the query. You can specify an offset, and the number of rows or percentage of rows to return. You can use this clause to implement top-N reporting. For consistent results, specify the `order_by_clause` to ensure a deterministic sort order. 
+The *row_limiting_clause* allows you to limit the rows returned by the query. You can specify an offset, and the number of rows or percentage of rows to return. You can use this clause to implement top-N reporting. For consistent results, specify the *order_by_clause* to ensure a deterministic sort order. 
 
-OFFSET
+OFFSET 
 
-Use this clause to specify the number of rows to skip before row limiting begins. `offset` must be a number or an expression that evaluates to a numeric value. If you specify a negative number, then `offset` is treated as 0. If you specify NULL, or a number greater than or equal to the number of rows returned by the query, then 0 rows are returned. If `offset` includes a fraction, then the fractional portion is truncated. If you do not specify this clause, then `offset` is 0 and row limiting begins with the first row. 
+Use this clause to specify the number of rows to skip before row limiting begins. *offset* must be a number or an expression that evaluates to a numeric value. If you specify a negative number, then *offset* is treated as 0. If you specify NULL, or a number greater than or equal to the number of rows returned by the query, then 0 rows are returned. If *offset* includes a fraction, then the fractional portion is truncated. If you do not specify this clause, then *offset* is 0 and row limiting begins with the first row. 
 
-Restrictions
+Restrictions 
 
-This clause is subject to the following restrictions:
+This clause is subject to the following restrictions: 
 
-  * You cannot specify this clause with the `for_update_clause`. 
+  * You cannot specify this clause with the *for_update_clause* . 
 
-  * If you specify this clause, then the select list cannot contain the sequence pseudocolumns `CURRVAL` or `NEXTVAL`. 
+  * If you specify this clause, then the select list cannot contain the sequence pseudocolumns ` CURRVAL ` or ` NEXTVAL ` . 
 
-  * Materialized views are not eligible for an incremental refresh if the defining query contains the `row_limiting_clause`. 
+  * Materialized views are not eligible for an incremental refresh if the defining query contains the *row_limiting_clause* . 
 
-  * If the select list contains columns with identical names and you specify the `row_limiting_clause`, then an `ORA-00918` error occurs. This error occurs whether the identically named columns are in the same table or in different tables. You can work around this issue by specifying unique column aliases for the identically named columns. 
-
-
+  * If the select list contains columns with identical names and you specify the *row_limiting_clause* , then an ` ORA-00918 ` error occurs. This error occurs whether the identically named columns are in the same table or in different tables. You can work around this issue by specifying unique column aliases for the identically named columns. 
 
 
-fetch_clause
 
-Use this clause to specify the number of rows or percentage of rows to return. If you do not specify this clause, then all rows are returned, beginning at row `offset` \+ 1. 
 
-APPROX | APPROXIMATE
+*fetch_clause* 
 
-Specify `APPROX` or `APPROXIMATE` to perform approximate vector search. 
+Use this clause to specify the number of rows or percentage of rows to return. If you do not specify this clause, then all rows are returned, beginning at row *offset* \+ 1. 
 
-Rules
+APPROX | APPROXIMATE 
 
-  * If you specify `APPROX` or `APPROXIMATE`, you must specify `rowcount` and `ROW` or `ROWS`. 
+Specify ` APPROX ` or ` APPROXIMATE ` to perform approximate vector search. 
 
-`rowcount` must be a positive integer between 1 and `UB4MAXVAL`. 
+Rules 
 
-  * You cannot specify `percent` and `WITH TIES` with `APPROX` or `APPROXIMATE`. 
+  * If you specify ` APPROX ` or ` APPROXIMATE ` , you must specify *rowcount* and ` ROW ` or ` ROWS ` . 
 
-  * Specify `WITH` `TARGET` first if you want to specify `ACCURACY`, followed by the input parameter `accuracy` and `PERCENT`. 
+*rowcount* must be a positive integer between 1 and ` UB4MAXVAL ` . 
 
-`accuracy` must be a postive integer literal between 1 and 100. 
+  * You cannot specify *percent* and ` WITH TIES ` with ` APPROX ` or ` APPROXIMATE ` . 
+
+  * Specify ` WITH ` ` TARGET ` first if you want to specify ` ACCURACY ` , followed by the input parameter *accuracy* and ` PERCENT ` . 
+
+*accuracy* must be a postive integer literal between 1 and 100. 
 
 In the case where vector index is used, the accuracy, if specified, overwrites the index specification, otherwise it inherits the index specification. In the case where no vector index is used, exact results are returned, and the accuracy is meaningless. 
 
-  * `PARAMETERS` `efs` and `nprobes` must be a positive integer literal between 1 and `UB4MAXVAL`. 
+  * ` PARAMETERS ` *efs* and *nprobes* must be a positive integer literal between 1 and ` UB4MAXVAL ` . 
 
 
 
-Rules for an Approximate Vector Search when a Vector Index is available
+Rules for an Approximate Vector Search when a Vector Index is available 
 
-  * The `APPROXIMATE` syntax is used in row limiting clause. 
+  * The ` APPROXIMATE ` syntax is used in row limiting clause. 
 
-  * The approximate row limiting clause must be associated with an `ORDER BY` clause. 
+  * The approximate row limiting clause must be associated with an ` ORDER BY ` clause. 
 
-  * The first key of the `ORDER BY` must be a distance function (`VECTOR_DISTANCE` or variant), which must have one and only one vector column operand. 
+  * The first key of the ` ORDER BY ` must be a distance function ( ` VECTOR_DISTANCE ` or variant), which must have one and only one vector column operand. 
 
-  * There may be additional `ORDER BY` expressions after the distance function, but not before. 
-
-
-
-
-FIRST | NEXT
-
-These keywords can be used interchangeably and are provided for semantic clarity.
-
-row_limiting_partition_clause
-
-You can specify one or more levels of partitions in `partition_count` to apply row limiting within each partition or each combination of all levels of partitions. 
-
-You may specify unlimited levels of partitions. For each partition level, the following rules apply:
-
-  * `partition_countX` used without `APPROX`, must be a number or an expression that evaluates to a numeric value. It can be given as a constant literal, a bind, a non-scalar subquery, or a correlated variable. Otherwise an error is raised. 
-
-  * If a negative number is specified, then it is treated as 0.
-
-  * If `partition_countX` is greater than the number of partitions available in this level, then certain rows from all available partitions in this level are returned. 
-
-  * If `partition_countX` includes a fraction, then the fractional portion is truncated. 
-
-  * If `partition_countX` in any level is NULL, then 0 rows are returned. 
-
-  * `partition_by_exprX` must be constants, columns, nonanalytic functions, function expressions, or expressions involving any of these. 
+  * There may be additional ` ORDER BY ` expressions after the distance function, but not before. 
 
 
 
 
-Given that the query result may be sorted in certain order, partitioned row limiting clause filters out records so that only records that meet the following conditions are returned:
+FIRST | NEXT 
 
-  * the record has `partition_by_expr1` being one of the top `partition_count1` values of `partition_by_expr1`
+These keywords can be used interchangeably and are provided for semantic clarity. 
 
-  * within the same `partition_by_expr1`, the record has `partition_by_expr2` being one of the top `partition_count2` values of `partition_by_expr2`
+*row_limiting_partition_clause* 
 
-  * within the same `partition_by_expr1` and `partition_by_expr2`, the record has `partition_by_expr3` being one of the top `partition_count3` values of `partition_by_expr3`
+You can specify one or more levels of partitions in *partition_count* to apply row limiting within each partition or each combination of all levels of partitions. 
 
-  * the same logic applies to all levels of partitions
+You may specify unlimited levels of partitions. For each partition level, the following rules apply: 
 
-  * within the nested partition of `partition_by_expr1`, ..., `partition_by_exprN`, the record is the top `rowcount` rows, or top `percent` percent of rows. If `WITH TIES` is specified, additional rows with the same sort key as the last row fetched are returned. 
+  * *partition_countX* used without ` APPROX ` , must be a number or an expression that evaluates to a numeric value. It can be given as a constant literal, a bind, a non-scalar subquery, or a correlated variable. Otherwise an error is raised. 
+
+  * If a negative number is specified, then it is treated as 0. 
+
+  * If *partition_countX* is greater than the number of partitions available in this level, then certain rows from all available partitions in this level are returned. 
+
+  * If *partition_countX* includes a fraction, then the fractional portion is truncated. 
+
+  * If *partition_countX* in any level is NULL, then 0 rows are returned. 
+
+  * *partition_by_exprX* must be constants, columns, nonanalytic functions, function expressions, or expressions involving any of these. 
 
 
 
 
-row_specification
+Given that the query result may be sorted in certain order, partitioned row limiting clause filters out records so that only records that meet the following conditions are returned: 
 
-ROW | ROWS
+  * the record has *partition_by_expr1* being one of the top *partition_count1* values of *partition_by_expr1* 
 
-Specify one of `ROW` or `ROWS`. These keywords can be used interchangeably and are provided for semantic clarity. 
+  * within the same *partition_by_expr1* , the record has *partition_by_expr2* being one of the top *partition_count2* values of *partition_by_expr2* 
 
-If any of these conditions are not met, an exact search will be performed even though the `APPROXIMATE` syntax is used. In addition, even if all the conditions are met, the optimizer may employ other cost-based decisions and choose not to use the index and perform exact search . 
+  * within the same *partition_by_expr1* and *partition_by_expr2* , the record has *partition_by_expr3* being one of the top *partition_count3* values of *partition_by_expr3* 
 
-Example: Vector Search Query
+  * the same logic applies to all levels of partitions 
+
+  * within the nested partition of *partition_by_expr1* , ..., *partition_by_exprN* , the record is the top *rowcount* rows, or top ` percent ` percent of rows. If ` WITH TIES ` is specified, additional rows with the same sort key as the last row fetched are returned. 
+
+
+
+
+*row_specification* 
+
+ROW | ROWS 
+
+Specify one of ` ROW ` or ` ROWS ` . These keywords can be used interchangeably and are provided for semantic clarity. 
+
+If any of these conditions are not met, an exact search will be performed even though the ` APPROXIMATE ` syntax is used. In addition, even if all the conditions are met, the optimizer may employ other cost-based decisions and choose not to use the index and perform exact search . 
+
+Example: Vector Search Query 
     
+    
+    ```
     
     SELECT docID FROM vec_table
     ORDER BY VECTOR_DISTANCE(data, :query_vec)
     FETCH APPROX FIRST 20 ROWS ONLY;
+    ```
 
-You can use this clause in vector and non-vector contexts. See examples [Partitioned Row Limiting in Non-Vector Context: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P_ODN_DVT_3BC) and [Partitioned Row Limiting in a Multi-Vector Search: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P_A1V_X5T_3BC) . 
+You can use this clause in vector and non-vector contexts. See examples [ Partitioned Row Limiting in Non-Vector Context: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P_ODN_DVT_3BC) and [ Partitioned Row Limiting in a Multi-Vector Search: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__P_A1V_X5T_3BC) . 
 
-row_specification
+*row_specification* 
 
-rowcount | percent PERCENT
+*rowcount*  |  *percent*  PERCENT 
 
-Use `rowcount` to specify the number of rows to return. `rowcount` must be a number or an expression that evaluates to a numeric value. If you specify a negative number, then `rowcount` is treated as 0. If `rowcount` is greater than the number of rows available beginning at row `offset` \+ 1, then all available rows are returned. If `rowcount` includes a fraction, then the fractional portion is truncated. If `rowcount` is NULL, then 0 rows are returned. 
+Use *rowcount* to specify the number of rows to return. *rowcount* must be a number or an expression that evaluates to a numeric value. If you specify a negative number, then *rowcount* is treated as 0. If *rowcount* is greater than the number of rows available beginning at row *offset* \+ 1, then all available rows are returned. If *rowcount* includes a fraction, then the fractional portion is truncated. If *rowcount* is NULL, then 0 rows are returned. 
 
-Use `percent` `PERCENT` to specify the percentage of the total number of selected rows to return. `percent` must be a number or an expression that evaluates to a numeric value. If you specify a negative number, then `percent` is treated as 0. If `percent` is NULL, then 0 rows are returned. 
+Use *percent* ` PERCENT ` to specify the percentage of the total number of selected rows to return. *percent* must be a number or an expression that evaluates to a numeric value. If you specify a negative number, then *percent* is treated as 0. If *percent* is NULL, then 0 rows are returned. 
 
-If you do not specify `rowcount` or `percent` `PERCENT`, then 1 row is returned. 
+If you do not specify *rowcount* or *percent* ` PERCENT ` , then 1 row is returned. 
 
-ONLY | WITH TIES
+ONLY | WITH TIES 
 
-Specify `ONLY` to return exactly the specified number of rows or percentage of rows. 
+Specify ` ONLY ` to return exactly the specified number of rows or percentage of rows. 
 
-Specify `WITH` `TIES` to return additional rows with the same sort key as the last row fetched. `WITH` `TIES` must be specified with `order_by_clause` . If you do not specify the `order_by_clause`, then no additional rows will be returned. 
+Specify ` WITH ` ` TIES ` to return additional rows with the same sort key as the last row fetched. ` WITH ` ` TIES ` must be specified with *order_by_clause* . If you do not specify the *order_by_clause* , then no additional rows will be returned. 
 
-You cannot use `WITH` `TIES` for approximate vector search and partition row limit. If you specify it, approximate search will not happen, or if there are partitions, the statement will fail. 
+You cannot use ` WITH ` ` TIES ` for approximate vector search and partition row limit. If you specify it, approximate search will not happen, or if there are partitions, the statement will fail. 
 
-See Also:
+> **note:** See Also: 
 
-"[Row Limiting: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABEAACC)"
+" [ Row Limiting: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABEAACC) " 
 
-for_update_clause
+*for_update_clause* 
 
-The `FOR` `UPDATE` clause lets you lock the selected rows so that other users cannot lock or update the rows until you end your transaction. You can specify this clause only in a top-level `SELECT` statement, not in subqueries. 
+The ` FOR ` ` UPDATE ` clause lets you lock the selected rows so that other users cannot lock or update the rows until you end your transaction. You can specify this clause only in a top-level ` SELECT ` statement, not in subqueries. 
 
-Note:
+> **note:** 
 
-Prior to updating a LOB value, you must lock the row containing the LOB. One way to lock the row is with an embedded `SELECT` ... `FOR` `UPDATE` statement. You can do this using one of the programmatic languages or `DBMS_LOB` package. For more information on lock rows before writing to a LOB, see [Oracle Database SecureFiles and Large Objects Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADLOB1004). 
+Prior to updating a LOB value, you must lock the row containing the LOB. One way to lock the row is with an embedded ` SELECT ` ... ` FOR ` ` UPDATE ` statement. You can do this using one of the programmatic languages or ` DBMS_LOB ` package. For more information on lock rows before writing to a LOB, see [ *Oracle Database SecureFiles and Large Objects Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADLOB1004) . 
 
-Nested table rows are not locked as a result of locking the parent table rows. If you want the nested table rows to be locked, then you must lock them explicitly.
+Nested table rows are not locked as a result of locking the parent table rows. If you want the nested table rows to be locked, then you must lock them explicitly. 
 
-Restrictions on the FOR UPDATE Clause
+Restrictions on the FOR UPDATE Clause 
 
-This clause is subject to the following restrictions:
+This clause is subject to the following restrictions: 
 
-  * You cannot specify this clause with the following other constructs: the `DISTINCT` operator, `CURSOR` expression, set operators, `group_by_clause`, or aggregate functions. 
+  * You cannot specify this clause with the following other constructs: the ` DISTINCT ` operator, ` CURSOR ` expression, set operators, *group_by_clause* , or aggregate functions. 
 
-  * The tables locked by this clause must all be located on the same database and on the same database as any `LONG` columns and sequences referenced in the same statement. 
-
-
+  * The tables locked by this clause must all be located on the same database and on the same database as any ` LONG ` columns and sequences referenced in the same statement. 
 
 
-See Also:
 
-"[Using the FOR UPDATE Clause: Examples](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130052)"
 
-Using the FOR UPDATE Clause on Views
+> **note:** See Also: 
 
-In general, this clause is not supported on views. However, in some cases, a `SELECT` ... `FOR` `UPDATE` query on a view can succeed without any errors. This occurs when the view has been merged to its containing query block internally by the query optimizer, and `SELECT` ... `FOR` `UPDATE` succeeds on the internally transformed query. The examples in this section illustrate when using the `FOR` `UPDATE` clause on a view can succeed or fail. 
+" [ Using the FOR UPDATE Clause: Examples ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2130052) " 
 
-  * Using the `FOR` `UPDATE` clause on merged views 
+Using the FOR UPDATE Clause on Views 
 
-An error can occur when you use the `FOR` `UPDATE` clause on a merged view if both of the following conditions apply: 
+In general, this clause is not supported on views. However, in some cases, a ` SELECT ` ... ` FOR ` ` UPDATE ` query on a view can succeed without any errors. This occurs when the view has been merged to its containing query block internally by the query optimizer, and ` SELECT ` ... ` FOR ` ` UPDATE ` succeeds on the internally transformed query. The examples in this section illustrate when using the ` FOR ` ` UPDATE ` clause on a view can succeed or fail. 
 
-    * The underlying column of the view is an expression
+  * Using the ` FOR ` ` UPDATE ` clause on merged views 
 
-    * The `FOR` `UPDATE` clause applies to a column list 
+An error can occur when you use the ` FOR ` ` UPDATE ` clause on a merged view if both of the following conditions apply: 
 
-The following statement succeeds because the underlying column of the view is not an expression:
+    * The underlying column of the view is an expression 
+
+    * The ` FOR ` ` UPDATE ` clause applies to a column list 
+
+The following statement succeeds because the underlying column of the view is not an expression: 
     
-        SELECT employee_id FROM (SELECT * FROM employees)
+        ```
+    SELECT employee_id FROM (SELECT * FROM employees)
        FOR UPDATE OF employee_id;
     
+    ```
 
-The following statement succeeds because, while the underlying column of the view is an expression, the `FOR` `UPDATE` clause does not apply to a column list: 
+The following statement succeeds because, while the underlying column of the view is an expression, the ` FOR ` ` UPDATE ` clause does not apply to a column list: 
     
-        SELECT employee_id FROM (SELECT employee_id+1 AS employee_id FROM employees)
+        ```
+    SELECT employee_id FROM (SELECT employee_id+1 AS employee_id FROM employees)
        FOR UPDATE;
     
+    ```
 
-The following statement fails because the underlying column of the view is an expression and the `FOR` `UPDATE` clause applies to a column list: 
+The following statement fails because the underlying column of the view is an expression and the ` FOR ` ` UPDATE ` clause applies to a column list: 
     
-        SELECT employee_id FROM (SELECT employee_id+1 AS employee_id FROM employees)
+        ```
+    SELECT employee_id FROM (SELECT employee_id+1 AS employee_id FROM employees)
        FOR UPDATE OF employee_id;
                      *
     Error at line 2:
     ORA-01733: virtual column not allowed here
     
+    ```
 
-  * Using the `FOR` `UPDATE` clause on non-merged views 
+  * Using the ` FOR ` ` UPDATE ` clause on non-merged views 
 
-Since the `FOR` `UPDATE` clause is not supported on views, anything that prevents view merging, such as the `NO_MERGE` hint, parameters that disallow view merging, or something in the query structure that prevents view merging, will result in an `ORA-02014` error. 
+Since the ` FOR ` ` UPDATE ` clause is not supported on views, anything that prevents view merging, such as the ` NO_MERGE ` hint, parameters that disallow view merging, or something in the query structure that prevents view merging, will result in an ` ORA-02014 ` error. 
 
-In the following example, the `GROUP` `BY` statement prevents view merging, which causes an error: 
+In the following example, the ` GROUP ` ` BY ` statement prevents view merging, which causes an error: 
     
-        SELECT avgsal
+        ```
+    SELECT avgsal
        FROM (SELECT AVG(salary) AS avgsal FROM employees GROUP BY job_id)
        FOR UPDATE;
     FROM (SELECT AVG(salary) AS avgsal FROM employees GROUP BY job_id)
          *
     ERROR at line 2:
     ORA-02014: cannot select FOR UPDATE from view with DISTINCT, GROUP BY, etc.
+    ```
 
 
 
 
-Note:
+> **note:** 
 
-Due to the complexity of the view merging mechanism, Oracle recommends against using the `FOR` `UPDATE` clause on views. 
+Due to the complexity of the view merging mechanism, Oracle recommends against using the ` FOR ` ` UPDATE ` clause on views. 
 
-OF ... column
+OF ...  *column* 
 
-Use the `OF` ... `column` clause to lock the select rows only for a particular table or view in a join. The columns in the `OF` clause only indicate which table or view rows are locked. The specific columns that you specify are not significant. However, you must specify an actual column name, not a column alias. If you omit this clause, then the database locks the selected rows from all the tables in the query. 
+Use the ` OF ` ... *column* clause to lock the select rows only for a particular table or view in a join. The columns in the ` OF ` clause only indicate which table or view rows are locked. The specific columns that you specify are not significant. However, you must specify an actual column name, not a column alias. If you omit this clause, then the database locks the selected rows from all the tables in the query. 
 
-NOWAIT | WAIT
+NOWAIT | WAIT 
 
-The `NOWAIT` and `WAIT` clauses let you tell the database how to proceed if the `SELECT` statement attempts to lock a row that is locked by another user. 
+The ` NOWAIT ` and ` WAIT ` clauses let you tell the database how to proceed if the ` SELECT ` statement attempts to lock a row that is locked by another user. 
 
-  * Specify `NOWAIT` to return control to you immediately if a lock exists. 
+  * Specify ` NOWAIT ` to return control to you immediately if a lock exists. 
 
-  * Specify `WAIT` to instruct the database to wait `integer` seconds for the row to become available and then return control to you. 
+  * Specify ` WAIT ` to instruct the database to wait *integer* seconds for the row to become available and then return control to you. 
 
 
 
 
-If you specify neither `WAIT` nor `NOWAIT`, then the database waits until the row is available and then returns the results of the `SELECT` statement. 
+If you specify neither ` WAIT ` nor ` NOWAIT ` , then the database waits until the row is available and then returns the results of the ` SELECT ` statement. 
 
-SKIP LOCKED
+SKIP LOCKED 
 
-`SKIP` `LOCKED` is an alternative way to handle a contending transaction that is locking some rows of interest. Specify `SKIP` `LOCKED` to instruct the database to attempt to lock the rows specified by the `WHERE` clause and to skip any rows that are found to be already locked by another transaction. This feature is designed for use in multiconsumer queue environments. It enables queue consumers to skip rows that are locked by other consumers and obtain unlocked rows without waiting for the other consumers to finish. Refer to [Oracle Database Advanced Queuing User's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADQUE2835) for more information. 
+` SKIP ` ` LOCKED ` is an alternative way to handle a contending transaction that is locking some rows of interest. Specify ` SKIP ` ` LOCKED ` to instruct the database to attempt to lock the rows specified by the ` WHERE ` clause and to skip any rows that are found to be already locked by another transaction. This feature is designed for use in multiconsumer queue environments. It enables queue consumers to skip rows that are locked by other consumers and obtain unlocked rows without waiting for the other consumers to finish. Refer to [ *Oracle Database Advanced Queuing User's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADQUE2835) for more information. 
 
-Note on the WAIT and SKIP LOCKED Clauses
+Note on the WAIT and SKIP LOCKED Clauses 
 
-If you specify `WAIT` or `SKIP` `LOCKED` and the table is locked in exclusive mode, then the database will not return the results of the `SELECT` statement until the lock on the table is released. In the case of `WAIT`, the `SELECT` `FOR` `UPDATE` clause is blocked regardless of the wait time specified. 
+If you specify ` WAIT ` or ` SKIP ` ` LOCKED ` and the table is locked in exclusive mode, then the database will not return the results of the ` SELECT ` statement until the lock on the table is released. In the case of ` WAIT ` , the ` SELECT ` ` FOR ` ` UPDATE ` clause is blocked regardless of the wait time specified. 
 
-row_pattern_clause
+*row_pattern_clause* 
 
-The `MATCH_RECOGNIZE` clause lets you perform pattern matching. Use this clause to recognize patterns in a sequence of rows in `table`, which is called the row pattern input table. The result of a query that uses the `MATCH_RECOGNIZE` clause is called the row pattern output table. 
+The ` MATCH_RECOGNIZE ` clause lets you perform pattern matching. Use this clause to recognize patterns in a sequence of rows in *table* , which is called the row pattern input table. The result of a query that uses the ` MATCH_RECOGNIZE ` clause is called the row pattern output table. 
 
-The `MATCH_RECOGNIZE` enables you to do the following tasks: 
+The ` MATCH_RECOGNIZE ` enables you to do the following tasks: 
 
-  * Logically partition and order the data with the `PARTITION` `BY` and `ORDER` `BY` clauses. 
+  * Logically partition and order the data with the ` PARTITION ` ` BY ` and ` ORDER ` ` BY ` clauses. 
 
-  * Define measures, which are expressions usable in other parts of the SQL query, in the `MEASURES` clause. 
+  * Define measures, which are expressions usable in other parts of the SQL query, in the ` MEASURES ` clause. 
 
-  * Define patterns of rows to seek using the `PATTERN` clause. These patterns use regular expression syntax, a powerful and expressive feature, applied to the pattern variables you define. 
+  * Define patterns of rows to seek using the ` PATTERN ` clause. These patterns use regular expression syntax, a powerful and expressive feature, applied to the pattern variables you define. 
 
-  * Specify the logical conditions required to map a row to a row pattern variable in the `DEFINE` clause. 
+  * Specify the logical conditions required to map a row to a row pattern variable in the ` DEFINE ` clause. 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8956) for more information on pattern matching 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8956) for more information on pattern matching 
 
-  * "[Row Pattern Matching: Example](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJHHDD)"
+  * " [ Row Pattern Matching: Example ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJHHDD) " 
 
 
 
 
-row_pattern_partition_by
+*row_pattern_partition_by* 
 
-Specify `PARTITION` `BY` to divide the rows in the row pattern input table into logical groups called row pattern partitions. Use `column` to specify one or more partitioning columns. Each partition consists of the set of rows in the row pattern input table that have the same value(s) on the partitioning column(s). 
+Specify ` PARTITION ` ` BY ` to divide the rows in the row pattern input table into logical groups called row pattern partitions. Use *column* to specify one or more partitioning columns. Each partition consists of the set of rows in the row pattern input table that have the same value(s) on the partitioning column(s). 
 
-If you specify this clause, then matches are found within partitions and do not cross partition boundaries. If you do not specify this clause, then all rows of the row input table constitute a single row pattern partition.
+If you specify this clause, then matches are found within partitions and do not cross partition boundaries. If you do not specify this clause, then all rows of the row input table constitute a single row pattern partition. 
 
-row_pattern_order_by
+*row_pattern_order_by* 
 
-Specify `ORDER` `BY` to order rows within each row pattern partition. Use `column` to specify one or more ordering columns. If you specify multiple columns, then Oracle Database first sorts rows based on their values for the first column. Rows with the same value for the first column are then sorted based on their values for the second column, and so on. Oracle Database sorts nulls following all others in ascending order. 
+Specify ` ORDER ` ` BY ` to order rows within each row pattern partition. Use *column* to specify one or more ordering columns. If you specify multiple columns, then Oracle Database first sorts rows based on their values for the first column. Rows with the same value for the first column are then sorted based on their values for the second column, and so on. Oracle Database sorts nulls following all others in ascending order. 
 
-If you do not specify this clause, then the result of the `row_pattern_clause` is nondeterministic and you may get inconsistent results each time you run the query. 
+If you do not specify this clause, then the result of the *row_pattern_clause* is nondeterministic and you may get inconsistent results each time you run the query. 
 
-row_pattern_measures
+*row_pattern_measures* 
 
-Use the `MEASURES` clause to define one or more row pattern measure columns. These columns are included in the row pattern output table and contain values that are useful for analyzing data. 
+Use the ` MEASURES ` clause to define one or more row pattern measure columns. These columns are included in the row pattern output table and contain values that are useful for analyzing data. 
 
-When you define a row pattern measure column, using the `row_pattern_measure_column` clause, you specify its pattern measure expression. The values in the column are calculated by evaluating the pattern measure expression whenever a match is found. 
+When you define a row pattern measure column, using the *row_pattern_measure_column* clause, you specify its pattern measure expression. The values in the column are calculated by evaluating the pattern measure expression whenever a match is found. 
 
-row_pattern_measure_column
+*row_pattern_measure_column* 
 
-Use this clause to define a row pattern measure column.
+Use this clause to define a row pattern measure column. 
 
-  * For `expr`, specify the pattern measure expression. A pattern measure expression is an expression as described in [Expressions](Expressions.html#GUID-E7A5363C-AEE9-4809-99C1-1A9C6E3AE017) that can contain only the following elements: 
+  * For *expr* , specify the pattern measure expression. A pattern measure expression is an expression as described in [ Expressions ](Expressions.md#GUID-E7A5363C-AEE9-4809-99C1-1A9C6E3AE017) that can contain only the following elements: 
 
-    * Constants: Text literals and numeric literals
+    * Constants: Text literals and numeric literals 
 
-    * References to any column of the row pattern input table
+    * References to any column of the row pattern input table 
 
-    * The `CLASSIFIER` function, which returns the name of the primary row pattern variable to which the row is mapped. Refer to [row_pattern_classifier_func](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBGAAB) for more information. 
+    * The ` CLASSIFIER ` function, which returns the name of the primary row pattern variable to which the row is mapped. Refer to *row_pattern_classifier_func* for more information. 
 
-    * The `MATCH_NUMBER` function, which returns the sequential number of a row pattern match within the row pattern partition. Refer to [row_pattern_match_num_func](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBEEBD) for more information. 
+    * The ` MATCH_NUMBER ` function, which returns the sequential number of a row pattern match within the row pattern partition. Refer to *row_pattern_match_num_func* for more information. 
 
-    * Row pattern navigation functions: `PREV`, `NEXT`, `FIRST`, and `LAST`. Refer to [row_pattern_navigation_func](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABGCIIA) for more information. 
+    * Row pattern navigation functions: ` PREV ` , ` NEXT ` , ` FIRST ` , and ` LAST ` . Refer to *row_pattern_navigation_func* for more information. 
 
-    * Row pattern aggregate functions: [AVG](AVG.html#GUID-B64BCBF1-DAA0-4D88-9821-2C4D3FDE5E4A), [COUNT](COUNT.html#GUID-AEF08B79-024D-4E3A-B362-9715FB011776), [MAX](MAX.html#GUID-E5372020-A6DA-44BF-93BE-DA8C3F74CD01), [MIN](MIN.html#GUID-F7F04E18-1AD8-4D15-9491-4622AD847A74), or [SUM](SUM.html#GUID-5610BE2C-CFE5-446F-A1F7-B924B5663220). Refer to [row_pattern_aggregate_func](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABIDJGB) for more information. 
+    * Row pattern aggregate functions: [ AVG ](AVG.md#GUID-B64BCBF1-DAA0-4D88-9821-2C4D3FDE5E4A) , [ COUNT ](COUNT.md#GUID-AEF08B79-024D-4E3A-B362-9715FB011776) , [ MAX ](MAX.md#GUID-E5372020-A6DA-44BF-93BE-DA8C3F74CD01) , [ MIN ](MIN.md#GUID-F7F04E18-1AD8-4D15-9491-4622AD847A74) , or [ SUM ](SUM.md#GUID-5610BE2C-CFE5-446F-A1F7-B924B5663220) . Refer to *row_pattern_aggregate_func* for more information. 
 
-  * For `c_alias`, specify the alias for the pattern measure expression. Oracle Database uses this alias in the column heading of the row pattern output table. The `AS` keyword is optional. The alias can be used in other parts of the query, such as the `SELECT` ... `ORDER` `BY` clause. 
+  * For *c_alias* , specify the alias for the pattern measure expression. Oracle Database uses this alias in the column heading of the row pattern output table. The ` AS ` keyword is optional. The alias can be used in other parts of the query, such as the ` SELECT ` ... ` ORDER ` ` BY ` clause. 
 
 
 
 
-row_pattern_rows_per_match
+*row_pattern_rows_per_match* 
 
-This clause lets you specify whether the row pattern output table includes summary or detailed data about each match.
+This clause lets you specify whether the row pattern output table includes summary or detailed data about each match. 
 
-  * If you specify `ONE` `ROW` `PER` `MATCH`, then each match produces one summary row. This is the default. 
+  * If you specify ` ONE ` ` ROW ` ` PER ` ` MATCH ` , then each match produces one summary row. This is the default. 
 
-  * If you specify `ALL` `ROWS` `PER` `MATCH`, then each match that spans multiple rows will produce one output row for each row in the match. 
+  * If you specify ` ALL ` ` ROWS ` ` PER ` ` MATCH ` , then each match that spans multiple rows will produce one output row for each row in the match. 
 
 
 
 
-row_pattern_skip_to
+*row_pattern_skip_to* 
 
-This clause lets you specify the point to resume row pattern matching after a non-empty match is found.
+This clause lets you specify the point to resume row pattern matching after a non-empty match is found. 
 
-  * Specify `AFTER` `MATCH` `SKIP` `TO` `NEXT` `ROW` to resume pattern matching at the row after the first row of the current match. 
+  * Specify ` AFTER ` ` MATCH ` ` SKIP ` ` TO ` ` NEXT ` ` ROW ` to resume pattern matching at the row after the first row of the current match. 
 
-  * Specify `AFTER` `MATCH` `SKIP` `PAST` `LAST` `ROW` to resume pattern matching at the next row after the last row of the current match. This is the default. 
+  * Specify ` AFTER ` ` MATCH ` ` SKIP ` ` PAST ` ` LAST ` ` ROW ` to resume pattern matching at the next row after the last row of the current match. This is the default. 
 
-  * Specify `AFTER` `MATCH` `SKIP` `TO` `FIRST` `variable_name` to resume pattern matching at the first row that is mapped to pattern variable `variable_name`. The `variable_name` must be defined in the `DEFINE` clause. 
+  * Specify ` AFTER ` ` MATCH ` ` SKIP ` ` TO ` ` FIRST ` *variable_name* to resume pattern matching at the first row that is mapped to pattern variable *variable_name* . The *variable_name* must be defined in the ` DEFINE ` clause. 
 
-  * Specify `AFTER` `MATCH` `SKIP` `TO` `LAST` `variable_name` to resume pattern matching at the last row that is mapped to pattern variable `variable_name`. The `variable_name` must be defined in the `DEFINE` clause. 
+  * Specify ` AFTER ` ` MATCH ` ` SKIP ` ` TO ` ` LAST ` *variable_name* to resume pattern matching at the last row that is mapped to pattern variable *variable_name* . The *variable_name* must be defined in the ` DEFINE ` clause. 
 
-  * `AFTER` `MATCH` `SKIP` `TO` `variable_name` has the same behavior as `AFTER` `MATCH` `SKIP` `TO` `LAST` `variable_name`. 
+  * ` AFTER ` ` MATCH ` ` SKIP ` ` TO ` *variable_name* has the same behavior as ` AFTER ` ` MATCH ` ` SKIP ` ` TO ` ` LAST ` *variable_name* . 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8993) for more information on the `AFTER` `MATCH` `SKIP` clauses 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8993) for more information on the ` AFTER ` ` MATCH ` ` SKIP ` clauses 
 
-PATTERN
+PATTERN 
 
-Use the `PATTERN` clause to define which pattern variables must be matched, the sequence in which they must be matched, and the quantity of rows that must be matched for each pattern variable. 
+Use the ` PATTERN ` clause to define which pattern variables must be matched, the sequence in which they must be matched, and the quantity of rows that must be matched for each pattern variable. 
 
-A row pattern match consists of a set of contiguous rows in a row pattern partition. Each row of the match is mapped to a pattern variable. The mapping of rows to pattern variables must conform to the regular expression specified in the `row_pattern` clause, and all conditions in the `DEFINE` clause must be true. 
+A row pattern match consists of a set of contiguous rows in a row pattern partition. Each row of the match is mapped to a pattern variable. The mapping of rows to pattern variables must conform to the regular expression specified in the *row_pattern* clause, and all conditions in the ` DEFINE ` clause must be true. 
 
-Note:
+> **note:** 
 
-It is outside the scope of this document to explain regular expression concepts and details. If you are not familiar with regular expressions, then you are encouraged to familiarize yourself with the topic using other sources.
+It is outside the scope of this document to explain regular expression concepts and details. If you are not familiar with regular expressions, then you are encouraged to familiarize yourself with the topic using other sources. 
 
-The precedence of the elements that you specify in the regular expression of the `PATTERNS` clause, in decreasing order, is as follows: 
+The precedence of the elements that you specify in the regular expression of the ` PATTERNS ` clause, in decreasing order, is as follows: 
 
-  * Row pattern elements (specified in the `row_pattern_primary` clause) 
+  * Row pattern elements (specified in the *row_pattern_primary* clause) 
 
-  * Row pattern quantifiers (specified in the `row_pattern_quantifier` clause) 
+  * Row pattern quantifiers (specified in the *row_pattern_quantifier* clause) 
 
-  * Concatenation (specified in the `row_pattern_term` clause) 
+  * Concatenation (specified in the *row_pattern_term* clause) 
 
-  * Alternation (specified in the `row_pattern` clause) 
+  * Alternation (specified in the *row_pattern* clause) 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8986) for more information on the `PATTERN` clause 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8986) for more information on the ` PATTERN ` clause 
 
-row_pattern
+*row_pattern* 
 
-Use this clause to specify the row pattern. A row pattern is a regular expression that can take one of the following forms:
+Use this clause to specify the row pattern. A row pattern is a regular expression that can take one of the following forms: 
 
-  * A single row pattern term
+  * A single row pattern term 
 
-For example: `PATTERN(A)`
+For example: ` PATTERN(A) `
 
-  * A row pattern, a vertical bar, and a row pattern term
+  * A row pattern, a vertical bar, and a row pattern term 
 
-For example: `PATTERN(A|B)`
+For example: ` PATTERN(A|B) `
 
-  * A recursively built row pattern, a vertical bar, and a row pattern term
+  * A recursively built row pattern, a vertical bar, and a row pattern term 
 
-For example: `PATTERN(A|B|C)`
+For example: ` PATTERN(A|B|C) `
 
 
 
 
-The vertical bar in this clause represents alternation. Alternation matches a single regular expression from a list of several possible regular expressions. Alternatives are preferred in the order they are specified. For example, if you specify `PATTERN(A|B|C)`, then Oracle Database attempts to match `A` first. If `A` is not matched, then it attempts to match `B`. If `B` is not matched, then it attempts to match `C`. 
+The vertical bar in this clause represents  alternation  . Alternation matches a single regular expression from a list of several possible regular expressions. Alternatives are preferred in the order they are specified. For example, if you specify ` PATTERN(A|B|C) ` , then Oracle Database attempts to match ` A ` first. If ` A ` is not matched, then it attempts to match ` B ` . If ` B ` is not matched, then it attempts to match ` C ` . 
 
-row_pattern_term
+*row_pattern_term* 
 
-This clause lets you specify a row pattern term. A row pattern term can take one of the following forms:
+This clause lets you specify a row pattern term. A row pattern term can take one of the following forms: 
 
-  * A single row pattern factor
+  * A single row pattern factor 
 
-For example: `PATTERN(A)`
+For example: ` PATTERN(A) `
 
-  * A row pattern term followed by a row pattern factor.
+  * A row pattern term followed by a row pattern factor. 
 
-For example: `PATTERN(A B)`
+For example: ` PATTERN(A B) `
 
-  * A recursively built row pattern term followed by a row pattern factor
+  * A recursively built row pattern term followed by a row pattern factor 
 
-For example: `PATTERN(A B C)`
+For example: ` PATTERN(A B C) `
 
 
 
 
-The syntax used in the second and third examples represents concatenation. Concatenation is used to list two or more items in a pattern to be matched and the order in which they are to be matched. For example, if you specify `PATTERN(A B C)`, then Oracle Database first matches `A`, then uses the resulting matched rows to match `B`, then uses the resulting matched rows to match `C`. Only rows that match `A`, `B`, and `C`, are included in the row pattern match. 
+The syntax used in the second and third examples represents  concatenation  . Concatenation is used to list two or more items in a pattern to be matched and the order in which they are to be matched. For example, if you specify ` PATTERN(A B C) ` , then Oracle Database first matches ` A ` , then uses the resulting matched rows to match ` B ` , then uses the resulting matched rows to match ` C ` . Only rows that match ` A ` , ` B ` , and ` C ` , are included in the row pattern match. 
 
-row_pattern_factor
+*row_pattern_factor* 
 
-This clause lets you specify a row pattern factor. A row pattern factor consists of a row pattern element, specified using the `row_pattern_primary` clause, and an optional row pattern quantifier, specified using the `row_pattern_quantifier` clause. 
+This clause lets you specify a row pattern factor. A row pattern factor consists of a row pattern element, specified using the *row_pattern_primary* clause, and an optional row pattern quantifier, specified using the *row_pattern_quantifier* clause. 
 
-row_pattern_primary
+*row_pattern_primary* 
 
-Use this clause to specify the row pattern element. [Table 19-1](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABIDGEJ "First column lists row pattern quantifiers; second column provides descriptions.") lists the valid row pattern elements and their descriptions. 
+Use this clause to specify the row pattern element. [ Table 19-1 ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABIDGEJ) lists the valid row pattern elements and their descriptions. 
 
-Table 19-1 Row Pattern Elements
+**Table: Row Pattern Elements** 
 
-Row Pattern Element | Description  
+Row Pattern Element  |  Description   
 ---|---  
-variable_name | Specify a primary pattern variable name that is defined in the row_pattern_definition clause. You cannot specify a union pattern variable that is defined in the row_pattern_subset_item clause.  
-$ | $ matches the position after the last row in the partition. This element is an anchor. Anchors work in terms of positions rather than rows.  
-^ | ^ matches the position before the first row in the partition. This element is an anchor. Anchors work in terms of positions rather than rows  
-( [row_pattern] ) | Use row_pattern to specify the row pattern to be matched. An empty pattern () matches an empty set of rows.  
-{- row_pattern -} | Exclusion syntax. Use row_pattern to specify parts of the pattern to be excluded from the output of ALL ROWS PER MATCH.  
-row_pattern_permute | Use row_pattern_permute to specify a pattern that is a permutation of row pattern elements. Refer to row_pattern_permute for the full semantics of this clause.  
+*variable_name*  |  Specify a primary pattern variable name that is defined in the *row_pattern_definition* clause. You cannot specify a union pattern variable that is defined in the *row_pattern_subset_item* clause.   
+` $ ` |  ` $ ` matches the position after the last row in the partition. This element is an anchor. Anchors work in terms of positions rather than rows.   
+` ^ ` |  ` ^ ` matches the position before the first row in the partition. This element is an anchor. Anchors work in terms of positions rather than rows   
+` ( ` ` [ ` *row_pattern* ` ] ` ` ) ` |  Use *row_pattern* to specify the row pattern to be matched. An empty pattern ` () ` matches an empty set of rows.   
+` {- ` *row_pattern* ` -} ` |  Exclusion syntax. Use *row_pattern* to specify parts of the pattern to be excluded from the output of ` ALL ` ` ROWS ` ` PER ` ` MATCH ` .   
+*row_pattern_permute*  |  Use *row_pattern_permute* to specify a pattern that is a permutation of row pattern elements. Refer to *row_pattern_permute* for the full semantics of this clause.   
   
-row_pattern_permute
+*row_pattern_permute* 
 
-Use the `PERMUTE` clause to express a pattern that is a permutation of the specified row pattern elements. For example, `PATTERN` `(PERMUTE` `(A,` `B,` `C))` is equivalent to an alternation of all permutations of the three row pattern elements `A`, `B`, and `C`, similar to the following: 
+Use the ` PERMUTE ` clause to express a pattern that is a permutation of the specified row pattern elements. For example, ` PATTERN ` ` (PERMUTE ` ` (A, ` ` B, ` ` C)) ` is equivalent to an alternation of all permutations of the three row pattern elements ` A ` , ` B ` , and ` C ` , similar to the following: 
     
     
+    ```
     PATTERN (A B C | A C B | B A C | B C A | C A B | C B A)
     
+    ```
 
-Note that the row pattern elements are expanded lexicographically and that each element to permute must be separated by a comma from the other elements.
+Note that the row pattern elements are expanded lexicographically and that each element to permute must be separated by a comma from the other elements. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9022) for more information on permutations 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9022) for more information on permutations 
 
-row_pattern_quantifier
+*row_pattern_quantifier* 
 
-Use this clause to specify the row pattern quantifier, which is a postfix operator that defines the number of iterations accepted for a match.
+Use this clause to specify the row pattern quantifier, which is a postfix operator that defines the number of iterations accepted for a match. 
 
-Row pattern quantifiers are referred to as greedy; they will attempt to match as many instances of the regular expression on which they are applied as possible. The exception is row pattern quantifiers that have a question mark (`?`) as a suffix, which are referred to as reluctant. They will attempt to match as few instances as possible of the regular expression on which they are applied. 
+Row pattern quantifiers are referred to as greedy; they will attempt to match as many instances of the regular expression on which they are applied as possible. The exception is row pattern quantifiers that have a question mark ( ` ? ` ) as a suffix, which are referred to as reluctant. They will attempt to match as few instances as possible of the regular expression on which they are applied. 
 
-[Table 19-2](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABGAGEF "First column lists row pattern quantifiers; second column provides descriptions.") lists the valid row pattern quantifiers and the number of iterations they accept for a match. In this table, `n` and `m` represent unsigned integers. 
+[ Table 19-2 ](SELECT.md#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABGAGEF) lists the valid row pattern quantifiers and the number of iterations they accept for a match. In this table, *n* and *m* represent unsigned integers. 
 
-Table 19-2 Row Pattern Quantifiers
+**Table: Row Pattern Quantifiers** 
 
-Row Pattern Quantifier | Number of Iterations Accepted for a Match  
+Row Pattern Quantifier  |  Number of Iterations Accepted for a Match   
 ---|---  
-* | 0 or more iterations (greedy)  
-*? | 0 or more iterations (reluctant)  
-+ | 1 or more iterations (greedy)  
-+? | 1 or more iterations (reluctant)  
-? | 0 or 1 iterations (greedy)  
-?? | 0 or 1 iterations (reluctant)  
-{n,} | n or more iterations, (n >= 0) (greedy)  
-{n,}? | n or more iterations, (n >= 0) (reluctant)  
-{n,m} | Between n and m iterations, inclusive, (0 <= n <= m, 0 < m) (greedy)  
-{n,m}? | Between n and m iterations, inclusive, (0 <= n <= m, 0 < m) (reluctant)  
-{,m} | Between 0 and m iterations, inclusive (m > 0) (greedy)  
-{,m}? | Between 0 and m iterations, inclusive (m > 0) (reluctant)  
-{n}? | n iterations, (n > 0)  
+` * ` |  0 or more iterations (greedy)   
+` *? ` |  0 or more iterations (reluctant)   
+` + ` |  1 or more iterations (greedy)   
+` +? ` |  1 or more iterations (reluctant)   
+` ? ` |  0 or 1 iterations (greedy)   
+` ?? ` |  0 or 1 iterations (reluctant)   
+` { ` *n* ` ,} ` |  *n* or more iterations, ( *n* >= 0) (greedy)   
+` { ` *n* ` ,}? ` |  *n* or more iterations, ( *n* >= 0) (reluctant)   
+` { ` *n* ` , ` *m* ` } ` |  Between *n* and *m* iterations, inclusive, (0 <= *n* <= *m* , 0 < *m* ) (greedy)   
+` { ` *n* ` , ` *m* ` }? ` |  Between *n* and *m* iterations, inclusive, (0 <= *n* <= *m* , 0 < *m* ) (reluctant)   
+` {, ` *m* ` } ` |  Between 0 and *m* iterations, inclusive ( *m* > 0) (greedy)   
+` {, ` *m* ` }? ` |  Between 0 and *m* iterations, inclusive ( *m* > 0) (reluctant)   
+` { ` *n* ` }? ` |  *n* iterations, ( *n* > 0)   
   
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8986) for more information on row pattern quantifiers 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8986) for more information on row pattern quantifiers 
 
-row_pattern_subset_clause
+*row_pattern_subset_clause* 
 
-The `SUBSET` clause lets you specify one or more union row pattern variables. Use the `row_pattern_subset_item` clause to declare each union row pattern variable. 
+The ` SUBSET ` clause lets you specify one or more union row pattern variables. Use the *row_pattern_subset_item* clause to declare each union row pattern variable. 
 
-You can specify union row pattern variables in the following clauses:
+You can specify union row pattern variables in the following clauses: 
 
-  * `MEASURES` clause: In the expression for a row pattern measure column. That is, in expression `expr` of the `row_pattern_measure_column` clause. 
+  * ` MEASURES ` clause: In the expression for a row pattern measure column. That is, in expression *expr* of the *row_pattern_measure_column* clause. 
 
-  * `DEFINE` clause: In the condition that defines a primary pattern variable. That is, in `condition` of the `row_pattern_definition` clause 
+  * ` DEFINE ` clause: In the condition that defines a primary pattern variable. That is, in *condition* of the *row_pattern_definition* clause 
 
 
 
 
-row_pattern_subset_item
+*row_pattern_subset_item* 
 
-This clause lets you create a grouping of multiple pattern variables that can be referred to with a variable name of its own. The variable name that refers to this grouping is called a union row pattern variable.
+This clause lets you create a grouping of multiple pattern variables that can be referred to with a variable name of its own. The variable name that refers to this grouping is called a union row pattern variable. 
 
-  * For `variable_name` on the left side of the equal sign, specify the name of the union row pattern variable. 
+  * For *variable_name* on the left side of the equal sign, specify the name of the union row pattern variable. 
 
-  * On the right side of the equal sign, specify a comma-separated list of distinct primary row pattern variables within parentheses. This list cannot include any union row pattern variables.
+  * On the right side of the equal sign, specify a comma-separated list of distinct primary row pattern variables within parentheses. This list cannot include any union row pattern variables. 
 
 
 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8989) for more information on defining union row pattern variables 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8989) for more information on defining union row pattern variables 
 
-DEFINE
+DEFINE 
 
-Use the `DEFINE` clause to specify one or more row pattern definitions. A row pattern definition specifies the conditions that a row must meet in order to be mapped to a specific pattern variable. 
+Use the ` DEFINE ` clause to specify one or more row pattern definitions. A row pattern definition specifies the conditions that a row must meet in order to be mapped to a specific pattern variable. 
 
-The `DEFINE` clause only supports running semantics. 
+The ` DEFINE ` clause only supports running semantics. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8999) for more information on the `DEFINE` clause 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8999) for more information on the ` DEFINE ` clause 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
 
 
 
 
-row_pattern_definition_list
+*row_pattern_definition_list* 
 
-This clause lets you specify one or more row pattern definitions.
+This clause lets you specify one or more row pattern definitions. 
 
-row_pattern_definition
+*row_pattern_definition* 
 
-This clause lets you specify a row pattern definition, which contains the conditions that a row must meet in order to be mapped to the specified pattern variable.
+This clause lets you specify a row pattern definition, which contains the conditions that a row must meet in order to be mapped to the specified pattern variable. 
 
-  * For `variable_name`, specify the name of the pattern variable. 
+  * For *variable_name* , specify the name of the pattern variable. 
 
-  * For `condition`, specify a condition as described in [Conditions](Conditions.html#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8), with the following extension: `condition` can contain any of the functions described by [row_pattern_navigation_func::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABDHIEA) and [row_pattern_aggregate_func::=](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBDCFA). 
+  * For *condition* , specify a condition as described in [ Conditions ](Conditions.md#GUID-C2E3ED44-16E7-4924-9125-E1693B1022A8) , with the following extension: *condition* can contain any of the functions described by *row_pattern_navigation_func::=* and *row_pattern_aggregate_func::=* . 
 
 
 
 
-row_pattern_rec_func
+*row_pattern_rec_func* 
 
-This clause comprises the following clauses, which let you specify row pattern recognition functions:
+This clause comprises the following clauses, which let you specify row pattern recognition functions: 
 
-  * `row_pattern_classifier_func`: Use this clause to specify the `CLASSIFIER` function, which returns a character string whose value is the name of the variable to which the row is mapped. 
+  * *row_pattern_classifier_func* : Use this clause to specify the ` CLASSIFIER ` function, which returns a character string whose value is the name of the variable to which the row is mapped. 
 
-  * `row_pattern_match_num_func`: Use this clause to specify the `MATCH_NUMBER` function, which returns a numeric value with scale 0 (zero) whose value is the sequential number of the match within the row pattern partition. 
+  * *row_pattern_match_num_func* : Use this clause to specify the ` MATCH_NUMBER ` function, which returns a numeric value with scale 0 (zero) whose value is the sequential number of the match within the row pattern partition. 
 
-  * `row_pattern_navigation_func`: Use this clause to specify functions that perform row pattern navigation operations. 
+  * *row_pattern_navigation_func* : Use this clause to specify functions that perform row pattern navigation operations. 
 
-  * `row_pattern_aggregate_func`: Use this clause to specify an aggregate function in the expression for a row pattern measure column or in the condition that defines a primary pattern variable. 
+  * *row_pattern_aggregate_func* : Use this clause to specify an aggregate function in the expression for a row pattern measure column or in the condition that defines a primary pattern variable. 
 
 
 
 
-You can specify row pattern recognition functions in the following clauses:
+You can specify row pattern recognition functions in the following clauses: 
 
-  * `MEASURES` clause: In the expression for a row pattern measure column. That is, in expression `expr` of the `row_pattern_measure_column` clause. 
+  * ` MEASURES ` clause: In the expression for a row pattern measure column. That is, in expression *expr* of the *row_pattern_measure_column* clause. 
 
-  * `DEFINE` clause: In the condition that defines a primary pattern variable. That is, in `condition` of the `row_pattern_definition` clause 
+  * ` DEFINE ` clause: In the condition that defines a primary pattern variable. That is, in *condition* of the *row_pattern_definition* clause 
 
 
 
 
-A row pattern recognition function may behave differently depending whether you specify it in the `MEASURES` or `DEFINE` clause. These details are explained in the semantics for each clause. 
+A row pattern recognition function may behave differently depending whether you specify it in the ` MEASURES ` or ` DEFINE ` clause. These details are explained in the semantics for each clause. 
 
-row_pattern_classifier_func
+*row_pattern_classifier_func* 
 
-The `CLASSIFIER` function returns a character string whose value is the name of the variable to which the row is mapped. 
+The ` CLASSIFIER ` function returns a character string whose value is the name of the variable to which the row is mapped. 
 
-  * In the `MEASURES` clause: 
+  * In the ` MEASURES ` clause: 
 
-    * If you specify `ONE` `ROW` `PER` `MATCH`, then the query uses the last row of the match when processing the `MEASURES` clause, so the `CLASSIFIER` function returns the name of the pattern variable to which the last row of the match is mapped. 
+    * If you specify ` ONE ` ` ROW ` ` PER ` ` MATCH ` , then the query uses the last row of the match when processing the ` MEASURES ` clause, so the ` CLASSIFIER ` function returns the name of the pattern variable to which the last row of the match is mapped. 
 
-    * If you specify `ALL` `ROWS` `PER` `MATCH`, then for each row of the match found, the `CLASSIFIER` function returns the name of the pattern variable to which the row is mapped. 
+    * If you specify ` ALL ` ` ROWS ` ` PER ` ` MATCH ` , then for each row of the match found, the ` CLASSIFIER ` function returns the name of the pattern variable to which the row is mapped. 
 
-For empty matchesâthat is, matches that contain no rows, the `CLASSIFER` function returns NULL. 
+For empty matches—that is, matches that contain no rows, the ` CLASSIFER ` function returns NULL. 
 
-  * In the `DEFINE` clause, the `CLASSIFIER` function returns the name of the primary pattern variable to which the current row is mapped. 
+  * In the ` DEFINE ` clause, the ` CLASSIFIER ` function returns the name of the primary pattern variable to which the current row is mapped. 
 
 
 
 
-row_pattern_match_num_func
+*row_pattern_match_num_func* 
 
-The `MATCH_NUMBER` function returns a numeric value with scale 0 (zero) whose value is the sequential number of the match within the row pattern partition. 
+The ` MATCH_NUMBER ` function returns a numeric value with scale 0 (zero) whose value is the sequential number of the match within the row pattern partition. 
 
-Matches within a row pattern partition are numbered sequentially starting with 1 in the order in which they are found. If multiple rows satisfy a match, then they are all assigned the same match number. Note that match numbering starts over again at 1 in each row pattern partition, because there is no inherent ordering between row pattern partitions.
+Matches within a row pattern partition are numbered sequentially starting with 1 in the order in which they are found. If multiple rows satisfy a match, then they are all assigned the same match number. Note that match numbering starts over again at 1 in each row pattern partition, because there is no inherent ordering between row pattern partitions. 
 
-  * In the `MEASURES` clause: You can use `MATCH_NUMBER` to obtain the sequential number of the match within the row pattern. 
+  * In the ` MEASURES ` clause: You can use ` MATCH_NUMBER ` to obtain the sequential number of the match within the row pattern. 
 
-  * In the `DEFINE` clause: You can use `MATCH_NUMBER` to define conditions that depend upon the match number. 
+  * In the ` DEFINE ` clause: You can use ` MATCH_NUMBER ` to define conditions that depend upon the match number. 
 
 
 
 
-row_pattern_navigation_func
+*row_pattern_navigation_func* 
 
-This clause lets you perform the following row pattern navigation operations:
+This clause lets you perform the following row pattern navigation operations: 
 
-  * Navigate among the group of rows mapped to a pattern variable using the `FIRST` and `LAST` functions of the `row_pattern_nav_logical` clause. 
+  * Navigate among the group of rows mapped to a pattern variable using the ` FIRST ` and ` LAST ` functions of the *row_pattern_nav_logical* clause. 
 
-  * Navigate among all rows in a row pattern partition using the `PREV` and `NEXT` functions of the `row_pattern_nav_physical` clause 
+  * Navigate among all rows in a row pattern partition using the ` PREV ` and ` NEXT ` functions of the *row_pattern_nav_physical* clause 
 
-  * Nest the `FIRST` or `LAST` function within the `PREV` or `NEXT` function using the `row_pattern_nav_compound` clause. 
+  * Nest the ` FIRST ` or ` LAST ` function within the ` PREV ` or ` NEXT ` function using the *row_pattern_nav_compound* clause. 
 
 
 
 
-row_pattern_nav_logical
+*row_pattern_nav_logical* 
 
-This clause lets you use the `FIRST` and `LAST` functions to navigate among the group of rows mapped to a pattern variable using an optional logical offset. 
+This clause lets you use the ` FIRST ` and ` LAST ` functions to navigate among the group of rows mapped to a pattern variable using an optional logical offset. 
 
-  * The `FIRST` function returns the value of expression `expr` when evaluated in the first row of the group of rows mapped to the pattern variable that is specified in `expr`. If no rows are mapped to the pattern variable, then the `FIRST` function returns NULL. 
+  * The ` FIRST ` function returns the value of expression *expr* when evaluated in the first row of the group of rows mapped to the pattern variable that is specified in *expr* . If no rows are mapped to the pattern variable, then the ` FIRST ` function returns NULL. 
 
-  * The `LAST` function returns the value of expression `expr` when evaluated in the last row of the group of rows mapped to the pattern variable that is specified in `expr`. If no rows are mapped to the pattern variable, then the `LAST` function returns NULL. 
+  * The ` LAST ` function returns the value of expression *expr* when evaluated in the last row of the group of rows mapped to the pattern variable that is specified in *expr* . If no rows are mapped to the pattern variable, then the ` LAST ` function returns NULL. 
 
-  * Use `expr` to specify the expression to be evaluated. It must contain at least one row pattern column reference. If it contains more than one row pattern column reference, then all must refer to the same pattern variable. 
+  * Use *expr* to specify the expression to be evaluated. It must contain at least one row pattern column reference. If it contains more than one row pattern column reference, then all must refer to the same pattern variable. 
 
-  * Use the optional `offset` to specify the logical offset within the set of rows mapped to the pattern variable. When specified with the `FIRST` function, the offset is the number of rows from the first row, in ascending order. When specified with the `LAST` function, the offset is the number of rows from the last row in descending order. The default offset is 0. 
+  * Use the optional *offset* to specify the logical offset within the set of rows mapped to the pattern variable. When specified with the ` FIRST ` function, the offset is the number of rows from the first row, in ascending order. When specified with the ` LAST ` function, the offset is the number of rows from the last row in descending order. The default offset is 0. 
 
-For `offset`, specify a non-negative integer. It must be a runtime constant (literal, bind variable, or expressions involving them), but not a column or subquery. 
+For *offset* , specify a non-negative integer. It must be a runtime constant (literal, bind variable, or expressions involving them), but not a column or subquery. 
 
-If you specify an `offset` that is greater than or equal to the number of rows mapped to the pattern variable minus 1, then the function returns NULL. 
+If you specify an *offset* that is greater than or equal to the number of rows mapped to the pattern variable minus 1, then the function returns NULL. 
 
 
 
 
-You can specify running or final semantics for the `FIRST` and `LAST` functions as follows: 
+You can specify running or final semantics for the ` FIRST ` and ` LAST ` functions as follows: 
 
-  * The `MEASURES` clause supports running and final semantics. Specify `RUNNING` for running semantics. Specify `FINAL` for final semantics. The default is `RUNNING`. 
+  * The ` MEASURES ` clause supports running and final semantics. Specify ` RUNNING ` for running semantics. Specify ` FINAL ` for final semantics. The default is ` RUNNING ` . 
 
-  * The `DEFINE` clause supports only running semantics. Therefore, running semantics will be used whether you specify or omit `RUNNING`. You cannot specify `FINAL`. 
+  * The ` DEFINE ` clause supports only running semantics. Therefore, running semantics will be used whether you specify or omit ` RUNNING ` . You cannot specify ` FINAL ` . 
 
-See Also:
+> **note:** See Also: 
+    * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9001) for more information on the ` FIRST ` and ` LAST ` functions 
 
-    * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9001) for more information on the `FIRST` and `LAST` functions 
+    * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
 
-    * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
 
 
 
+*row_pattern_nav_physical* 
 
-row_pattern_nav_physical
+This clause lets you use the ` PREV ` and ` NEXT ` functions to navigate all rows in a row pattern partition using an optional physical offset. 
 
-This clause lets you use the `PREV` and `NEXT` functions to navigate all rows in a row pattern partition using an optional physical offset. 
+  * The ` PREV ` function returns the value of expression *expr* when evaluated in the previous row in the partition. If there is no previous row in the partition, then the ` PREV ` function returns NULL. 
 
-  * The `PREV` function returns the value of expression `expr` when evaluated in the previous row in the partition. If there is no previous row in the partition, then the `PREV` function returns NULL. 
+  * The ` NEXT ` function returns the value of expression *expr* when evaluated in the next row in the partition. If there is no next row in the partition, then the NEXT function returns NULL. 
 
-  * The `NEXT` function returns the value of expression `expr` when evaluated in the next row in the partition. If there is no next row in the partition, then the NEXT function returns NULL. 
+  * Use *expr* to specify the expression to be evaluated. It must contain at least one row pattern column reference. If it contains more than one row pattern column reference, then all must refer to the same pattern variable. 
 
-  * Use `expr` to specify the expression to be evaluated. It must contain at least one row pattern column reference. If it contains more than one row pattern column reference, then all must refer to the same pattern variable. 
+  * Use the optional *offset* to specify the physical offset within the partition. When specified with the ` PREV ` function, it is the number of rows before the current row. When specified with the ` NEXT ` function, it is the number of rows after the current row. The default is 1. If you specify an offset of 0, then the current row is evaluated. 
 
-  * Use the optional `offset` to specify the physical offset within the partition. When specified with the `PREV` function, it is the number of rows before the current row. When specified with the `NEXT` function, it is the number of rows after the current row. The default is 1. If you specify an offset of 0, then the current row is evaluated. 
+For *offset* , specify a non-negative integer. It must be a runtime constant (literal, bind variable, or expressions involving them), but not a column or subquery. 
 
-For `offset`, specify a non-negative integer. It must be a runtime constant (literal, bind variable, or expressions involving them), but not a column or subquery. 
 
 
 
+The ` PREV ` and ` NEXT ` functions always use running semantics. Therefore, you cannot specify the ` RUNNING ` or ` FINAL ` keywords with this clause. 
 
-The `PREV` and `NEXT` functions always use running semantics. Therefore, you cannot specify the `RUNNING` or `FINAL` keywords with this clause. 
+> **note:** See Also: 
 
-See Also:
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8999) for more information on the ` PREV ` and ` NEXT ` functions 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8999) for more information on the `PREV` and `NEXT` functions 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
 
 
 
+*row_pattern_nav_compound* 
 
-row_pattern_nav_compound
+This clause lets you nest the *row_pattern_nav_logical* clause within the *row_pattern_nav_physical* clause. That is, it lets you nest the ` FIRST ` or ` LAST ` function within the ` PREV ` or ` NEXT ` function. The *row_pattern_nav_logical* clause is evaluated first and then the result is supplied to the *row_pattern_nav_physical* clause. 
 
-This clause lets you nest the `row_pattern_nav_logical` clause within the `row_pattern_nav_physical` clause. That is, it lets you nest the `FIRST` or `LAST` function within the `PREV` or `NEXT` function. The `row_pattern_nav_logical` clause is evaluated first and then the result is supplied to the `row_pattern_nav_physical` clause. 
+Refer to *row_pattern_nav_logical* and *row_pattern_nav_physical* for the full semantics of these clauses. 
 
-Refer to [row_pattern_nav_logical](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABHCBFE) and [row_pattern_nav_physical](SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFIFBC) for the full semantics of these clauses. 
+> **note:** See Also: 
 
-See Also:
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9015) for more information on nesting the ` FIRST ` and ` LAST ` functions within the ` PREV ` and ` NEXT ` functions 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9015) for more information on nesting the `FIRST` and `LAST` functions within the `PREV` and `NEXT` functions 
+*row_pattern_aggregate_func* 
 
-row_pattern_aggregate_func
+This clause lets you use an aggregate function in the expression for a row pattern measure column or in the condition that defines a primary pattern variable. 
 
-This clause lets you use an aggregate function in the expression for a row pattern measure column or in the condition that defines a primary pattern variable.
+For *aggregate_function* , specify any one of the [ AVG ](AVG.md#GUID-B64BCBF1-DAA0-4D88-9821-2C4D3FDE5E4A) , [ COUNT ](COUNT.md#GUID-AEF08B79-024D-4E3A-B362-9715FB011776) , [ MAX ](MAX.md#GUID-E5372020-A6DA-44BF-93BE-DA8C3F74CD01) , [ MIN ](MIN.md#GUID-F7F04E18-1AD8-4D15-9491-4622AD847A74) , or [ SUM ](SUM.md#GUID-5610BE2C-CFE5-446F-A1F7-B924B5663220) functions. The ` DISTINCT ` keyword is not supported. 
 
-For `aggregate_function`, specify any one of the [AVG](AVG.html#GUID-B64BCBF1-DAA0-4D88-9821-2C4D3FDE5E4A), [COUNT](COUNT.html#GUID-AEF08B79-024D-4E3A-B362-9715FB011776), [MAX](MAX.html#GUID-E5372020-A6DA-44BF-93BE-DA8C3F74CD01), [MIN](MIN.html#GUID-F7F04E18-1AD8-4D15-9491-4622AD847A74), or [SUM](SUM.html#GUID-5610BE2C-CFE5-446F-A1F7-B924B5663220) functions. The `DISTINCT` keyword is not supported. 
+You can specify running or final semantics for aggregate functions as follows: 
 
-You can specify running or final semantics for aggregate functions as follows:
+  * The ` MEASURES ` clause supports running and final semantics. Specify ` RUNNING ` for running semantics. Specify ` FINAL ` for final semantics. The default is ` RUNNING ` . 
 
-  * The `MEASURES` clause supports running and final semantics. Specify `RUNNING` for running semantics. Specify `FINAL` for final semantics. The default is `RUNNING`. 
+  * The ` DEFINE ` clause supports only running semantics. Therefore, running semantics will be used whether you specify or omit ` RUNNING ` . You cannot specify ` FINAL ` . 
 
-  * The `DEFINE` clause supports only running semantics. Therefore, running semantics will be used whether you specify or omit `RUNNING`. You cannot specify `FINAL`. 
 
 
 
+> **note:** See Also: 
 
-See Also:
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8998) for more information on aggregate functions 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG8998) for more information on aggregate functions 
+  * [ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
 
-  * [Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG9193) for more information on running and final semantics 
 
 
 
+Examples 
 
-Examples
+SQL Macros - Scalar Valued Macros: Examples 
 
-SQL Macros - Scalar Valued Macros: Examples
+Print Hello 
 
-Print Hello <name>
-
-A PL/SQL function `greet` is defined as a scalar SQL Macro that returns the string 'Hello, <name>! ' when called from a SQL `SELECT` statement. 
+A PL/SQL function ` greet ` is defined as a scalar SQL Macro that returns the string 'Hello,  ! ' when called from a SQL ` SELECT ` statement. 
     
     
+    ```
     create or replace function greet(name varchar2 default 'World')
                       return varchar2 SQL_MACRO(Scalar) is
     begin
-      return q'{ 'Hello, ' || name || '!' }';
+      return q'{ 'Hello, ' \|\| name \|\| '!' }';
     end;
     /
+    ```
 
-You can call `greet` in two ways: 
+You can call ` greet ` in two ways: 
 
-Option 1: Without passing an explicit argument . In this case the default argument is used and 'Hello World' is returned. 
+Option 1: Without passing an explicit argument  . In this case the default argument is used and 'Hello World' is returned. 
     
     
+    ```
     SELECT greet ('World') from dual;
     –---------------
     Hello, World! 
+    ```
 
-Option 2: Passing an explicit argument . In this case the argument passed is used and 'Hello Bob' is returned. 
+Option 2: Passing an explicit argument  . In this case the argument passed is used and 'Hello Bob' is returned. 
     
     
+    ```
     SELECT greet ('Bob') from dual;
     –---------------
     Hello, Bob! 
+    ```
 
-Split String Based on Delimiter
+Split String Based on Delimiter 
 
-The PL/SQL function `split_part` splits a string on the specified delimiter and returns the part at the specified position. 
+The PL/SQL function ` split_part ` splits a string on the specified delimiter and returns the part at the specified position. 
     
     
+    ```
     create or replace function split_part(string    varchar2, 
                                           delimiter varchar2,
                                           position  pls_integer)
               return varchar2 SQL_MACRO(Scalar) is
     begin
       return q'{
-        regexp_substr(replace(string, delimiter||delimiter, delimiter||' '||delimiter), 
-                      '[^'||delimiter||']+', 1, position, 'imx')
+        regexp_substr(replace(string, delimiter\|\|delimiter, delimiter\|\|' '\|\|delimiter), 
+                      '[^'\|\|delimiter\|\|']+', 1, position, 'imx')
       }';
     end;
     /
@@ -2779,12 +2813,14 @@ The PL/SQL function `split_part` splits a string on the specified delimiter and 
         –----
         OCT
     
+    ```
 
-SQL Macros - Table Valued Macros: Examples
+SQL Macros - Table Valued Macros: Examples 
 
-The macro function `budget` computes the amount of each department's budget for a given job. It returns the number of employees in each department with the specified job title. 
+The macro function ` budget ` computes the amount of each department's budget for a given job. It returns the number of employees in each department with the specified job title. 
     
     
+    ```
     create or replace function budget(job varchar2) return varchar2 SQL_MACRO is
     begin
       return q'{
@@ -2796,7 +2832,10 @@ The macro function `budget` computes the amount of each department's budget for 
     end;
     / 
     
+    ```
     
+    
+    ```
     
     SELECT * FROM budget ('MANAGER');
        DEPTNO     BUDGET
@@ -2805,12 +2844,14 @@ The macro function `budget` computes the amount of each department's budget for 
          30       2850
          10       2450
     
+    ```
 
-Using a PL/SQL Function in the WITH Clause: Examples
+Using a PL/SQL Function in the WITH Clause: Examples 
 
-The following example declares and defines a PL/SQL function `get_domain` in the `WITH` clause. The `get_domain` function returns the domain name from a URL string, assuming that the URL string has the "`www`" prefix immediately preceding the domain name, and the domain name is separated by dots on the left and right. The `SELECT` statement uses `get_domain` to find distinct catalog domain names from the `orders` table in the `oe` schema. 
+The following example declares and defines a PL/SQL function ` get_domain ` in the ` WITH ` clause. The ` get_domain ` function returns the domain name from a URL string, assuming that the URL string has the " ` www ` " prefix immediately preceding the domain name, and the domain name is separated by dots on the left and right. The ` SELECT ` statement uses ` get_domain ` to find distinct catalog domain names from the ` orders ` table in the ` oe ` schema. 
     
     
+    ```
     WITH
      FUNCTION get_domain(url VARCHAR2) RETURN VARCHAR2 IS
        pos BINARY_INTEGER;
@@ -2823,12 +2864,14 @@ The following example declares and defines a PL/SQL function `get_domain` in the
     SELECT DISTINCT get_domain(catalog_url)
       FROM product_information;
     /
+    ```
 
-Subquery Factoring: Example
+Subquery Factoring: Example 
 
-The following statement creates the query names `dept_costs` and `avg_cost` for the initial query block containing a join, and then uses the query names in the body of the main query. 
+The following statement creates the query names ` dept_costs ` and ` avg_cost ` for the initial query block containing a join, and then uses the query names in the body of the main query. 
     
     
+    ```
     WITH 
        dept_costs AS (
           SELECT department_name, SUM(salary) dept_total
@@ -2847,12 +2890,14 @@ The following statement creates the query names `dept_costs` and `avg_cost` for 
     ------------------------------ ----------
     Sales                              304500
     Shipping                           156400
+    ```
 
-Recursive Subquery Factoring: Examples
+Recursive Subquery Factoring: Examples 
 
-The following statement shows the employees who directly or indirectly report to employee 101 and their reporting level.
+The following statement shows the employees who directly or indirectly report to employee 101 and their reporting level. 
     
     
+    ```
     WITH
       reports_to_101 (eid, emp_last, mgr_id, reportLevel) AS
       (
@@ -2883,10 +2928,12 @@ The following statement shows the employees who directly or indirectly report to
            113 Popp                             108           2
            206 Gietz                            205           2
     
+    ```
 
-The following statement shows employees who directly or indirectly report to employee 101, their reporting level, and their management chain.
+The following statement shows employees who directly or indirectly report to employee 101, their reporting level, and their management chain. 
     
     
+    ```
     WITH
       reports_to_101 (eid, emp_last, mgr_id, reportLevel, mgr_list) AS
       (
@@ -2919,10 +2966,12 @@ The following statement shows employees who directly or indirectly report to emp
            113 Popp                             108           2  100,101,108
            206 Gietz                            205           2  100,101,205
     
+    ```
 
-The following statement shows the employees who directly or indirectly report to employee 101 and their reporting level. It stops at reporting level 1.
+The following statement shows the employees who directly or indirectly report to employee 101 and their reporting level. It stops at reporting level 1. 
     
     
+    ```
     WITH
       reports_to_101 (eid, emp_last, mgr_id, reportLevel) AS
       (
@@ -2948,10 +2997,12 @@ The following statement shows the employees who directly or indirectly report to
            204 Baer                             101           1
            205 Higgins                          101           1
     
+    ```
 
-The following statement shows the entire organization, indenting for each level of management.
+The following statement shows the entire organization, indenting for each level of management. 
     
     
+    ```
     WITH
       org_chart (eid, emp_last, mgr_id, reportLevel, salary, job_id) AS
       (
@@ -2989,10 +3040,12 @@ The following statement shows the entire organization, indenting for each level 
         Ande                    166        147       6400 SA_REP
     . . .
     
+    ```
 
-The following statement shows the entire organization, indenting for each level of management, with each level ordered by `hire_date`. The value of `is_cycle` is set to `Y` for any employee who has the same `hire_date` as any manager above him in the management chain. 
+The following statement shows the entire organization, indenting for each level of management, with each level ordered by *hire_date* . The value of *is_cycle* is set to ` Y ` for any employee who has the same *hire_date* as any manager above him in the management chain. 
     
     
+    ```
     WITH
       dup_hiredate (eid, emp_last, mgr_id, reportLevel, hire_date, job_id) AS
       (
@@ -3029,10 +3082,12 @@ The following statement shows the entire organization, indenting for each level 
           Chen                  110        108 28-SEP-05 FI_ACCOUNT        N
     . . .
     
+    ```
 
-The following statement counts the number of employees under each manager.
+The following statement counts the number of employees under each manager. 
     
     
+    ```
     WITH
       emp_count (eid, emp_last, mgr_id, mgrLevel, salary, cnt_employees) AS
       (
@@ -3061,12 +3116,14 @@ The following statement counts the number of employees under each manager.
     Hartstein                 201        100      13000                  1          1
     Kaufling                  122        100       7900                  8          1
     . . .
+    ```
 
-Analytic Views: Examples
+Analytic Views: Examples 
 
-The following statement uses the persistent analytic view sales_av. The query selects the `member_name` hierarchical attribute of time_hier, which is the alias of a hierarchy of the same name, and values from the sales and units measures of the analytic view that are dimensioned by the time attribute dimension used by the time_hier hierarchy.. The results of the selection are filtered to those for the YEAR level of the hierarchy. The results are returned in hierarchical order. 
+The following statement uses the persistent analytic view sales_av. The query selects the ` member_name ` hierarchical attribute of time_hier, which is the alias of a hierarchy of the same name, and values from the sales and units measures of the analytic view that are dimensioned by the time attribute dimension used by the time_hier hierarchy.. The results of the selection are filtered to those for the YEAR level of the hierarchy. The results are returned in hierarchical order. 
     
     
+    ```
     SELECT time_hier.member_name as TIME,
      sales,
      units
@@ -3075,10 +3132,12 @@ The following statement uses the persistent analytic view sales_av. The query se
     WHERE time_hier.level_name = 'YEAR'
     ORDER BY time_hier.hier_order;
     
+    ```
 
-The results of the query are the following:
+The results of the query are the following: 
     
     
+    ```
     TIME    SALES           UNITS
     ------  -------------  ---------
     CY2011  6755115980.73  24462444
@@ -3086,12 +3145,14 @@ The results of the query are the following:
     CY2013  7240938717.57  24407259
     CY2014  7579746352.89  24402666
     CY2015  7941102885.15  24475206
+    ```
 
-Transitory Analytic View Examples
+Transitory Analytic View Examples 
 
-The following statement defines the transitory analytic view my_av in the `WITH` clause. The transitory analytic view is based on the persistent analytic view sales_av. The lag_sales calculated measure is a `LAG` calculation that is used at query time. 
+The following statement defines the transitory analytic view my_av in the ` WITH ` clause. The transitory analytic view is based on the persistent analytic view sales_av. The lag_sales calculated measure is a ` LAG ` calculation that is used at query time. 
     
     
+    ```
     WITH
       my_av ANALYTIC VIEW AS (
         USING sales_av HIERARCHIES (time_hier)
@@ -3103,10 +3164,12 @@ The following statement defines the transitory analytic view my_av in the `WITH`
     FROM my_av HIERARCHIES (time_hier)
     WHERE time_hier.level_name = 'YEAR'
     ORDER BY time_hier.hier_order;
+    ```
 
-The results of the query are the following:
+The results of the query are the following: 
     
     
+    ```
     TIME         SALES   LAG_SALES
     ------  ----------  ----------
     CY2011  6755115981      (null)
@@ -3114,10 +3177,12 @@ The results of the query are the following:
     CY2013  7240938718  6901682399
     CY2014  7579746353  7240938718
     CY2015  7941102885  7579746353
+    ```
 
-The following statement defines a transitory analytic view that uses a filter clause.
+The following statement defines a transitory analytic view that uses a filter clause. 
     
     
+    ```
     WITH
       my_av ANALYTIC VIEW AS (
         USING sales_av HIERARCHIES (time_hier)
@@ -3130,10 +3195,12 @@ The following statement defines a transitory analytic view that uses a filter cl
       FROM my_av HIERARCHIES (time_hier)
       WHERE time_hier.level_name IN ('YEAR', 'QUARTER')
       ORDER BY time_hier.hier_order;
+    ```
 
-The results of the query are the following:
+The results of the query are the following: 
     
     
+    ```
     TIME           SALES
     --------  ----------
     CY2011    3340459835
@@ -3142,12 +3209,14 @@ The results of the query are the following:
     CY2012    3397271965
     Q1CY2012  1644857783
     Q2CY2012  1752414182
+    ```
 
-Inline Analytic View Example
+Inline Analytic View Example 
 
-The following statement defines an inline analytic view in the `FROM` clause. The transitory analytic view is based on the persistent analytic view sales_av. The lag_sales calculated measure is a `LAG` calculation that is used at query time. 
+The following statement defines an inline analytic view in the ` FROM ` clause. The transitory analytic view is based on the persistent analytic view sales_av. The lag_sales calculated measure is a ` LAG ` calculation that is used at query time. 
     
     
+    ```
     SELECT time_hier.member_name time, sales, lag_sales
     FROM
       ANALYTIC VIEW (
@@ -3158,10 +3227,12 @@ The following statement defines an inline analytic view in the `FROM` clause. Th
       )
     WHERE time_hier.level_name = 'YEAR'
     ORDER BY time_hier.hier_order;
+    ```
 
-The results of the query are the following:
+The results of the query are the following: 
     
     
+    ```
     TIME         SALES   LAG_SALES
     ------  ----------  ----------
     CY2011  6755115981      (null)
@@ -3169,30 +3240,36 @@ The results of the query are the following:
     CY2013  7240938718  6901682399
     CY2014  7579746353  7240938718
     CY2015  7941102885  7579746353
+    ```
 
-Simple Query Examples
+Simple Query Examples 
 
-The following statement selects rows from the `employees` table with the department number of 30: 
+The following statement selects rows from the ` employees ` table with the department number of 30: 
     
     
+    ```
     SELECT * 
        FROM employees 
        WHERE department_id = 30
        ORDER BY last_name;
     
+    ```
 
-The following statement selects the name, job, salary and department number of all employees except purchasing clerks from department number 30:
+The following statement selects the name, job, salary and department number of all employees except purchasing clerks from department number 30: 
     
     
+    ```
     SELECT last_name, job_id, salary, department_id 
        FROM employees 
        WHERE NOT (job_id = 'PU_CLERK' AND department_id = 30)
        ORDER BY last_name; 
     
+    ```
 
-The following statement selects from subqueries in the `FROM` clause and for each department returns the total employees and salaries as a decimal value of all the departments: 
+The following statement selects from subqueries in the ` FROM ` clause and for each department returns the total employees and salaries as a decimal value of all the departments: 
     
     
+    ```
     SELECT a.department_id "Department",
        a.num_emp/b.total_count "%_Employees",
        a.sal_sum/b.total_sal "%_Salary"
@@ -3203,48 +3280,58 @@ The following statement selects from subqueries in the `FROM` clause and for eac
     (SELECT COUNT(*) total_count, SUM(salary) total_sal
        FROM employees) b
     ORDER BY a.department_id;
+    ```
 
-Selecting from a Partition: Example
+Selecting from a Partition: Example 
 
-You can select rows from a single partition of a partitioned table by specifying the keyword `PARTITION` in the `FROM` clause. This SQL statement assigns an alias for and retrieves rows from the `sales_q2_2000` partition of the sample table `sh.sales`: 
+You can select rows from a single partition of a partitioned table by specifying the keyword ` PARTITION ` in the ` FROM ` clause. This SQL statement assigns an alias for and retrieves rows from the ` sales_q2_2000 ` partition of the sample table ` sh.sales ` : 
     
     
+    ```
     SELECT * FROM sales PARTITION (sales_q2_2000) s
        WHERE s.amount_sold > 1500
        ORDER BY cust_id, time_id, channel_id;
     
+    ```
 
-The following example selects rows from the `oe.orders` table for orders earlier than a specified date: 
+The following example selects rows from the ` oe.orders ` table for orders earlier than a specified date: 
     
     
+    ```
     SELECT * FROM orders
        WHERE order_date < TO_DATE('2006-06-15', 'YYYY-MM-DD');
+    ```
 
-Selecting a Sample: Examples
+Selecting a Sample: Examples 
 
-The following query estimates the number of orders in the `oe.orders` table: 
+The following query estimates the number of orders in the ` oe.orders ` table: 
     
     
+    ```
     SELECT COUNT(*) * 10 FROM orders SAMPLE (10);
     
     COUNT(*)*10
     -----------
              70
     
+    ```
 
 Because the query returns an estimate, the actual return value may differ from one query to the next. 
     
     
+    ```
     SELECT COUNT(*) * 10 FROM orders SAMPLE (10);
     
     COUNT(*)*10
     -----------
              80
     
+    ```
 
-The following query adds a seed value to the preceding query. Oracle Database always returns the same estimate given the same seed value:
+The following query adds a seed value to the preceding query. Oracle Database always returns the same estimate given the same seed value: 
     
     
+    ```
     SELECT COUNT(*) * 10 FROM orders SAMPLE(10) SEED (1);
     
     COUNT(*)*10
@@ -3262,12 +3349,14 @@ The following query adds a seed value to the preceding query. Oracle Database al
     COUNT(*)*10
     -----------
             130
+    ```
 
-Using Flashback Queries: Example
+Using Flashback Queries: Example 
 
-The following statements show a current value from the sample table `hr.employees` and then change the value. The intervals used in these examples are very short for demonstration purposes. Time intervals in your own environment are likely to be larger. 
+The following statements show a current value from the sample table ` hr.employees ` and then change the value. The intervals used in these examples are very short for demonstration purposes. Time intervals in your own environment are likely to be larger. 
     
     
+    ```
     SELECT salary FROM employees
        WHERE last_name = 'Chung';
        
@@ -3286,10 +3375,12 @@ The following statements show a current value from the sample table `hr.employee
     ----------
           4000
     
+    ```
 
-To learn what the value was before the update, you can use the following Flashback Query:
+To learn what the value was before the update, you can use the following Flashback Query: 
     
     
+    ```
     SELECT salary FROM employees
        AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '1' MINUTE)
        WHERE last_name = 'Chung';
@@ -3298,20 +3389,24 @@ To learn what the value was before the update, you can use the following Flashba
     ----------
           3800
     
+    ```
 
-To learn what the values were during a particular time period, you can use a version Flashback Query:
+To learn what the values were during a particular time period, you can use a version Flashback Query: 
     
     
+    ```
     SELECT salary FROM employees
       VERSIONS BETWEEN TIMESTAMP
         SYSTIMESTAMP - INTERVAL '10' MINUTE AND
         SYSTIMESTAMP - INTERVAL '1' MINUTE
       WHERE last_name = 'Chung';
     
+    ```
 
-To revert to the earlier value, use the Flashback Query as the subquery of another `UPDATE` statement: 
+To revert to the earlier value, use the Flashback Query as the subquery of another ` UPDATE ` statement: 
     
     
+    ```
     UPDATE employees SET salary =      
        (SELECT salary FROM employees
        AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '2' MINUTE)
@@ -3325,29 +3420,36 @@ To revert to the earlier value, use the Flashback Query as the subquery of anoth
         SALARY
     ----------
           3800
+    ```
 
-Using the GROUP BY Clause: Examples
+Using the GROUP BY Clause: Examples 
 
-To return the minimum and maximum salaries for each department in the `employees` table, issue the following statement: 
+To return the minimum and maximum salaries for each department in the ` employees ` table, issue the following statement: 
     
     
+    ```
     SELECT department_id, MIN(salary), MAX (salary)
          FROM employees
          GROUP BY department_id
        ORDER BY department_id;
     
+    ```
 
-To return the minimum and maximum salaries for the clerks in each department, issue the following statement:
+To return the minimum and maximum salaries for the clerks in each department, issue the following statement: 
     
     
+    ```
     SELECT department_id, MIN(salary), MAX (salary)
          FROM employees
          WHERE job_id = 'PU_CLERK'
          GROUP BY department_id
        ORDER BY department_id;
+    ```
 
-The following example counts how many employees were hired each year. The `GROUP BY` clause uses the column alias `YEAR_HIRED`, so this groups using the expression `TRUNC(hire_date, 'YYYY')`
+The following example counts how many employees were hired each year. The ` GROUP BY ` clause uses the column alias ` YEAR_HIRED ` , so this groups using the expression ` TRUNC(hire_date, 'YYYY') `
     
+    
+    ```
     
     SELECT TRUNC(hire_date, 'YYYY') year_hired, COUNT(*)
     FROM employees
@@ -3361,9 +3463,12 @@ The following example counts how many employees were hired each year. The `GROUP
     ...
     01-JAN-2017 19
     01-JAN-2018 11
+    ```
 
-The following example counts how many employees were hired each day. The query groups by `HIRE_DATE`, which is the name of a column in `EMPLOYEES` and a `SELECT` list alias. The column name takes priority, so the query groups by the column, not the alias. 
+The following example counts how many employees were hired each day. The query groups by ` HIRE_DATE ` , which is the name of a column in ` EMPLOYEES ` and a ` SELECT ` list alias. The column name takes priority, so the query groups by the column, not the alias. 
     
+    
+    ```
     
     SELECT TRUNC(hire_date, 'YYYY') hire_date, COUNT(*)
     FROM employees
@@ -3378,12 +3483,14 @@ The following example counts how many employees were hired each day. The query g
     ...
     01-JAN-2018 1
     01-JAN-2018 1
+    ```
 
-Using the GROUP BY CUBE Clause: Example
+Using the GROUP BY CUBE Clause: Example 
 
-To return the number of employees and their average yearly salary across all possible combinations of department and job category, issue the following query on the sample tables `hr.employees` and `hr.departments`: 
+To return the number of employees and their average yearly salary across all possible combinations of department and job category, issue the following query on the sample tables ` hr.employees ` and ` hr.departments ` : 
     
     
+    ```
     SELECT DECODE(GROUPING(department_name), 1, 'All Departments',
           department_name) AS department_name,
        DECODE(GROUPING(job_id), 1, 'All Jobs', job_id) AS job_id,
@@ -3402,23 +3509,25 @@ To return the number of employees and their average yearly salary across all pos
     . . .
     Shipping                       ST_CLERK           20       33420
     Shipping                       ST_MAN              5       87360
+    ```
 
-Using the GROUPING SETS Clause: Example
+Using the GROUPING SETS Clause: Example 
 
-The following example finds the sum of sales aggregated for three precisely specified groups:
+The following example finds the sum of sales aggregated for three precisely specified groups: 
 
-  * `(channel_desc, calendar_month_desc, country_id)`
+  * ` (channel_desc, calendar_month_desc, country_id) `
 
-  * `(channel_desc, country_id)`
+  * ` (channel_desc, country_id) `
 
-  * `(calendar_month_desc, country_id)`
-
-
+  * ` (calendar_month_desc, country_id) `
 
 
-Without the `GROUPING` `SETS` syntax, you would have to write less efficient queries with more complicated SQL. For example, you could run three separate queries and `UNION` them, or run a query with a `CUBE(channel_desc, calendar_month_desc, country_id)` operation and filter out five of the eight groups it would generate. 
+
+
+Without the ` GROUPING ` ` SETS ` syntax, you would have to write less efficient queries with more complicated SQL. For example, you could run three separate queries and ` UNION ` them, or run a query with a ` CUBE(channel_desc, calendar_month_desc, country_id) ` operation and filter out five of the eight groups it would generate. 
     
     
+    ```
     SELECT channel_desc, calendar_month_desc, co.country_id,
           TO_CHAR(sum(amount_sold) , '9,999,999,999') SALES$
        FROM sales, customers, times, channels, countries co
@@ -3444,37 +3553,43 @@ Without the `GROUPING` `SETS` syntax, you would have to write less efficient que
                          2000-10       52790        819,351
     Internet                           52790        261,278
     Direct Sales                       52790      1,320,497
+    ```
 
-See Also:
+> **note:** See Also: 
 
-The functions [GROUP_ID](GROUP_ID.html#GUID-3A5A9C15-1B67-4FD7-AC41-EE8349B2E834), [GROUPING](GROUPING.html#GUID-82E6084A-0BDF-4587-A40E-36899783F073), and [GROUPING_ID](GROUPING_ID.html#GUID-E20A5B8E-73B6-42FD-8AFB-DD3CD6D6DC61) for more information on those functions 
+The functions [ GROUP_ID ](GROUP_ID.md#GUID-3A5A9C15-1B67-4FD7-AC41-EE8349B2E834) , [ GROUPING ](GROUPING.md#GUID-82E6084A-0BDF-4587-A40E-36899783F073) , and [ GROUPING_ID ](GROUPING_ID.md#GUID-E20A5B8E-73B6-42FD-8AFB-DD3CD6D6DC61) for more information on those functions 
 
-Hierarchical Query: Examples
+Hierarchical Query: Examples 
 
-The following query with a `CONNECT` `BY` clause defines a hierarchical relationship in which the `employee_id` value of the parent row is equal to the `manager_id` value of the child row: 
+The following query with a ` CONNECT ` ` BY ` clause defines a hierarchical relationship in which the ` employee_id ` value of the parent row is equal to the ` manager_id ` value of the child row: 
     
     
+    ```
     SELECT last_name, employee_id, manager_id FROM employees
        CONNECT BY employee_id = manager_id
        ORDER BY last_name;
     
+    ```
 
-In the following `CONNECT` `BY` clause, the `PRIOR` operator applies only to the `employee_id` value. To evaluate this condition, the database evaluates `employee_id` values for the parent row and `manager_id`, `salary`, and `commission_pct` values for the child row: 
+In the following ` CONNECT ` ` BY ` clause, the ` PRIOR ` operator applies only to the ` employee_id ` value. To evaluate this condition, the database evaluates ` employee_id ` values for the parent row and ` manager_id ` , ` salary ` , and ` commission_pct ` values for the child row: 
     
     
+    ```
     SELECT last_name, employee_id, manager_id FROM employees
        CONNECT BY PRIOR employee_id = manager_id
        AND salary > commission_pct
        ORDER BY last_name; 
     
+    ```
 
-To qualify as a child row, a row must have a `manager_id` value equal to the `employee_id` value of the parent row and it must have a `salary` value greater than its `commission_pct` value. 
+To qualify as a child row, a row must have a ` manager_id ` value equal to the ` employee_id ` value of the parent row and it must have a ` salary ` value greater than its ` commission_pct ` value. 
 
-Using the HAVING Condition: Example
+Using the HAVING Condition: Example 
 
-To return the minimum and maximum salaries for the employees in each department whose lowest salary is less than $5,000, issue the next statement:
+To return the minimum and maximum salaries for the employees in each department whose lowest salary is less than $5,000, issue the next statement: 
     
     
+    ```
     SELECT department_id, MIN(salary), MAX (salary)
        FROM employees
        GROUP BY department_id
@@ -3488,48 +3603,58 @@ To return the minimum and maximum salaries for the employees in each department 
                50        2100        8200
                60        4200        9000
     
+    ```
 
-The following example uses a correlated subquery in a `HAVING` clause that eliminates from the result set any departments without managers and managers without departments: 
+The following example uses a correlated subquery in a ` HAVING ` clause that eliminates from the result set any departments without managers and managers without departments: 
     
     
+    ```
     SELECT department_id, manager_id 
        FROM employees 
        GROUP BY department_id, manager_id HAVING (department_id, manager_id) IN
        (SELECT department_id, manager_id FROM employees x 
           WHERE x.department_id = employees.department_id)
        ORDER BY department_id;
+    ```
 
-Using the ORDER BY Clause: Examples
+Using the ORDER BY Clause: Examples 
 
-To select all purchasing clerk records from `employees` and order the results by salary in descending order, issue the following statement: 
+To select all purchasing clerk records from ` employees ` and order the results by salary in descending order, issue the following statement: 
     
     
+    ```
     SELECT * 
        FROM employees
        WHERE job_id = 'PU_CLERK' 
        ORDER BY salary DESC; 
     
+    ```
 
-To select information from `employees` ordered first by ascending department number and then by descending salary, issue the following statement: 
+To select information from ` employees ` ordered first by ascending department number and then by descending salary, issue the following statement: 
     
     
+    ```
     SELECT last_name, department_id, salary
        FROM employees
        ORDER BY department_id ASC, salary DESC, last_name; 
     
+    ```
 
-To select the same information as the previous `SELECT` and use the positional `ORDER` `BY` notation, issue the following statement, which orders by ascending `department_id`, then descending `salary`, and finally alphabetically by `last_name`: 
+To select the same information as the previous ` SELECT ` and use the positional ` ORDER ` ` BY ` notation, issue the following statement, which orders by ascending ` department_id ` , then descending ` salary ` , and finally alphabetically by ` last_name ` : 
     
     
+    ```
     SELECT last_name, department_id, salary 
        FROM employees 
        ORDER BY 2 ASC, 3 DESC, 1; 
+    ```
 
-The MODEL clause: Examples
+The MODEL clause: Examples 
 
-The view created below is based on the sample `sh` schema and is used by the example that follows. 
+The view created below is based on the sample ` sh ` schema and is used by the example that follows. 
     
     
+    ```
     CREATE OR REPLACE VIEW sales_view_ref AS
       SELECT country_name country,
              prod_name prod,
@@ -3572,17 +3697,19 @@ The view created below is based on the sample `sh` schema and is used by the exa
      
     16 rows selected.
     
+    ```
 
-The next example creates a multidimensional array from `sales_view_ref` with columns containing country, product, year, and sales. It also: 
+The next example creates a multidimensional array from ` sales_view_ref ` with columns containing country, product, year, and sales. It also: 
 
-  * Assigns the sum of the sales of the Mouse Pad for years 1999 and 2000 to the sales of the Mouse Pad for year 2001, if a row containing sales of the Mouse Pad for year 2001 exists.
+  * Assigns the sum of the sales of the Mouse Pad for years 1999 and 2000 to the sales of the Mouse Pad for year 2001, if a row containing sales of the Mouse Pad for year 2001 exists. 
 
-  * Assigns the value of sales of the Standard Mouse for year 2001 to sales of the Standard Mouse for year 2002, creating a new row if a row containing sales of the Standard Mouse for year 2002 does not exist.
+  * Assigns the value of sales of the Standard Mouse for year 2001 to sales of the Standard Mouse for year 2002, creating a new row if a row containing sales of the Standard Mouse for year 2002 does not exist. 
 
 
 
     
     
+    ```
     SELECT country,prod,year,s
       FROM sales_view_ref
       MODEL
@@ -3622,18 +3749,20 @@ The next example creates a multidimensional array from `sales_view_ref` with col
     
     18 rows selected.
     
+    ```
 
-The first rule uses `UPDATE` behavior because symbolic referencing is used on the left-hand side of the rule. The rows represented by the left-hand side of the rule exist, so the measure columns are updated. If the rows did not exist, then no action would have been taken. 
+The first rule uses ` UPDATE ` behavior because symbolic referencing is used on the left-hand side of the rule. The rows represented by the left-hand side of the rule exist, so the measure columns are updated. If the rows did not exist, then no action would have been taken. 
 
-The second rule uses `UPSERT` behavior because positional referencing is used on the left-hand side and a single cell is referenced. The rows do not exist, so new rows are inserted and the related measure columns are updated. If the rows did exist, then the measure columns would have been updated. 
+The second rule uses ` UPSERT ` behavior because positional referencing is used on the left-hand side and a single cell is referenced. The rows do not exist, so new rows are inserted and the related measure columns are updated. If the rows did exist, then the measure columns would have been updated. 
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG021) for an expanded discussion and examples 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG021) for an expanded discussion and examples 
 
-The next example uses the same `sales_view_ref` view and the analytic function `SUM` to calculate a cumulative sum (`csum`) of sales per country and per year. 
+The next example uses the same ` sales_view_ref ` view and the analytic function ` SUM ` to calculate a cumulative sum ( ` csum ` ) of sales per country and per year. 
     
     
+    ```
     SELECT country, year, sale, csum
        FROM 
        (SELECT country, year, SUM(sale) sale
@@ -3661,12 +3790,14 @@ The next example uses the same `sales_view_ref` view and the analytic function `
     Germany               2001   15991.21   53557.54
      
     8 rows selected.
+    ```
 
-Row Limiting: Examples
+Row Limiting: Examples 
 
-The following statement returns the 5 employees with the lowest `employee_id` values: 
+The following statement returns the 5 employees with the lowest ` employee_id ` values: 
     
     
+    ```
     SELECT employee_id, last_name
       FROM employees
       ORDER BY employee_id
@@ -3680,10 +3811,12 @@ The following statement returns the 5 employees with the lowest `employee_id` va
             103 Hunold
             104 Ernst
     
+    ```
 
-The following statement returns the next 5 employees with the lowest `employee_id` values: 
+The following statement returns the next 5 employees with the lowest ` employee_id ` values: 
     
     
+    ```
     SELECT employee_id, last_name
       FROM employees
       ORDER BY employee_id
@@ -3697,10 +3830,12 @@ The following statement returns the next 5 employees with the lowest `employee_i
             108 Greenberg
             109 Faviet
     
+    ```
 
-The following statement returns the 5 percent of employees with the lowest salaries:
+The following statement returns the 5 percent of employees with the lowest salaries: 
     
     
+    ```
     SELECT employee_id, last_name, salary
       FROM employees
       ORDER BY salary
@@ -3715,10 +3850,12 @@ The following statement returns the 5 percent of employees with the lowest salar
             135 Gee                             2400
             119 Colmenares                      2500
     
+    ```
 
-Because `WITH` `TIES` is specified, the following statement returns the 5 percent of employees with the lowest salaries, plus all additional employees with the same salary as the last row fetched in the previous example: 
+Because ` WITH ` ` TIES ` is specified, the following statement returns the 5 percent of employees with the lowest salaries, plus all additional employees with the same salary as the last row fetched in the previous example: 
     
     
+    ```
     SELECT employee_id, last_name, salary
       FROM employees
       ORDER BY salary
@@ -3737,12 +3874,14 @@ Because `WITH` `TIES` is specified, the following statement returns the 5 percen
             144 Vargas                          2500
             182 Sullivan                        2500
             191 Perkins                         2500
+    ```
 
-Using the FOR UPDATE Clause: Examples
+Using the FOR UPDATE Clause: Examples 
 
-The following statement locks rows in the `employees` table with purchasing clerks located in Oxford, which has `location_id` 2500, and locks rows in the `departments` table with departments in Oxford that have purchasing clerks: 
+The following statement locks rows in the ` employees ` table with purchasing clerks located in Oxford, which has ` location_id ` 2500, and locks rows in the ` departments ` table with departments in Oxford that have purchasing clerks: 
     
     
+    ```
     SELECT e.employee_id, e.salary, e.commission_pct
        FROM employees e, departments d
        WHERE job_id = 'SA_REP'
@@ -3751,10 +3890,12 @@ The following statement locks rows in the `employees` table with purchasing cler
        ORDER BY e.employee_id
        FOR UPDATE;
     
+    ```
 
-The following statement locks only those rows in the `employees` table with purchasing clerks located in Oxford. No rows are locked in the `departments` table: 
+The following statement locks only those rows in the ` employees ` table with purchasing clerks located in Oxford. No rows are locked in the ` departments ` table: 
     
     
+    ```
     SELECT e.employee_id, e.salary, e.commission_pct
        FROM employees e JOIN departments d
        USING (department_id)
@@ -3762,32 +3903,38 @@ The following statement locks only those rows in the `employees` table with purc
        AND location_id = 2500
        ORDER BY e.employee_id
        FOR UPDATE OF e.salary;
+    ```
 
-Using the WITH CHECK OPTION Clause: Example
+Using the WITH CHECK OPTION Clause: Example 
 
-The following statement is legal even though the third value inserted violates the condition of the subquery `where_clause`: 
+The following statement is legal even though the third value inserted violates the condition of the subquery *where_clause* : 
     
     
+    ```
     INSERT INTO (SELECT department_id, department_name, location_id
        FROM departments WHERE location_id < 2000)
        VALUES (9999, 'Entertainment', 2500);
     
+    ```
 
-However, the following statement is illegal because it contains the `WITH` `CHECK` `OPTION` clause: 
+However, the following statement is illegal because it contains the ` WITH ` ` CHECK ` ` OPTION ` clause: 
     
     
+    ```
     INSERT INTO (SELECT department_id, department_name, location_id
        FROM departments WHERE location_id < 2000 WITH CHECK OPTION)
        VALUES (9999, 'Entertainment', 2500);
          *
     ERROR at line 2:
     ORA-01402: view WITH CHECK OPTION where-clause violation
+    ```
 
-Using PIVOT and UNPIVOT: Examples
+Using PIVOT and UNPIVOT: Examples 
 
-The `oe.orders` table contains information about when an order was placed (`order_date`), how it was place (`order_mode`), and the total amount of the order (`order_total`), as well as other information. The following example shows how to use the `PIVOT` clause to pivot `order_mode` values into columns, aggregating `order_total` data in the process, to get yearly totals by order mode: 
+The ` oe.orders ` table contains information about when an order was placed ( ` order_date ` ), how it was place ( ` order_mode ` ), and the total amount of the order ( ` order_total ` ), as well as other information. The following example shows how to use the ` PIVOT ` clause to pivot ` order_mode ` values into columns, aggregating ` order_total ` data in the process, to get yearly totals by order mode: 
     
     
+    ```
     CREATE TABLE pivot_table AS
     SELECT * FROM
     (SELECT EXTRACT(YEAR FROM order_date) year, order_mode, order_total FROM orders)
@@ -3803,10 +3950,12 @@ The `oe.orders` table contains information about when an order was placed (`orde
           2007  1274078.8  1271019.5
           2008   252108.3   393349.4
     
+    ```
 
-The `UNPIVOT` clause lets you rotate specified columns so that the input column headings are output as values of one or more descriptor columns, and the input column values are output as values of one or more measures columns. The first query that follows shows that nulls are excluded by default. The second query shows that you can include nulls using the `INCLUDE` `NULLS` clause. 
+The ` UNPIVOT ` clause lets you rotate specified columns so that the input column headings are output as values of one or more descriptor columns, and the input column values are output as values of one or more measures columns. The first query that follows shows that nulls are excluded by default. The second query shows that you can include nulls using the ` INCLUDE ` ` NULLS ` clause. 
     
     
+    ```
     SELECT * FROM pivot_table
       UNPIVOT (yearly_total FOR order_mode IN (store AS 'direct',
                internet AS 'online'))
@@ -3841,12 +3990,14 @@ The `UNPIVOT` clause lets you rotate specified columns so that the input column 
           2008 online     393349.4
     
     8 rows selected.
+    ```
 
-Using Join Queries: Examples
+Using Join Queries: Examples 
 
-The following examples show various ways of joining tables in a query. In the first example, an equijoin returns the name and job of each employee and the number and name of the department in which the employee works:
+The following examples show various ways of joining tables in a query. In the first example, an equijoin returns the name and job of each employee and the number and name of the department in which the employee works: 
     
     
+    ```
     SELECT last_name, job_id, departments.department_id, department_name
        FROM employees, departments
        WHERE employees.department_id = departments.department_id
@@ -3860,16 +4011,20 @@ The following examples show various ways of joining tables in a query. In the fi
     Austin               IT_PROG              60 IT
     . . .
     
+    ```
 
 You must use a join to return this data because employee names and jobs are stored in a different table than department names. Oracle Database combines rows of the two tables according to this join condition: 
     
     
+    ```
     employees.department_id = departments.department_id 
     
+    ```
 
-The following equijoin returns the name, job, department number, and department name of all sales managers:
+The following equijoin returns the name, job, department number, and department name of all sales managers: 
     
     
+    ```
     SELECT last_name, job_id, departments.department_id, department_name
        FROM employees, departments
        WHERE employees.department_id = departments.department_id
@@ -3884,42 +4039,50 @@ The following equijoin returns the name, job, department number, and department 
     Russell             SA_MAN                80 Sales
     Zlotkey             SA_MAN                80 Sales
     
+    ```
 
-This query is identical to the preceding example, except that it uses an additional `where_clause` condition to return only rows with a `job` value of '`SA_MAN`'. 
+This query is identical to the preceding example, except that it uses an additional *where_clause* condition to return only rows with a ` job ` value of ' ` SA_MAN ` '. 
 
-Using Subqueries: Examples
+Using Subqueries: Examples 
 
-To determine who works in the same department as employee '`Lorentz`', issue the following statement: 
+To determine who works in the same department as employee ' ` Lorentz ` ', issue the following statement: 
     
     
+    ```
     SELECT last_name, department_id FROM employees
        WHERE department_id =
          (SELECT department_id FROM employees
           WHERE last_name = 'Lorentz')
        ORDER BY last_name, department_id; 
     
+    ```
 
-To give all employees in the `employees` table a 10% raise if they have changed jobsâif they appear in the `job_history` tableâissue the following statement: 
+To give all employees in the ` employees ` table a 10% raise if they have changed jobs—if they appear in the ` job_history ` table—issue the following statement: 
     
     
+    ```
     UPDATE employees 
         SET salary = salary * 1.1
         WHERE employee_id IN (SELECT employee_id FROM job_history);
     
+    ```
 
-To create a second version of the `departments` table `new_departments`, with only three of the columns of the original table, issue the following statement: 
+To create a second version of the ` departments ` table ` new_departments ` , with only three of the columns of the original table, issue the following statement: 
     
     
+    ```
     CREATE TABLE new_departments 
        (department_id, department_name, location_id)
        AS SELECT department_id, department_name, location_id 
        FROM departments; 
+    ```
 
-Using Self Joins: Example
+Using Self Joins: Example 
 
-The following query uses a self join to return the name of each employee along with the name of the employee's manager. A `WHERE` clause is added to shorten the output. 
+The following query uses a self join to return the name of each employee along with the name of the employee's manager. A ` WHERE ` clause is added to shorten the output. 
     
     
+    ```
     SELECT e1.last_name||' works for '||e2.last_name 
        "Employees and Their Managers"
        FROM employees e1, employees e2 
@@ -3934,41 +4097,49 @@ The following query uses a self join to return the name of each employee along w
     Rogers works for Kaufling
     Russell works for King
     
+    ```
 
-The join condition for this query uses the aliases `e1` and `e2` for the sample table `employees`: 
+The join condition for this query uses the aliases ` e1 ` and ` e2 ` for the sample table ` employees ` : 
     
     
+    ```
     e1.manager_id = e2.employee_id
+    ```
 
-Using Outer Joins: Examples
+Using Outer Joins: Examples 
 
-The following example shows how a partitioned outer join fills data gaps in rows to facilitate analytic function specification and reliable report formatting. The example first creates a small data table to be used in the join:
+The following example shows how a partitioned outer join fills data gaps in rows to facilitate analytic function specification and reliable report formatting. The example first creates a small data table to be used in the join: 
     
     
+    ```
     SELECT d.department_id, e.last_name
        FROM departments d LEFT OUTER JOIN employees e
        ON d.department_id = e.department_id
        ORDER BY d.department_id, e.last_name;
     
+    ```
 
-Users familiar with the traditional Oracle Database outer joins syntax will recognize the same query in this form:
+Users familiar with the traditional Oracle Database outer joins syntax will recognize the same query in this form: 
     
     
+    ```
     SELECT d.department_id, e.last_name
        FROM departments d, employees e
        WHERE d.department_id = e.department_id(+)
        ORDER BY d.department_id, e.last_name;
     
+    ```
 
-Oracle strongly recommends that you use the more flexible `FROM` clause join syntax shown in the former example. 
+Oracle strongly recommends that you use the more flexible ` FROM ` clause join syntax shown in the former example. 
 
-The left outer join returns all departments, including those without any employees. The same statement with a right outer join returns all employees, including those not yet assigned to a department:
+The left outer join returns all departments, including those without any employees. The same statement with a right outer join returns all employees, including those not yet assigned to a department: 
 
-Note:
+> **note:** 
 
-The employee Zeuss was added to the employees table for these examples, and is not part of the sample data.
+The employee Zeuss was added to the employees table for these examples, and is not part of the sample data. 
     
     
+    ```
     SELECT d.department_id, e.last_name
        FROM departments d RIGHT OUTER JOIN employees e
        ON d.department_id = e.department_id
@@ -3982,10 +4153,12 @@ The employee Zeuss was added to the employees table for these examples, and is n
                   Grant
                   Zeuss
     
+    ```
 
-It is not clear from this result whether employees Grant and Zeuss have `department_id` `NULL`, or whether their `department_id` is not in the `departments` table. To determine this requires a full outer join: 
+It is not clear from this result whether employees Grant and Zeuss have ` department_id ` ` NULL ` , or whether their ` department_id ` is not in the ` departments ` table. To determine this requires a full outer join: 
     
     
+    ```
     SELECT d.department_id as d_dept_id, e.department_id as e_dept_id,
           e.last_name
        FROM departments d FULL OUTER JOIN employees e
@@ -4003,10 +4176,12 @@ It is not clear from this result whether employees Grant and Zeuss have `departm
                       999 Zeuss
                           Grant
     
+    ```
 
-Because the column names in this example are the same in both tables in the join, you can also use the common column feature by specifying the `USING` clause of the join syntax. The output is the same as for the preceding example except that the `USING` clause coalesces the two matching columns `department_id` into a single column output: 
+Because the column names in this example are the same in both tables in the join, you can also use the common column feature by specifying the ` USING ` clause of the join syntax. The output is the same as for the preceding example except that the ` USING ` clause coalesces the two matching columns ` department_id ` into a single column output: 
     
     
+    ```
     SELECT department_id AS d_e_dept_id, e.last_name
        FROM departments d FULL OUTER JOIN employees e
        USING (department_id)
@@ -4022,12 +4197,14 @@ Because the column names in this example are the same in both tables in the join
             270
             999 Zeuss
                 Grant
+    ```
 
-Using Partitioned Outer Joins: Examples
+Using Partitioned Outer Joins: Examples 
 
-The following example shows how a partitioned outer join fills in gaps in rows to facilitate analytic calculation specification and reliable report formatting. The example first creates and populates a simple table to be used in the join:
+The following example shows how a partitioned outer join fills in gaps in rows to facilitate analytic calculation specification and reliable report formatting. The example first creates and populates a simple table to be used in the join: 
     
     
+    ```
     CREATE TABLE inventory (time_id    DATE,
                             product    VARCHAR2(10),
                             quantity   NUMBER);
@@ -4061,10 +4238,12 @@ The following example shows how a partitioned outer join fills in gaps in rows t
     
     12 rows selected.
     
+    ```
 
-The data is now more dense along the time dimension for each partition of the product dimension. However, each of the newly added rows within each partition is null in the quantity column. It is more useful to see the nulls replaced by the preceding non-`NULL` value in time order. You can achieve this by applying the analytic function `LAST_VALUE` on top of the query result: 
+The data is now more dense along the time dimension for each partition of the product dimension. However, each of the newly added rows within each partition is null in the quantity column. It is more useful to see the nulls replaced by the preceding non- ` NULL ` value in time order. You can achieve this by applying the analytic function ` LAST_VALUE ` on top of the query result: 
     
     
+    ```
     SELECT time_id, product, LAST_VALUE(quantity IGNORE NULLS) 
        OVER (PARTITION BY product ORDER BY time_id) quantity 
        FROM ( SELECT times.time_id, product, quantity 
@@ -4090,39 +4269,45 @@ The data is now more dense along the time dimension for each partition of the pr
     06-APR-01 can                10
     
     12 rows selected.
+    ```
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Data Warehousing Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG02013) for an expanded discussion on filling gaps in time series calculations and examples of usage 
+[ *Oracle Database Data Warehousing Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=DWHSG02013) for an expanded discussion on filling gaps in time series calculations and examples of usage 
 
-Using Antijoins: Example
+Using Antijoins: Example 
 
-The following example selects a list of employees who are not in a particular set of departments:
+The following example selects a list of employees who are not in a particular set of departments: 
     
     
+    ```
     SELECT * FROM employees 
        WHERE department_id NOT IN 
        (SELECT department_id FROM departments 
            WHERE location_id = 1700)
        ORDER BY last_name;
+    ```
 
-Using Semijoins: Example
+Using Semijoins: Example 
 
-In the following example, only one row needs to be returned from the `departments` table, even though many rows in the `employees` table might match the subquery. If no index has been defined on the `salary` column in `employees`, then a semijoin can be used to improve query performance. 
+In the following example, only one row needs to be returned from the ` departments ` table, even though many rows in the ` employees ` table might match the subquery. If no index has been defined on the ` salary ` column in ` employees ` , then a semijoin can be used to improve query performance. 
     
     
+    ```
     SELECT * FROM departments 
        WHERE EXISTS 
        (SELECT * FROM employees 
            WHERE departments.department_id = employees.department_id 
            AND employees.salary > 2500)
        ORDER BY department_name;
+    ```
 
-Using CROSS APPLY and OUTER APPLY Joins: Examples
+Using CROSS APPLY and OUTER APPLY Joins: Examples 
 
-The following statement uses the `CROSS` `APPLY` clause of the `cross_outer_apply_clause`. The join returns only rows from the table on the left side of the join (`departments`) that produce a result from the inline view on the right side of the join. That is, the join returns only the departments that have at least one employee. The `WHERE` clause restricts the result set to include only the Marketing, Operations, and Public Relations departments. However, the Operations department is not included in the result set because it has no employees. 
+The following statement uses the ` CROSS ` ` APPLY ` clause of the *cross_outer_apply_clause* . The join returns only rows from the table on the left side of the join ( ` departments ` ) that produce a result from the inline view on the right side of the join. That is, the join returns only the departments that have at least one employee. The ` WHERE ` clause restricts the result set to include only the Marketing, Operations, and Public Relations departments. However, the Operations department is not included in the result set because it has no employees. 
     
     
+    ```
     SELECT d.department_name, v.employee_id, v.last_name
       FROM departments d CROSS APPLY (SELECT * FROM employees e
                                       WHERE e.department_id = d.department_id) v
@@ -4135,10 +4320,12 @@ The following statement uses the `CROSS` `APPLY` clause of the `cross_outer_appl
     Marketing                      202         Fay
     Public Relations               204         Baer
     
+    ```
 
-The following statement uses the `OUTER` `APPLY` clause of the `cross_outer_apply_clause`. The join returns all rows from the table on the left side of the join (`departments`) regardless of whether they produce a result from the inline view on the right side of the join. That is, the join returns all departments regardless of whether the departments have any employees. The `WHERE` clause restricts the result set to include only the Marketing, Operations, and Public Relations departments. The Operations department is included in the result set even though it has no employees. 
+The following statement uses the ` OUTER ` ` APPLY ` clause of the *cross_outer_apply_clause* . The join returns all rows from the table on the left side of the join ( ` departments ` ) regardless of whether they produce a result from the inline view on the right side of the join. That is, the join returns all departments regardless of whether the departments have any employees. The ` WHERE ` clause restricts the result set to include only the Marketing, Operations, and Public Relations departments. The Operations department is included in the result set even though it has no employees. 
     
     
+    ```
     SELECT d.department_name, v.employee_id, v.last_name
       FROM departments d OUTER APPLY (SELECT * FROM employees e
                                       WHERE e.department_id = d.department_id) v
@@ -4151,30 +4338,36 @@ The following statement uses the `OUTER` `APPLY` clause of the `cross_outer_appl
     Marketing                      202         Fay
     Operations
     Public Relations               204         Baer
+    ```
 
-Using Lateral Inline Views: Example
+Using Lateral Inline Views: Example 
 
-The following example shows a join with two operands. The second operand is an inline view that specifies the first operand, table `e`, in the `WHERE` clause. This results in an error. 
+The following example shows a join with two operands. The second operand is an inline view that specifies the first operand, table ` e ` , in the ` WHERE ` clause. This results in an error. 
     
     
+    ```
     SELECT * FROM employees e, (SELECT * FROM departments d
                                 WHERE e.department_id = d.department_id);
     ORA-00904: "E"."DEPARTMENT_ID": invalid identifier
     
+    ```
 
-The following example shows a join with two operands. The second operand is a lateral inline view that specifies the first operand, table `e`, in the `WHERE` clause and succeeds without an error. 
+The following example shows a join with two operands. The second operand is a lateral inline view that specifies the first operand, table ` e ` , in the ` WHERE ` clause and succeeds without an error. 
     
     
+    ```
     SELECT * FROM employees e, LATERAL(SELECT * FROM departments d
                                        WHERE e.department_id = d.department_id);
+    ```
 
-Table Collections: Examples
+Table Collections: Examples 
 
-You can perform DML operations on nested tables only if they are defined as columns of a table. Therefore, when the `query_table_expr_clause` of an `INSERT`, `DELETE`, or `UPDATE` statement is a `table_collection_expression`, the collection expression must be a subquery that uses the `TABLE` collection expression to select the nested table column of the table. The examples that follow are based on the following scenario: 
+You can perform DML operations on nested tables only if they are defined as columns of a table. Therefore, when the *query_table_expr_clause* of an ` INSERT ` , ` DELETE ` , or ` UPDATE ` statement is a *table_collection_expression* , the collection expression must be a subquery that uses the ` TABLE ` collection expression to select the nested table column of the table. The examples that follow are based on the following scenario: 
 
-Suppose the database contains a table `hr_info` with columns `department_id`, `location_id`, and `manager_id`, and a column of nested table type `people` which has `last_name`, `department_id`, and `salary` columns for all the employees of each respective manager: 
+Suppose the database contains a table ` hr_info ` with columns ` department_id ` , ` location_id ` , and ` manager_id ` , and a column of nested table type ` people ` which has ` last_name ` , ` department_id ` , and ` salary ` columns for all the employees of each respective manager: 
     
     
+    ```
     CREATE TYPE people_typ AS OBJECT (
        last_name      VARCHAR2(25),
        department_id  NUMBER(4),
@@ -4191,44 +4384,54 @@ Suppose the database contains a table `hr_info` with columns `department_id`, `l
     
     INSERT INTO hr_info VALUES (280, 1800, 999, people_tab_typ());
     
+    ```
 
-The following example inserts into the `people` nested table column of the `hr_info` table for department 280: 
+The following example inserts into the ` people ` nested table column of the ` hr_info ` table for department 280: 
     
     
+    ```
     INSERT INTO TABLE(SELECT h.people FROM hr_info h
        WHERE h.department_id = 280)
        VALUES ('Smith', 280, 1750);
     
+    ```
 
-The next example updates the department 280 `people` nested table: 
+The next example updates the department 280 ` people ` nested table: 
     
     
+    ```
     UPDATE TABLE(SELECT h.people FROM hr_info h
        WHERE h.department_id = 280) p
        SET p.salary = p.salary + 100;
     
+    ```
 
-The next example deletes from the department 280 `people` nested table: 
+The next example deletes from the department 280 ` people ` nested table: 
     
     
+    ```
     DELETE TABLE(SELECT h.people FROM hr_info h
        WHERE h.department_id = 280) p
        WHERE p.salary > 1700;
+    ```
 
-Collection Unnesting: Examples
+Collection Unnesting: Examples 
 
-To select data from a nested table column, use the `TABLE` collection expression to treat the nested table as columns of a table. This process is called collection unnesting. 
+To select data from a nested table column, use the ` TABLE ` collection expression to treat the nested table as columns of a table. This process is called  collection unnesting  . 
 
-You could get all the rows from `hr_info`, which was created in the preceding example, and all the rows from the `people` nested table column of `hr_info` using the following statement: 
+You could get all the rows from ` hr_info ` , which was created in the preceding example, and all the rows from the ` people ` nested table column of ` hr_info ` using the following statement: 
     
     
+    ```
     SELECT t1.department_id, t2.* FROM hr_info t1, TABLE(t1.people) t2
        WHERE t2.department_id = t1.department_id;
     
+    ```
 
-Now suppose that `people` is not a nested table column of `hr_info`, but is instead a separate table with columns `last_name`, `department_id`, `address`, `hiredate`, and `salary`. You can extract the same rows as in the preceding example with this statement: 
+Now suppose that ` people ` is not a nested table column of ` hr_info ` , but is instead a separate table with columns ` last_name ` , ` department_id ` , ` address ` , ` hiredate ` , and ` salary ` . You can extract the same rows as in the preceding example with this statement: 
     
     
+    ```
     SELECT t1.department_id, t2.* 
        FROM hr_info t1, TABLE(CAST(MULTISET(
           SELECT t3.last_name, t3.department_id, t3.salary 
@@ -4236,22 +4439,26 @@ Now suppose that `people` is not a nested table column of `hr_info`, but is inst
           WHERE t3.department_id = t1.department_id)
           AS people_tab_typ)) t2;
     
+    ```
 
-Finally, suppose that `people` is neither a nested table column of table `hr_info` nor a table itself. Instead, you have created a function `people_func` that extracts from various sources the name, department, and salary of all employees. You can get the same information as in the preceding examples with the following query: 
+Finally, suppose that ` people ` is neither a nested table column of table ` hr_info ` nor a table itself. Instead, you have created a function ` people_func ` that extracts from various sources the name, department, and salary of all employees. You can get the same information as in the preceding examples with the following query: 
     
     
+    ```
     SELECT t1.department_id, t2.* FROM hr_info t1, TABLE(CAST
        (people_func( ... ) AS people_tab_typ)) t2;
+    ```
 
-See Also:
+> **note:** See Also: 
 
-[Oracle Database Object-Relational Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADOBJ00204) for more examples of collection unnesting. 
+[ *Oracle Database Object-Relational Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADOBJ00204) for more examples of collection unnesting. 
 
-Using the LEVEL Pseudocolumn: Examples
+Using the LEVEL Pseudocolumn: Examples 
 
-The following statement returns all employees in hierarchical order. The root row is defined to be the employee whose job is `AD_VP`. The child rows of a parent row are defined to be those who have the employee number of the parent row as their manager number. 
+The following statement returns all employees in hierarchical order. The root row is defined to be the employee whose job is ` AD_VP ` . The child rows of a parent row are defined to be those who have the employee number of the parent row as their manager number. 
     
     
+    ```
     SELECT LPAD(' ',2*(LEVEL-1)) || last_name org_chart, 
             employee_id, manager_id, job_id
         FROM employees
@@ -4279,10 +4486,12 @@ The following statement returns all employees in hierarchical order. The root ro
         Pataballa              106        103 IT_PROG
         Lorentz                107        103 IT_PROG
     
+    ```
 
-The following statement is similar to the previous one, except that it does not select employees with the job `FI_MGR`. 
+The following statement is similar to the previous one, except that it does not select employees with the job ` FI_MGR ` . 
     
     
+    ```
     SELECT LPAD(' ',2*(LEVEL-1)) || last_name org_chart, 
             employee_id, manager_id, job_id
         FROM employees
@@ -4311,12 +4520,14 @@ The following statement is similar to the previous one, except that it does not 
         Lorentz                107        103 IT_PROG
     
     
+    ```
 
-Oracle Database does not return the manager `Greenberg`, although it does return employees who are managed by `Greenberg`. 
+Oracle Database does not return the manager ` Greenberg ` , although it does return employees who are managed by ` Greenberg ` . 
 
-The following statement is similar to the first one, except that it uses the `LEVEL` pseudocolumn to select only the first two levels of the management hierarchy: 
+The following statement is similar to the first one, except that it uses the ` LEVEL ` pseudocolumn to select only the first two levels of the management hierarchy: 
     
     
+    ```
     SELECT LPAD(' ',2*(LEVEL-1)) || last_name org_chart, 
     employee_id, manager_id, job_id 
         FROM employees
@@ -4340,21 +4551,25 @@ The following statement is similar to the first one, except that it uses the `LE
       Cambrault                148        100 SA_MAN
       Zlotkey                  149        100 SA_MAN
       Hartstein                201        100 MK_MAN
+    ```
 
-Using Distributed Queries: Example
+Using Distributed Queries: Example 
 
-This example shows a query that joins the `departments` table on the local database with the `employees` table on the `remote` database: 
+This example shows a query that joins the ` departments ` table on the local database with the ` employees ` table on the ` remote ` database: 
     
     
+    ```
     SELECT last_name, department_name 
        FROM employees@remote, departments
        WHERE employees.department_id = departments.department_id; 
+    ```
 
-Using Correlated Subqueries: Examples
+Using Correlated Subqueries: Examples 
 
-The following examples show the general syntax of a correlated subquery:
+The following examples show the general syntax of a correlated subquery: 
     
     
+    ```
     SELECT select_list 
         FROM table1 t_alias1 
         WHERE expr operator 
@@ -4375,10 +4590,12 @@ The following examples show the general syntax of a correlated subquery:
                 FROM table2 t_alias2 
                 WHERE t_alias1.column = t_alias2.column); 
     
+    ```
 
-The following statement returns data about employees whose salaries exceed their department average. The following statement assigns an alias to `employees`, the table containing the salary information, and then uses the alias in a correlated subquery: 
+The following statement returns data about employees whose salaries exceed their department average. The following statement assigns an alias to ` employees ` , the table containing the salary information, and then uses the alias in a correlated subquery: 
     
     
+    ```
     SELECT department_id, last_name, salary 
        FROM employees x 
        WHERE salary > (SELECT AVG(salary) 
@@ -4386,55 +4603,65 @@ The following statement returns data about employees whose salaries exceed their
           WHERE x.department_id = department_id) 
        ORDER BY department_id; 
     
+    ```
 
-For each row of the `employees` table, the parent query uses the correlated subquery to compute the average salary for members of the same department. The correlated subquery performs the following steps for each row of the `employees` table: 
+For each row of the ` employees ` table, the parent query uses the correlated subquery to compute the average salary for members of the same department. The correlated subquery performs the following steps for each row of the ` employees ` table: 
 
-  1. The `department_id` of the row is determined. 
+  1. The ` department_id ` of the row is determined. 
 
-  2. The `department_id` is then used to evaluate the parent query. 
+  2. The ` department_id ` is then used to evaluate the parent query. 
 
   3. If the salary in that row is greater than the average salary of the departments of that row, then the row is returned. 
 
 
 
 
-The subquery is evaluated once for each row of the `employees` table. 
+The subquery is evaluated once for each row of the ` employees ` table. 
 
-Selecting from the DUAL Table: Example
+Selecting from the DUAL Table: Example 
 
-The following statement returns the current date:
+The following statement returns the current date: 
     
     
+    ```
     SELECT CURRENT_DATE FROM DUAL; 
     
+    ```
 
-You could select `CURRENT_DATE` from the `employees` table, but the database would return 14 rows of the same `CURRENT_DATE`, one for every row of the `employees` table. Selecting from `DUAL` is more convenient. 
+You could select ` CURRENT_DATE ` from the ` employees ` table, but the database would return 14 rows of the same ` CURRENT_DATE ` , one for every row of the ` employees ` table. Selecting from ` DUAL ` is more convenient. 
 
-From Release 23 you can omit the optional `FROM` clause as in the following example: 
+From Release 23 you can omit the optional ` FROM ` clause as in the following example: 
     
     
+    ```
     SELECT CURRENT_DATE;
+    ```
 
-Selecting Sequence Values: Examples
+Selecting Sequence Values: Examples 
 
-The following statement increments the `employees_seq` sequence and returns the new value: 
+The following statement increments the ` employees_seq ` sequence and returns the new value: 
     
     
+    ```
     SELECT employees_seq.nextval 
         FROM DUAL; 
     
+    ```
 
-The following statement selects the current value of `employees_seq`: 
+The following statement selects the current value of ` employees_seq ` : 
     
     
+    ```
     SELECT employees_seq.currval 
         FROM DUAL; 
+    ```
 
-Row Pattern Matching: Example
+Row Pattern Matching: Example 
 
-This example uses row pattern matching to query stock price data. The following statements create table `Ticker` and inserts stock price data into the table: 
+This example uses row pattern matching to query stock price data. The following statements create table ` Ticker ` and inserts stock price data into the table: 
     
     
+    ```
     CREATE TABLE Ticker (SYMBOL VARCHAR2(10), tstamp DATE, price NUMBER);
     
     INSERT INTO Ticker VALUES('ACME', '01-Apr-11', 12);
@@ -4458,10 +4685,12 @@ This example uses row pattern matching to query stock price data. The following 
     INSERT INTO Ticker VALUES('ACME', '19-Apr-11', 23);
     INSERT INTO Ticker VALUES('ACME', '20-Apr-11', 22);
     
+    ```
 
-The following query uses row pattern matching to find all cases where stock prices dipped to a bottom price and then rose. This is generally called a V-shape. The resulting output contains only three rows because the query specifies `ONE` `ROW` `PER` `MATCH`, and three matches were found. 
+The following query uses row pattern matching to find all cases where stock prices dipped to a bottom price and then rose. This is generally called a V-shape. The resulting output contains only three rows because the query specifies ` ONE ` ` ROW ` ` PER ` ` MATCH ` , and three matches were found. 
     
     
+    ```
     SELECT *
     FROM Ticker MATCH_RECOGNIZE (
          PARTITION BY symbol
@@ -4483,37 +4712,43 @@ The following query uses row pattern matching to find all cases where stock pric
     ACME       05-APR-11 06-APR-11 10-APR-11
     ACME       10-APR-11 12-APR-11 13-APR-11
     ACME       14-APR-11 16-APR-11 18-APR-11
+    ```
 
-Partitioned Row Limiting in Non-Vector Context: Example
+Partitioned Row Limiting in Non-Vector Context: Example 
 
 The following example finds the top two departments that people with highest salary work in, and the top three people with the highest salary within each selected department: 
     
     
+    ```
+    
     SELECT deptno, ename FROM emp
     ORDER BY sal DESC
     FETCH FIRST 2 PARTITIONS BY deptno, 3 ROWS ONLY;
+    ```
 
-Partitioned Row Limiting in a Multi-Vector Search: Example
+Partitioned Row Limiting in a Multi-Vector Search: Example 
 
-The following statement creates a table `chunk_table` with three columns: `doc_id` and `chunk_id` (of type `NUMBER`), and `data_vec` (of type `VECTOR`). 
+The following statement creates a table ` chunk_table ` with three columns: *doc_id* and *chunk_id* (of type ` NUMBER ` ), and *data_vec* (of type ` VECTOR ` ). 
 
-`doc_id` refers to the document id, `chunk_id` refers to the chunk id, and `data_vec` refers to the vector embedding. 
+*doc_id* refers to the document id, *chunk_id* refers to the chunk id, and *data_vec* refers to the vector embedding. 
     
+    
+    ```
     
     CREATE TABLE chunk_table ( 
       doc_id NUMBER, 
       chunk_id NUMBER, 
       data_vec VECTOR
      );
+    ```
 
-The following query performs a multi-vector search :
+The following query performs a multi-vector search : 
     
+    
+    ```
     
     SELECT doc_id,
       FROM chunk_table
       ORDER BY VECTOR_DISTANCE(data_vec, :query_vec)
       FETCH [APPROX] FIRST 10 PARTITIONS BY docId, 1 ROW ONLY;
-
-[← Previous](SAVEPOINT.md)
-
-[Next →](SET-CONSTRAINTS.md)
+    ```

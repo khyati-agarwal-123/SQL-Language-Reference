@@ -1,60 +1,48 @@
-[Previous](Expression-Lists.html) [Next](Conditions.html) JavaScript must be enabled to correctly display this content 
+##  BOOLEAN Expressions {#GUID-E492D339-5AAF-43C1-95B8-88DB1CDED0D9} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Expressions](Expressions.html)
-  3. BOOLEAN Expressions
+You can now use boolean value expressions within SQL expressions wherever an expression appears in SQL syntax. 
 
-
-
-## BOOLEAN Expressions
-
-You can now use boolean value expressions within SQL expressions wherever an expression appears in SQL syntax.
-
-boolean_expression::= 
+*boolean_expression* ::= 
 
   
 
 
-![Description of boolean_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/boolean_expression.gif)[Description of the illustration boolean_expression.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/boolean_expression.html)
+![Description of boolean_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/boolean_expression.gif)[ Description of the illustration boolean_expression.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/boolean_expression.md)
 
   
 
 
-condition::= 
+*condition* ::= 
 
-![Description of condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/condition.gif)[Description of the illustration condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/condition.html)
+![Description of condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/condition.gif)[ Description of the illustration condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/condition.md)
 
-boolean_test_condition::= 
-
-  
-
-
-![Description of boolean_test_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/boolean_test_condition.gif)[Description of the illustration boolean_test_condition.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/boolean_test_condition.html)
+*boolean_test_condition* ::= 
 
   
 
 
-Use `boolean_expression` to evalute the input and return one of the following boolean values : 
+![Description of boolean_test_condition.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/boolean_test_condition.gif)[ Description of the illustration boolean_test_condition.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/boolean_test_condition.md)
 
-  * `IS TRUE`
-
-  * `IS NOT TRUE`
-
-  * `IS FALSE`
-
-  * `IS NOT FALSE`
-
-  * `IS NULL`
-
-  * `IS NOT NULL`
+  
 
 
+Use *boolean_expression* to evalute the input and return one of the following boolean values : 
+
+  * ` IS TRUE `
+
+  * ` IS NOT TRUE `
+
+  * ` IS FALSE `
+
+  * ` IS NOT FALSE `
+
+  * ` IS NULL `
+
+  * ` IS NOT NULL `
 
 
-See Also:
 
-[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)
 
-[← Previous](Expression-Lists.md)
+> **note:** See Also: 
 
-[Next →](Conditions.md)
+[ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)

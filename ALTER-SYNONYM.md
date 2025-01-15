@@ -1,86 +1,80 @@
-[Previous](SQL-Statements-ALTER-SYNONYM-to-COMMENT.html) [Next](ALTER-SYSTEM.html) JavaScript must be enabled to correctly display this content 
+##  ALTER SYNONYM {#GUID-C31B6804-6783-4A8C-B448-DF78E3FE6837} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: ALTER SYNONYM to COMMENT](SQL-Statements-ALTER-SYNONYM-to-COMMENT.html)
-  3. ALTER SYNONYM
+Purpose 
 
+Use the ` ALTER ` ` SYNONYM ` statement to modify an existing synonym. 
 
+Prerequisites 
 
-## ALTER SYNONYM
+To modify a private synonym in another user's schema, you must have the ` CREATE ` ` ANY ` ` SYNONYM ` and ` DROP ` ` ANY ` ` SYNONYM ` system privileges. 
 
-Purpose
+To modify a ` PUBLIC ` synonym, you must have the ` CREATE ` ` PUBLIC ` ` SYNONYM ` and ` DROP ` ` PUBLIC ` ` SYNONYM ` system privileges. 
 
-Use the `ALTER` `SYNONYM` statement to modify an existing synonym. 
+Syntax 
 
-Prerequisites
+*alter_synonym* ::= 
 
-To modify a private synonym in another user's schema, you must have the `CREATE` `ANY` `SYNONYM` and `DROP` `ANY` `SYNONYM` system privileges. 
+![Description of alter_synonym.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_synonym.gif)[ Description of the illustration alter_synonym.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_synonym.md)
 
-To modify a `PUBLIC` synonym, you must have the `CREATE` `PUBLIC` `SYNONYM` and `DROP` `PUBLIC` `SYNONYM` system privileges. 
+Semantics 
 
-Syntax
+PUBLIC 
 
-alter_synonym::= 
+Specify ` PUBLIC ` if *synonym* is a public synonym. You cannot use this clause to change a public synonym to a private synonym, or vice versa. 
 
-![Description of alter_synonym.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_synonym.gif)[Description of the illustration alter_synonym.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_synonym.html)
+IF EXISTS 
 
-Semantics
+Specify ` IF EXISTS ` to alter an existing table. 
 
-PUBLIC
+Specifying ` IF NOT EXISTS ` with ` ALTER VIEW ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-Specify `PUBLIC` if `synonym` is a public synonym. You cannot use this clause to change a public synonym to a private synonym, or vice versa. 
+*schema* 
 
-IF EXISTS
+Specify the schema containing the synonym. If you omit *schema* , then Oracle Database assumes the synonym is in your own schema. 
 
-Specify `IF EXISTS` to alter an existing table. 
-
-Specifying `IF NOT EXISTS` with `ALTER VIEW` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
-
-schema
-
-Specify the schema containing the synonym. If you omit `schema`, then Oracle Database assumes the synonym is in your own schema. 
-
-synonym
+*synonym* 
 
 Specify the name of the synonym to be altered. 
 
-EDITIONABLE | NONEDITIONABLE
+EDITIONABLE | NONEDITIONABLE 
 
-Use these clauses to specify whether the synonym becomes an editioned or noneditioned object if editioning is later enabled for the schema object type `SYNONYM` in `schema`. The default is `EDITIONABLE`. For information about altering editioned and noneditioned objects, see [Oracle Database Development Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS1287). 
+Use these clauses to specify whether the synonym becomes an editioned or noneditioned object if editioning is later enabled for the schema object type ` SYNONYM ` in *schema* . The default is ` EDITIONABLE ` . For information about altering editioned and noneditioned objects, see [ *Oracle Database Development Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADFNS1287) . 
 
-Restriction on EDITIONABLE | NONEDITIONABLE
+Restriction on EDITIONABLE | NONEDITIONABLE 
 
-You cannot specify these clauses for a public synonym because editioning is always enabled for the object type `SYNONYM` in the `PUBLIC` schema. 
+You cannot specify these clauses for a public synonym because editioning is always enabled for the object type ` SYNONYM ` in the ` PUBLIC ` schema. 
 
-COMPILE
+COMPILE 
 
-Use this clause to compile `synonym`. A synonym places a dependency on its target object and becomes invalid if the target object is changed or dropped. When you compile an invalid synonym, it becomes valid again. 
+Use this clause to compile *synonym* . A synonym places a dependency on its target object and becomes invalid if the target object is changed or dropped. When you compile an invalid synonym, it becomes valid again. 
 
-Note:
+> **note:** 
 
-You can determine if a synonym is valid or invalid by querying the `STATUS` column of the `ALL_`, `DBA_`, and `USER_OBJECTS` data dictionary views. 
+You can determine if a synonym is valid or invalid by querying the ` STATUS ` column of the ` ALL_ ` , ` DBA_ ` , and ` USER_OBJECTS ` data dictionary views. 
 
-Examples
+Examples 
 
-The following examples modify synonyms that were created in the `CREATE` `SYNONYM` "[Examples](CREATE-SYNONYM.html#GUID-A806C82F-1171-478E-A910-F9C6C42739B2__G2266838)". 
+The following examples modify synonyms that were created in the ` CREATE ` ` SYNONYM ` " [ Examples ](CREATE-SYNONYM.md#GUID-A806C82F-1171-478E-A910-F9C6C42739B2__G2266838) "  . 
 
-The following statement compiles synonym `offices`: 
+The following statement compiles synonym ` offices ` : 
     
     
+    ```
     ALTER SYNONYM offices COMPILE;
     
+    ```
 
-The following statement compiles public synonym `emp_table`: 
+The following statement compiles public synonym ` emp_table ` : 
     
     
+    ```
     ALTER PUBLIC SYNONYM emp_table COMPILE;
     
+    ```
 
-The following statement causes synonym `offices` to remain a noneditioned object if editioning is later enabled for schema object type `SYNONYM` in the schema that contains the synonym `offices`: 
+The following statement causes synonym ` offices ` to remain a noneditioned object if editioning is later enabled for schema object type ` SYNONYM ` in the schema that contains the synonym ` offices ` : 
     
     
+    ```
     ALTER SYNONYM offices NONEDITIONABLE;
-
-[← Previous](SQL-Statements-ALTER-SYNONYM-to-COMMENT.md)
-
-[Next →](ALTER-SYSTEM.md)
+    ```

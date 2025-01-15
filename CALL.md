@@ -1,137 +1,136 @@
-[Previous](AUDIT-Unified-Auditing.html) [Next](COMMENT.html) JavaScript must be enabled to correctly display this content 
+##  CALL {#GUID-6CD7B9C4-E5DC-4F3C-9B6A-876AD2C63545} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: ALTER SYNONYM to COMMENT](SQL-Statements-ALTER-SYNONYM-to-COMMENT.html)
-  3. CALL 
+Purpose 
 
+Use the ` CALL ` statement to execute a  routine  (a standalone procedure or function, or a procedure or function defined within a type or package) from within SQL. 
 
+> **note:** 
 
-## CALL 
+The restrictions on user-defined function expressions specified in  " [ Function Expressions ](Function-Expressions.md#GUID-C47F0B7D-9058-481F-815E-A31FB21F3BD5) "  apply to the ` CALL ` statement as well. 
 
-Purpose
+> **note:** See Also: 
 
-Use the `CALL` statement to execute a routine (a standalone procedure or function, or a procedure or function defined within a type or package) from within SQL. 
+[ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS002) for information on creating such routine 
 
-Note:
+Prerequisites 
 
-The restrictions on user-defined function expressions specified in "[Function Expressions](Function-Expressions.html#GUID-C47F0B7D-9058-481F-815E-A31FB21F3BD5)" apply to the `CALL` statement as well. 
+You must have ` EXECUTE ` privilege on the standalone routine or on the type or package in which the routine is defined. 
 
-See Also:
+Syntax 
 
-[Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS002) for information on creating such routine 
+*call* ::= 
 
-Prerequisites
+![Description of call.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/call.gif)[ Description of the illustration call.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/call.md)
 
-You must have `EXECUTE` privilege on the standalone routine or on the type or package in which the routine is defined. 
+*routine_clause* ::= 
 
-Syntax
+![Description of routine_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/routine_clause.gif)[ Description of the illustration routine_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/routine_clause.md)
 
-call::= 
+*object_access_expression* ::= 
 
-![Description of call.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/call.gif)[Description of the illustration call.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/call.html)
+![Description of object_access_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_access_expression.gif)[ Description of the illustration object_access_expression.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_access_expression.md)
 
-routine_clause::= 
+Semantics 
 
-![Description of routine_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/routine_clause.gif)[Description of the illustration routine_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/routine_clause.html)
+You can execute a routine in two ways. You can issue a call to the routine itself by name, by using the *routine_clause* , or you can invoke a routine inside the type of an expression, by using an *object_access_expression* . 
 
-object_access_expression::= 
+*routine_clause* 
 
-![Description of object_access_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_access_expression.gif)[Description of the illustration object_access_expression.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_access_expression.html)
+Specify the name of the function or procedure being called, or a synonym that resolves to a function or procedure. 
 
-Semantics
+When you call a member function or procedure of a type, if the first argument ( ` SELF ` ) is a null ` IN ` ` OUT ` argument, then Oracle Database returns an error. If ` SELF ` is a null ` IN ` argument, then the database returns null. In both cases, the function or procedure is not invoked. 
 
-You can execute a routine in two ways. You can issue a call to the routine itself by name, by using the `routine_clause`, or you can invoke a routine inside the type of an expression, by using an `object_access_expression`. 
+Restriction on Functions 
 
-routine_clause
+If the routine is a function, then the ` INTO ` clause is required. 
 
-Specify the name of the function or procedure being called, or a synonym that resolves to a function or procedure.
+*schema* 
 
-When you call a member function or procedure of a type, if the first argument (`SELF`) is a null `IN` `OUT` argument, then Oracle Database returns an error. If `SELF` is a null `IN` argument, then the database returns null. In both cases, the function or procedure is not invoked. 
+Specify the schema in which the standalone routine, or the package or type containing the routine, resides. If you do not specify *schema* , then Oracle Database assumes the routine is in your own schema. 
 
-Restriction on Functions
+*type*  or  *package* 
 
-If the routine is a function, then the `INTO` clause is required. 
+Specify the type or package in which the routine is defined. 
 
-schema
+*@dblink* 
 
-Specify the schema in which the standalone routine, or the package or type containing the routine, resides. If you do not specify `schema`, then Oracle Database assumes the routine is in your own schema. 
+In a distributed database system, specify the name of the database containing the standalone routine, or the package or function containing the routine. If you omit *dblink* , then Oracle Database looks in your local database. 
 
-type or package
+> **note:** See Also: 
 
-Specify the type or package in which the routine is defined.
+" [ Calling a Procedure: Example ](CALL.md#GUID-6CD7B9C4-E5DC-4F3C-9B6A-876AD2C63545__I2119950) "  for an example of calling a routine directly 
 
-@dblink
+*object_access_expression* 
 
-In a distributed database system, specify the name of the database containing the standalone routine, or the package or function containing the routine. If you omit `dblink`, then Oracle Database looks in your local database. 
+If you have an expression of an object type, such as a type constructor or a bind variable, then you can use this form of expression to call a routine defined within the type. In this context, the *object_access_expression* is limited to method invocations. 
 
-See Also:
+> **note:** See Also: 
 
-"[Calling a Procedure: Example](CALL.html#GUID-6CD7B9C4-E5DC-4F3C-9B6A-876AD2C63545__I2119950)" for an example of calling a routine directly 
+" [ Object Access Expressions ](Object-Access-Expressions.md#GUID-FA69A056-12A6-420F-A106-EE252386CC43) "  for syntax and semantics of this form of expression, and  " [ Calling a Procedure Using an Expression of an Object Type: Example ](CALL.md#GUID-6CD7B9C4-E5DC-4F3C-9B6A-876AD2C63545__I2119934) "  for an example of calling a routine using an expression of an object type 
 
-object_access_expression
+*argument* 
 
-If you have an expression of an object type, such as a type constructor or a bind variable, then you can use this form of expression to call a routine defined within the type. In this context, the `object_access_expression` is limited to method invocations. 
-
-See Also:
-
-"[Object Access Expressions](Object-Access-Expressions.html#GUID-FA69A056-12A6-420F-A106-EE252386CC43)" for syntax and semantics of this form of expression, and "[Calling a Procedure Using an Expression of an Object Type: Example](CALL.html#GUID-6CD7B9C4-E5DC-4F3C-9B6A-876AD2C63545__I2119934)" for an example of calling a routine using an expression of an object type 
-
-argument
-
-Specify one or more arguments to the routine, if the routine takes arguments. You can use positional, named, or mixed notation for `argument`. For example, all of the following notations are correct: 
+Specify one or more arguments to the routine, if the routine takes arguments. You can use positional, named, or mixed notation for *argument* . For example, all of the following notations are correct: 
     
     
+    ```
     CALL my_procedure(arg1 => 3, arg2 => 4) 
     
+    ```
     
     
+    ```
     CALL my_procedure(3, 4) 
     
     CALL my_procedure(3, arg2 => 4) 
+    ```
 
-Restrictions on Applying Arguments to Routines
+Restrictions on Applying Arguments to Routines 
 
-The `argument` is subject to the following restrictions: 
+The *argument* is subject to the following restrictions: 
 
-  * The data types of the parameters passed by the `CALL` statement must be SQL data types. They cannot be PL/SQL-only data types such as `BOOLEAN`. 
+  * The data types of the parameters passed by the ` CALL ` statement must be SQL data types. They cannot be PL/SQL-only data types such as ` BOOLEAN ` . 
 
-  * An `argument` cannot be a pseudocolumn or either of the object reference functions `VALUE` or `REF`. 
+  * An *argument* cannot be a pseudocolumn or either of the object reference functions ` VALUE ` or ` REF ` . 
 
-  * Any `argument` that is an `IN` `OUT` or `OUT` argument of the routine must correspond to a host variable expression. 
+  * Any *argument* that is an ` IN ` ` OUT ` or ` OUT ` argument of the routine must correspond to a host variable expression. 
 
-  * The number of arguments, including any return argument, is limited to 1000.
+  * The number of arguments, including any return argument, is limited to 1000. 
 
-  * You cannot bind arguments of character and raw data types (`CHAR`, `VARCHAR2`, `NCHAR`, `NVARCHAR2`, `RAW`, `LONG` `RAW`) that are larger than 4K. 
-
-
+  * You cannot bind arguments of character and raw data types ( ` CHAR ` , ` VARCHAR2 ` , ` NCHAR ` , ` NVARCHAR2 ` , ` RAW ` , ` LONG ` ` RAW ` ) that are larger than 4K. 
 
 
-INTO :host_variable
 
-The `INTO` clause applies only to calls to functions. Specify which host variable will store the return value of the function. 
 
-:indicator_variable
+INTO : *host_variable* 
 
-Specify the value or condition of the host variable.
+The ` INTO ` clause applies only to calls to functions. Specify which host variable will store the return value of the function. 
 
-See Also:
+: *indicator_variable* 
 
-Pro*C/C++ Programmer's Guide for more information on [host variables](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPCC3197) and [indicator variables](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPCC3205)
+Specify the value or condition of the host variable. 
 
-Examples
+> **note:** See Also: 
 
-Calling a Procedure: Example
+*Pro*C/C++ Programmer's Guide* for more information on [ host variables ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPCC3197) and [ indicator variables ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPCC3205)
 
-The following statement removes the Entertainment department (created in "[Inserting Sequence Values: Example](INSERT.html#GUID-903F8043-0254-4EE9-ACC1-CB8AC0AF3423__I2102477)") using uses the `remove_dept` procedure. See [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01381) for the example that creates this procedure. 
+Examples 
+
+Calling a Procedure: Example 
+
+The following statement removes the Entertainment department (created in  " [ Inserting Sequence Values: Example ](INSERT.md#GUID-903F8043-0254-4EE9-ACC1-CB8AC0AF3423__I2102477) "  ) using uses the ` remove_dept ` procedure. See [ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01381) for the example that creates this procedure. 
     
     
+    ```
     CALL emp_mgmt.remove_dept(162); 
+    ```
 
-Calling a Procedure Using an Expression of an Object Type: Example
+Calling a Procedure Using an Expression of an Object Type: Example 
 
-The following examples show how call a procedure by using an expression of an object type in the `CALL` statement. The example uses the `warehouse_typ` object type in the order entry sample schema `OE`: 
+The following examples show how call a procedure by using an expression of an object type in the ` CALL ` statement. The example uses the ` warehouse_typ ` object type in the order entry sample schema ` OE ` : 
     
     
+    ```
     ALTER TYPE warehouse_typ
           ADD MEMBER FUNCTION ret_name
           RETURN VARCHAR2
@@ -156,10 +155,12 @@ The following examples show how call a procedure by using an expression of an ob
     --------------------------------
     Warehouse 456
     
+    ```
 
-The next example shows how to use an external function to achieve the same thing:
+The next example shows how to use an external function to achieve the same thing: 
     
     
+    ```
     CREATE OR REPLACE FUNCTION ret_warehouse_typ(x warehouse_typ) 
       RETURN warehouse_typ
       IS
@@ -176,7 +177,4 @@ The next example shows how to use an external function to achieve the same thing
     X
     --------------------------------
     Warehouse 234
-
-[← Previous](AUDIT-Unified-Auditing.md)
-
-[Next →](COMMENT.md)
+    ```

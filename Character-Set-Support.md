@@ -1,36 +1,31 @@
-[Previous](Oracle-Compliance-with-Older-Standards.html) [Next](Oracle-Regular-Expression-Support.html) JavaScript must be enabled to correctly display this content 
+##  Character Set Support {#GUID-7625CE74-9C1F-4CC8-A223-43B8D53776E0} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Oracle and Standard SQL](Oracle-and-Standard-SQL.html)
-  3. Character Set Support
+Oracle supports most national, international, and vendor-specific encoded character set standards. A complete list of character sets supported by Oracle appears in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG584) . 
 
-
-
-## Character Set Support
-
-Oracle supports most national, international, and vendor-specific encoded character set standards. A complete list of character sets supported by Oracle appears in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG584). 
-
-Unicode is a universal encoded character set that lets you store information from any language using a single character set. Unicode is required by modern standards such as XML, Java, JavaScript, and LDAP. Unicode is compliant with ISO/IEC standard 10646. For information on ISO standards, visit the Web site of the International Organization for Standardization:
+Unicode is a universal encoded character set that lets you store information from any language using a single character set. Unicode is required by modern standards such as XML, Java, JavaScript, and LDAP. Unicode is compliant with ISO/IEC standard 10646. For information on ISO standards, visit the Web site of the International Organization for Standardization: 
     
     
-    [http://www.iso.ch/](http://www.iso.ch/)
+    ```
+    http://www.iso.ch/
     
+    ```
 
-Oracle Database Release 23 complies with version 15.0 of the Unicode Standard. For up-to-date information on the Unicode Standard, visit the Web site of the Unicode Consortium:
+Oracle Database Release 23 complies with version 15.0 of the Unicode Standard. For up-to-date information on the Unicode Standard, visit the Web site of the Unicode Consortium: 
     
     
-    [http://www.unicode.org](http://www.unicode.org)Oracle supports the UTF-8 encoding scheme of the Unicode Standard through the AL32UTF8 character set, the UTF-16BE encoding scheme through the AL16UTF16 character set, and the UTF-16LE encoding scheme through the AL16UTF16LE character set. AL32UTF8 is valid as the client and database character set on ASCII-based platforms. AL16UTF16 is valid as the national (`NCHAR`) character set on all platforms. AL16UTF16LE is not valid as the client, database, or national character set. 
+    ```
+    http://www.unicode.org
+    
+    ```
 
-Oracle implements two deprecated Unicode compatibility encoding forms: CESU-8 through the UTF8 character set and UTF-EBCDIC through the UTFE character set. The UTF8 and UTFE character sets are not guaranteed to include updates to the Unicode standard beyond version 3.0. UTF8 is valid as the client and database character set on ASCII-based platforms and as the national (`NCHAR`) character set on all platforms. UTFE is valid as the database character set on EBCDIC-based platforms. 
+Oracle supports the UTF-8 encoding scheme of the Unicode Standard through the AL32UTF8 character set, the UTF-16BE encoding scheme through the AL16UTF16 character set, and the UTF-16LE encoding scheme through the AL16UTF16LE character set. AL32UTF8 is valid as the client and database character set on ASCII-based platforms. AL16UTF16 is valid as the national ( ` NCHAR ` ) character set on all platforms. AL16UTF16LE is not valid as the client, database, or national character set. 
 
-All mentioned Oracle character sets are supported in conversion functions.
+Oracle implements two deprecated Unicode compatibility encoding forms: CESU-8 through the UTF8 character set and UTF-EBCDIC through the UTFE character set. The UTF8 and UTFE character sets are not guaranteed to include updates to the Unicode standard beyond version 3.0. UTF8 is valid as the client and database character set on ASCII-based platforms and as the national ( ` NCHAR ` ) character set on all platforms. UTFE is valid as the database character set on EBCDIC-based platforms. 
 
-Oracle recommends that databases on ASCII-based platforms are created with the AL32UTF8 character set and the AL16UTF16 national (`NCHAR`) character set. Oracle recommends that you avoid the use of the `NCHAR` data types and the associated national character set as they are not supported by some RDBMS components, such as Oracle Text and Oracle XDB. 
+All mentioned Oracle character sets are supported in conversion functions. 
 
-See Also:
+Oracle recommends that databases on ASCII-based platforms are created with the AL32UTF8 character set and the AL16UTF16 national ( ` NCHAR ` ) character set. Oracle recommends that you avoid the use of the ` NCHAR ` data types and the associated national character set as they are not supported by some RDBMS components, such as Oracle Text and Oracle XDB. 
 
-[Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG584) for details on Oracle character set support 
+> **note:** See Also: 
 
-[← Previous](Oracle-Compliance-with-Older-Standards.md)
-
-[Next →](Oracle-Regular-Expression-Support.md)
+[ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG584) for details on Oracle character set support 

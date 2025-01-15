@@ -1,57 +1,54 @@
-[Previous](VALUE.html) [Next](VAR_SAMP.html) JavaScript must be enabled to correctly display this content 
+##  VAR_POP {#GUID-B62FB4A4-BD1F-47B0-B412-31A98B70C2E4} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. VAR_POP 
+Syntax 
 
+![Description of var_pop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/var_pop.gif)[ Description of the illustration var_pop.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/var_pop.md)
 
+> **note:** See Also: 
 
-## VAR_POP 
+" [ Analytic Functions ](Analytic-Functions.md#GUID-527832F7-63C0-4445-8C16-307FA5084056) "  for information on syntax, semantics, and restrictions 
 
-Syntax
+Purpose 
 
-![Description of var_pop.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/var_pop.gif)[Description of the illustration var_pop.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/var_pop.html)
+` VAR_POP ` returns the population variance of a set of numbers after discarding the nulls in this set. You can use it as both an aggregate and analytic function. 
 
-See Also:
+This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument. 
 
-"[Analytic Functions](Analytic-Functions.html#GUID-527832F7-63C0-4445-8C16-307FA5084056)" for information on syntax, semantics, and restrictions 
+> **note:** See Also: 
 
-Purpose
+[ Table 2-9 ](Data-Type-Comparison-Rules.md#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937) for more information on implicit conversion 
 
-`VAR_POP` returns the population variance of a set of numbers after discarding the nulls in this set. You can use it as both an aggregate and analytic function. 
-
-This function takes as an argument any numeric data type or any nonnumeric data type that can be implicitly converted to a numeric data type. The function returns the same data type as the numeric data type of the argument.
-
-See Also:
-
-[Table 2-9](Data-Type-Comparison-Rules.html#GUID-98BE3A78-6E33-4181-B5CB-D96FD9DC1694__G195937 "An X in a cell indicates implicit conversion of the data types") for more information on implicit conversion 
-
-If the function is applied to an empty set, then it returns null. The function makes the following calculation:
+If the function is applied to an empty set, then it returns null. The function makes the following calculation: 
     
     
+    ```
     SUM((expr - (SUM(expr) / COUNT(expr)))2) / COUNT(expr)
     
+    ```
 
-See Also:
+> **note:** See Also: 
 
-"[About SQL Expressions](About-SQL-Expressions.html#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B)" for information on valid forms of `expr` and "[Aggregate Functions](Aggregate-Functions.html#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848)"
+" [ About SQL Expressions ](About-SQL-Expressions.md#GUID-68789A5C-B142-496F-ADEE-837F75F95B2B) "  for information on valid forms of *expr* and  " [ Aggregate Functions ](Aggregate-Functions.md#GUID-62BE676B-AF18-4E63-BD14-25206FEA0848) " 
 
-Aggregate Example
+Aggregate Example 
 
-The following example returns the population variance of the salaries in the `employees` table: 
+The following example returns the population variance of the salaries in the ` employees ` table: 
     
     
+    ```
     SELECT VAR_POP(salary) FROM employees;
     
     VAR_POP(SALARY)
     ---------------
          15141964.9
+    ```
 
-Analytic Example
+Analytic Example 
 
-The following example calculates the cumulative population and sample variances in the `sh.sales` table of the monthly sales in 1998: 
+The following example calculates the cumulative population and sample variances in the ` sh.sales ` table of the monthly sales in 1998: 
     
     
+    ```
     SELECT t.calendar_month_desc,
        VAR_POP(SUM(s.amount_sold)) 
           OVER (ORDER BY t.calendar_month_desc) "Var_Pop",
@@ -76,7 +73,4 @@ The following example calculates the cumulative population and sample variances 
     1998-10  3.9995E+10 4.4439E+10
     1998-11  3.6870E+10 4.0558E+10
     1998-12  4.0216E+10 4.3872E+10
-
-[← Previous](VALUE.md)
-
-[Next →](VAR_SAMP.md)
+    ```

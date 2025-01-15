@@ -1,420 +1,413 @@
-[Previous](CREATE-JAVA.html) [Next](SQL-Statements-CREATE-LIBRARY-to-CREATE-SCHEMA.html) JavaScript must be enabled to correctly display this content 
+##  CREATE JSON RELATIONAL DUALITY VIEW {#GUID-64B579AD-BF97-4B27-BF22-94C1FB6FD6DF} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: COMMIT to CREATE JSON RELATIONAL DUALITY VIEW](SQL-Statements-COMMIT-to-CREATE-JAVA.html)
-  3. CREATE JSON RELATIONAL DUALITY VIEW
+Purpose 
 
+JSON-relational duality views expose data in relational tables as JSON documents. The documents are materialized on demand, not stored as such. Duality views give your data a conceptual and an operational duality as it is organized both relationally and hierarchically. You can base different duality views on data stored in one or more of the same tables, providing different JSON hierarchies over the same, shared data. This means that applications can access (create, query, modify) the same data as a collection of JSON documents or as a set of related tables and columns, and both approaches can be employed at the same time. 
 
+A flex column in a table underlying a JSON-relational duality view lets you add and redefine fields of the document object produced by that table. This provides a certain kind of schema flexibility to a duality view, and to the documents it supports. For more information on flex columns in a table underlying a JSON-relational duality view see [ JSON Data Stored in JSON-Relational Duality Views ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-DB782F3B-F115-4D75-B0BC-9FE06725309F) of the *JSON-Relational Duality Developer's Guide* 
 
-## CREATE JSON RELATIONAL DUALITY VIEW
+You define a duality view against a set of tables related by primary key (PK), foreign key (FK) or unique key constraints (UK). The following rules apply: 
 
-Purpose
+  * The constraints must be declared in the database but need not be enforced (can be ` RELY ` ` DISABLE ` constraints). 
 
-JSON-relational duality views expose data in relational tables as JSON documents. The documents are materialized on demand, not stored as such. Duality views give your data a conceptual and an operational duality as it is organized both relationally and hierarchically. You can base different duality views on data stored in one or more of the same tables, providing different JSON hierarchies over the same, shared data. This means that applications can access (create, query, modify) the same data as a collection of JSON documents or as a set of related tables and columns, and both approaches can be employed at the same time.
+  * The relationships type can be 1-to-1, 1-to-N and N-to-M (using a mapping table with two FKs). The N-to-M relationship can be thought of as the combination of 1-to-N and 1-to-1 relationship 
 
-A flex column in a table underlying a JSON-relational duality view lets you add and redefine fields of the document object produced by that table. This provides a certain kind of schema flexibility to a duality view, and to the documents it supports. For more information on flex columns in a table underlying a JSON-relational duality view see [JSON Data Stored in JSON-Relational Duality Views](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-DB782F3B-F115-4D75-B0BC-9FE06725309F) of the JSON-Relational Duality Developer's Guide
-
-You define a duality view against a set of tables related by primary key (PK), foreign key (FK) or unique key constraints (UK). The following rules apply:
-
-  * The constraints must be declared in the database but need not be enforced (can be `RELY`` DISABLE` constraints). 
-
-  * The relationships type can be 1-to-1, 1-to-N and N-to-M (using a mapping table with two FKs). The N-to-M relationship can be thought of as the combination of 1-to-N and 1-to-1 relationship
-
-  * Columns of two or more tables with 1-to-1 or N-to-1 relationships can be merged into the same JSON object via `UNNEST`. Otherwise a nested JSON object is created. 
+  * Columns of two or more tables with 1-to-1 or N-to-1 relationships can be merged into the same JSON object via ` UNNEST ` . Otherwise a nested JSON object is created. 
 
   * Tables with a 1-to-N relationship create a nested JSON array. 
 
-  * A duality view has only one column of type `JSON`. 
+  * A duality view has only one column of type ` JSON ` . 
 
-  * Each row in the duality view is one JSON object, which is typically a hierarchy of nested objects and arrays.
+  * Each row in the duality view is one JSON object, which is typically a hierarchy of nested objects and arrays. 
 
-  * Each application object is built from values originating from one or multiple rows from the underlying tables of that view. Typically, each table contributes to one (nested) JSON object.
-
-
+  * Each application object is built from values originating from one or multiple rows from the underlying tables of that view. Typically, each table contributes to one (nested) JSON object. 
 
 
-Note:
-
-The SQL data types allowed for a column in a table underlying a duality view are `BINARY_DOUBLE`, `BINARY_FLOAT`, `BLOB`, `BOOLEAN`, `CHAR`, `CLOB`, `DATE`, `JSON`, `INTERVAL DAY TO SECOND`, `INTERVAL YEAR TO MONTH`, `NCHAR`, `NCLOB`, `NUMBER`, `NVARCHAR2`, `VARCHAR2`, `RAW`, `TIMESTAMP`, `TIMESTAMP WITH TIME ZONE`, and `VECTOR`. An error is raised if you specify any other column data type. 
-
-See Also:
-
-[JSON-Relational Duality Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-CE7227BF-B4AF-4024-A578-ED52795F4525)
-
-Syntax
-
-create_json_relational_duality_view::= 
-
-  
 
 
-![Description of create_json_relational_duality_view.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/create_json_relational_duality_view.gif)[Description of the illustration create_json_relational_duality_view.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/create_json_relational_duality_view.html)
+> **note:** 
+
+The SQL data types allowed for a column in a table underlying a duality view are ` BINARY_DOUBLE ` , ` BINARY_FLOAT ` , ` BLOB ` , ` BOOLEAN ` , ` CHAR ` , ` CLOB ` , ` DATE ` , ` JSON ` , ` INTERVAL DAY TO SECOND ` , ` INTERVAL YEAR TO MONTH ` , ` NCHAR ` , ` NCLOB ` , ` NUMBER ` , ` NVARCHAR2 ` , ` VARCHAR2 ` , ` RAW ` , ` TIMESTAMP ` , ` TIMESTAMP WITH TIME ZONE ` , and ` VECTOR ` . An error is raised if you specify any other column data type. 
+
+> **note:** See Also: 
+
+[ *JSON-Relational Duality Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-CE7227BF-B4AF-4024-A578-ED52795F4525)
+
+Syntax 
+
+*create_json_relational_duality_view* ::= 
 
   
 
 
-duality_view_replication_clause
+![Description of create_json_relational_duality_view.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/create_json_relational_duality_view.gif)[ Description of the illustration create_json_relational_duality_view.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/create_json_relational_duality_view.md)
 
   
 
 
-![Description of duality_view_replication_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/duality_view_replication_clause.gif)[Description of the illustration duality_view_replication_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/duality_view_replication_clause.html)
+*duality_view_replication_clause* 
 
   
 
 
-object_gen_clause::= 
+![Description of duality_view_replication_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/duality_view_replication_clause.gif)[ Description of the illustration duality_view_replication_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/duality_view_replication_clause.md)
 
   
 
 
-![Description of object_gen_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_gen_clause.gif)[Description of the illustration object_gen_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_gen_clause.html)
+*object_gen_clause* ::= 
 
   
 
 
-key_value_clause::= 
+![Description of object_gen_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_gen_clause.gif)[ Description of the illustration object_gen_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_gen_clause.md)
 
   
 
 
-![Description of key_value_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/key_value_clause.gif)[Description of the illustration key_value_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/key_value_clause.html)
+*key_value_clause* ::= 
 
   
 
 
-flex_clause::= 
+![Description of key_value_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/key_value_clause.gif)[ Description of the illustration key_value_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/key_value_clause.md)
 
   
 
 
-![Description of flex_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/flex_clause.gif)[Description of the illustration flex_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/flex_clause.html)
+*flex_clause* ::= 
 
   
 
 
-column_tags_clause::= 
+![Description of flex_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/flex_clause.gif)[ Description of the illustration flex_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/flex_clause.md)
 
   
 
 
-![Description of column_tags_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/column_tags_clause.gif)[Description of the illustration column_tags_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/column_tags_clause.html)
+*column_tags_clause* ::= 
 
   
 
 
-duality_view_subquery::= 
+![Description of column_tags_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/column_tags_clause.gif)[ Description of the illustration column_tags_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/column_tags_clause.md)
 
   
 
 
-![Description of duality_view_subquery.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/duality_view_subquery.gif)[Description of the illustration duality_view_subquery.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/duality_view_subquery.html)
+*duality_view_subquery* ::= 
 
   
 
 
-table_tags_clause::= 
+![Description of duality_view_subquery.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/duality_view_subquery.gif)[ Description of the illustration duality_view_subquery.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/duality_view_subquery.md)
 
   
 
 
-![Description of table_tags_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/table_tags_clause.gif)[Description of the illustration table_tags_clause.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/table_tags_clause.html)
+*table_tags_clause* ::= 
 
   
 
 
-graphql_query_for_DV::= 
-
-![Description of graphql_query_for_dv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/graphql_query_for_dv.gif)[Description of the illustration graphql_query_for_dv.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/graphql_query_for_dv.html)
-
-root_query_field::= 
+![Description of table_tags_clause.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/table_tags_clause.gif)[ Description of the illustration table_tags_clause.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/table_tags_clause.md)
 
   
 
 
-![Description of root_query_field.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/root_query_field.gif)[Description of the illustration root_query_field.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/root_query_field.html)( [directives::=](create-json-relational-duality-view.html#GUID-64B579AD-BF97-4B27-BF22-94C1FB6FD6DF__SECTION_VXB_R2Z_FYB), [selection_set::=](create-json-relational-duality-view.html#GUID-64B579AD-BF97-4B27-BF22-94C1FB6FD6DF__SECTION_GJN_GGZ_FYB)) 
+*graphql_query_for_DV* ::= 
 
-root_query_field_name::= 
+![Description of graphql_query_for_dv.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/graphql_query_for_dv.gif)[ Description of the illustration graphql_query_for_dv.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/graphql_query_for_dv.md)
 
-![Description of root_query_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/root_query_field_name.gif)[Description of the illustration root_query_field_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/root_query_field_name.html)
-
-directives::= 
-
-![Description of directives.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/directives.gif)[Description of the illustration directives.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/directives.html)
-
-directive::= 
-
-![Description of directive.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/directive.gif)[Description of the illustration directive.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/directive.html)
-
-arguments::= 
-
-![Description of arguments.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/arguments.gif)[Description of the illustration arguments.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/arguments.html)
-
-argument::= 
-
-![Description of argument.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/argument.gif)[Description of the illustration argument.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/argument.html)
-
-name::= 
+*root_query_field* ::= 
 
   
 
 
-![Description of name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name.gif)[Description of the illustration name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name.html)
+![Description of root_query_field.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/root_query_field.gif)[ Description of the illustration root_query_field.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/root_query_field.md)( *directives::=* , *selection_set::=* ) 
+
+*root_query_field_name* ::= 
+
+![Description of root_query_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/root_query_field_name.gif)[ Description of the illustration root_query_field_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/root_query_field_name.md)
+
+*directives* ::= 
+
+![Description of directives.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/directives.gif)[ Description of the illustration directives.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/directives.md)
+
+*directive* ::= 
+
+![Description of directive.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/directive.gif)[ Description of the illustration directive.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/directive.md)
+
+*arguments* ::= 
+
+![Description of arguments.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/arguments.gif)[ Description of the illustration arguments.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/arguments.md)
+
+*argument* ::= 
+
+![Description of argument.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/argument.gif)[ Description of the illustration argument.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/argument.md)
+
+*name* ::= 
 
   
 
 
-name_start::= 
-
-![Description of name_start.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name_start.gif)[Description of the illustration name_start.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name_start.html)
-
-name_continue::= 
-
-![Description of name_continue.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name_continue.gif)[Description of the illustration name_continue.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name_continue.html)
-
-letter::= 
-
-![Description of letter.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/letter.gif)[Description of the illustration letter.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/letter.html)
-
-upper_letter::= 
-
-![Description of upper_letter.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/upper_letter.gif)[Description of the illustration upper_letter.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/upper_letter.html)
-
-lower_letter::= 
-
-![Description of lower_letter.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/lower_letter.gif)[Description of the illustration lower_letter.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/lower_letter.html)
-
-digit::= 
-
-![Description of digit.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/digit.gif)[Description of the illustration digit.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/digit.html)
-
-selection_set::= 
+![Description of name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name.gif)[ Description of the illustration name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name.md)
 
   
 
 
-![Description of selection_set.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/selection_set.gif)[Description of the illustration selection_set.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/selection_set.html)
+*name_start* ::= 
+
+![Description of name_start.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name_start.gif)[ Description of the illustration name_start.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name_start.md)
+
+*name_continue* ::= 
+
+![Description of name_continue.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name_continue.gif)[ Description of the illustration name_continue.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name_continue.md)
+
+*letter* ::= 
+
+![Description of letter.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/letter.gif)[ Description of the illustration letter.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/letter.md)
+
+*upper_letter* ::= 
+
+![Description of upper_letter.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/upper_letter.gif)[ Description of the illustration upper_letter.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/upper_letter.md)
+
+*lower_letter* ::= 
+
+![Description of lower_letter.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/lower_letter.gif)[ Description of the illustration lower_letter.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/lower_letter.md)
+
+*digit* ::= 
+
+![Description of digit.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/digit.gif)[ Description of the illustration digit.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/digit.md)
+
+*selection_set* ::= 
 
   
 
 
-selection_list::= 
-
-![Description of selection_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/selection_list.gif)[Description of the illustration selection_list.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/selection_list.html)
-
-selection::= 
-
-![Description of selection.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/selection.gif)[Description of the illustration selection.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/selection.html)
-
-field::= 
+![Description of selection_set.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/selection_set.gif)[ Description of the illustration selection_set.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/selection_set.md)
 
   
 
 
-![Description of field.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/field.gif)[Description of the illustration field.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/field.html)( [directives::=](create-json-relational-duality-view.html#GUID-64B579AD-BF97-4B27-BF22-94C1FB6FD6DF__SECTION_VXB_R2Z_FYB), [selection_set::=](create-json-relational-duality-view.html#GUID-64B579AD-BF97-4B27-BF22-94C1FB6FD6DF__SECTION_GJN_GGZ_FYB)) 
+*selection_list* ::= 
 
-alias::= 
+![Description of selection_list.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/selection_list.gif)[ Description of the illustration selection_list.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/selection_list.md)
 
-![Description of alias.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alias.gif)[Description of the illustration alias.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alias.html)
+*selection* ::= 
 
-query_field_name::= 
+![Description of selection.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/selection.gif)[ Description of the illustration selection.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/selection.md)
 
-![Description of query_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_field_name.gif)[Description of the illustration query_field_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_field_name.html)
-
-query_scalar_field_name::= 
-
-![Description of query_scalar_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_scalar_field_name.gif)[Description of the illustration query_scalar_field_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_scalar_field_name.html)
-
-query_object_field_name::= 
-
-![Description of query_object_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_object_field_name.gif)[Description of the illustration query_object_field_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_object_field_name.html)
-
-fragment_spread::= 
-
-![Description of fragment_spread.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/fragment_spread.gif)[Description of the illustration fragment_spread.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/fragment_spread.html)
-
-fragment_name
-
-![Description of fragment_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/fragment_name.gif)[Description of the illustration fragment_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/fragment_name.html)
-
-quoted_name::= 
-
-![Description of quoted_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/quoted_name.gif)[Description of the illustration quoted_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/quoted_name.html)
-
-lower_case_name::= 
+*field* ::= 
 
   
 
 
-![Description of lower_case_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/lower_case_name.gif)[Description of the illustration lower_case_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/lower_case_name.html)
+![Description of field.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/field.gif)[ Description of the illustration field.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/field.md)( *directives::=* , *selection_set::=* ) 
+
+*alias* ::= 
+
+![Description of alias.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alias.gif)[ Description of the illustration alias.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alias.md)
+
+*query_field_name* ::= 
+
+![Description of query_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_field_name.gif)[ Description of the illustration query_field_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_field_name.md)
+
+*query_scalar_field_name* ::= 
+
+![Description of query_scalar_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_scalar_field_name.gif)[ Description of the illustration query_scalar_field_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_scalar_field_name.md)
+
+*query_object_field_name* ::= 
+
+![Description of query_object_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/query_object_field_name.gif)[ Description of the illustration query_object_field_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/query_object_field_name.md)
+
+*fragment_spread* ::= 
+
+![Description of fragment_spread.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/fragment_spread.gif)[ Description of the illustration fragment_spread.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/fragment_spread.md)
+
+*fragment_name* 
+
+![Description of fragment_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/fragment_name.gif)[ Description of the illustration fragment_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/fragment_name.md)
+
+*quoted_name* ::= 
+
+![Description of quoted_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/quoted_name.gif)[ Description of the illustration quoted_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/quoted_name.md)
+
+*lower_case_name* ::= 
 
   
 
 
-name_continue_lower::= 
-
-![Description of name_continue_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name_continue_lower.gif)[Description of the illustration name_continue_lower.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name_continue_lower.html)
-
-field_name::= 
-
-![Description of field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/field_name.gif)[Description of the illustration field_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/field_name.html)
-
-scalar_field_name::= 
-
-![Description of scalar_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/scalar_field_name.gif)[Description of the illustration scalar_field_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/scalar_field_name.html)
-
-object_field_name::= 
-
-![Description of object_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_field_name.gif)[Description of the illustration object_field_name.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_field_name.html)
-
-object_field_name_lower::= 
+![Description of lower_case_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/lower_case_name.gif)[ Description of the illustration lower_case_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/lower_case_name.md)
 
   
 
 
-![Description of object_type_name_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_type_name_lower.gif)[Description of the illustration object_type_name_lower.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_type_name_lower.html)
+*name_continue_lower* ::= 
+
+![Description of name_continue_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/name_continue_lower.gif)[ Description of the illustration name_continue_lower.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/name_continue_lower.md)
+
+*field_name* ::= 
+
+![Description of field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/field_name.gif)[ Description of the illustration field_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/field_name.md)
+
+*scalar_field_name* ::= 
+
+![Description of scalar_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/scalar_field_name.gif)[ Description of the illustration scalar_field_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/scalar_field_name.md)
+
+*object_field_name* ::= 
+
+![Description of object_field_name.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_field_name.gif)[ Description of the illustration object_field_name.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_field_name.md)
+
+*object_field_name_lower* ::= 
 
   
 
 
-schema_name_lower::= 
+![Description of object_type_name_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/object_type_name_lower.gif)[ Description of the illustration object_type_name_lower.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/object_type_name_lower.md)
 
-![Description of schema_name_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/schema_name_lower.gif)[Description of the illustration schema_name_lower.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/schema_name_lower.html)
+  
 
-simple_object_type_name_lower::= 
 
-![Description of simple_object_type_name_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/simple_object_type_name_lower.gif)[Description of the illustration simple_object_type_name_lower.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/simple_object_type_name_lower.html)
+*schema_name_lower* ::= 
 
-Semantics
+![Description of schema_name_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/schema_name_lower.gif)[ Description of the illustration schema_name_lower.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/schema_name_lower.md)
 
-The JSON realtional duality view has only one column of data type `JSON`. The column contains the JSON object which is a representation of a application object. The column name is always `DATA`. 
+*simple_object_type_name_lower* ::= 
 
-The duality view is read-only by default. This means that the following annotations are in effect: `NOINSERT`, `NODELETE`, `NOUPDATE`. 
+![Description of simple_object_type_name_lower.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/simple_object_type_name_lower.gif)[ Description of the illustration simple_object_type_name_lower.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/simple_object_type_name_lower.md)
 
-OR REPLACE
+*Semantics* 
 
-Specify `OR REPLACE` to re-create the view if it already exists. You can use this clause to change the definition of an existing view without dropping, re-creating, and regranting object privileges previously granted on it. 
+The JSON realtional duality view has only one column of data type ` JSON ` . The column contains the JSON object which is a representation of a application object. The column name is always ` DATA ` . 
 
-IF NOT EXISTS
+The duality view is read-only by default. This means that the following annotations are in effect: ` NOINSERT ` , ` NODELETE ` , ` NOUPDATE ` . 
 
-Specifying `IF NOT EXISTS` has the following effects: 
+OR REPLACE 
 
-  * If the view does not exist, a new view is created at the end of the statement.
+Specify ` OR REPLACE ` to re-create the view if it already exists. You can use this clause to change the definition of an existing view without dropping, re-creating, and regranting object privileges previously granted on it. 
 
-  * If the view exists, this is the view you have at the end of the statement. A new one is not created because the older one is detected.
+IF NOT EXISTS 
 
+Specifying ` IF NOT EXISTS ` has the following effects: 
 
+  * If the view does not exist, a new view is created at the end of the statement. 
 
+  * If the view exists, this is the view you have at the end of the statement. A new one is not created because the older one is detected. 
 
-You can have only one of `OR REPLACE` or `IF NOT EXISTS` in a statement at a time. Using both in the same statement results in the following error: 
 
-`ORA-11541`: `REPLACE` and `IF NOT EXISTS` cannot coexist in the same DDL statement. 
 
-Using `IF EXISTS` with `CREATE` results in `ORA-11543`: Incorrect `IF NOT EXISTS` clause for `CREATE` statement 
 
-duality_view_replication_clause
+You can have only one of ` OR REPLACE ` or ` IF NOT EXISTS ` in a statement at a time. Using both in the same statement results in the following error: 
 
-To enable logical replication on a duality view use `CREATE JSON RELATIONAL DUALITY VIEW ENABLE LOGICAL REPLICATION`. 
+` ORA-11541 ` : ` REPLACE ` and ` IF NOT EXISTS ` cannot coexist in the same DDL statement. 
 
-To disable logical replication on a duality view use `CREATE JSON RELATIONAL DUALITY VIEW DISABLE LOGICAL REPLICATION`
+Using ` IF EXISTS ` with ` CREATE ` results in ` ORA-11543 ` : Incorrect ` IF NOT EXISTS ` clause for ` CREATE ` statement 
 
-Note:
+*duality_view_replication_clause* 
 
-On a multi instance RAC database, you must run the `ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL` DDL, before you can enable or disable logical replication. 
+To enable logical replication on a duality view use ` CREATE JSON RELATIONAL DUALITY VIEW ENABLE LOGICAL REPLICATION ` . 
 
-You must run `ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL` after patching all the RAC instances. 
+To disable logical replication on a duality view use ` CREATE JSON RELATIONAL DUALITY VIEW DISABLE LOGICAL REPLICATION `
 
-After you run `ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL` you cannot perform an online downgrade (unpatch) of your RAC database to `DBRU23.5` or lower. You must take a downtime. 
+> **note:** 
 
-On a single instance database, you do not need to run `ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL`. 
+On a multi instance RAC database, you must run the ` ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL ` DDL, before you can enable or disable logical replication. 
 
-root_table
+You must run ` ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL ` after patching all the RAC instances. 
 
-`root_table` refers to the top level table which the duality view is defined on. It is the only table specified in the `FROM` clause of the top level `SELECT` statement. 
+After you run ` ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL ` you cannot perform an online downgrade (unpatch) of your RAC database to ` DBRU23.5 ` or lower. You must take a downtime. 
 
-key_value_clause
+On a single instance database, you do not need to run ` ALTER SYSTEM ENABLE RAC TWO_STAGE ROLLING UPDATES ALL ` . 
 
-You must have one key named `_id` that points to the column(s) that identify the JSON document, usually a primary-key column. 
+*root_table* 
 
-See [Document-Identifier Field for Duality Views](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-A1445407-623E-4898-BE32-5789A11E2EBD) of the JSON-Relational Duality Developer's Guide . 
+*root_table* refers to the top level table which the duality view is defined on. It is the only table specified in the ` FROM ` clause of the top level ` SELECT ` statement. 
 
-table_tags_clause
+*key_value_clause* 
 
-You can mark the view as updatable using the following keyword inside a `WITH` clause: 
+You must have one key named ` _id ` that points to the column(s) that identify the JSON document, usually a primary-key column. 
 
-  * `WITH INSERT`
+See [ Document-Identifier Field for Duality Views ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-A1445407-623E-4898-BE32-5789A11E2EBD) of the *JSON-Relational Duality Developer's Guide* . 
 
-  * `WITH UPDATE`
+*table_tags_clause* 
 
-  * `WITH DELETE`
+You can mark the view as updatable using the following keyword inside a ` WITH ` clause: 
 
+  * ` WITH INSERT `
 
+  * ` WITH UPDATE `
 
+  * ` WITH DELETE `
 
-You can combine keywords together by separting them with a comma, for example: `WITH INSERT, UPDATE`
 
-column_tags_clause
 
-You can mark individual columns with `WITH UPDATE` or `WITH NOUPDATE`. This supercedes table-level annotation. 
 
-Column Properties for Updatability
+You can combine keywords together by separting them with a comma, for example: ` WITH INSERT, UPDATE `
 
-If the `FROM` clause is marked with such keywords, then this sets the default for all columns of the table in the `FROM` clause. You can change the default setting on an individual column. If a the `FROM` clause is specified as `WITH` (`INSERT`, `UPDATE`, `DELETE`) and a column overrides this default with `NOUPDATE`, then updates are not allowed. 
+*column_tags_clause* 
 
-Column Properties for ETAGs
+You can mark individual columns with ` WITH UPDATE ` or ` WITH NOUPDATE ` . This supercedes table-level annotation. 
 
-Individual columns as well as a `FROM` clause can be specified to take part in the `CHECK` `ETAG` calculation or not. An `ETAG` is a hash value for all the columns' values in one JSON object and is used to detect changes. A column without `ETAG` can be changed without this change impacting other operations. By default all columns participate in `ETAG` calculation. Using `NOCHECK` `ETAG` a column can be excluded from `ETAG` calculation. 
+Column Properties for Updatability 
 
-graphql_query_for DV
+If the ` FROM ` clause is marked with such keywords, then this sets the default for all columns of the table in the ` FROM ` clause. You can change the default setting on an individual column. If a the ` FROM ` clause is specified as ` WITH ` ( ` INSERT ` , ` UPDATE ` , ` DELETE ` ) and a column overrides this default with ` NOUPDATE ` , then updates are not allowed. 
 
-`graphql_query_for_DV` is a special kind of shorthand query operation definition in GraphQL. 
+Column Properties for ETAGs 
 
-  * The `root_query_field` is the single top-level selection field of this shorthand query. 
+Individual columns as well as a ` FROM ` clause can be specified to take part in the ` CHECK ` ` ETAG ` calculation or not. An ` ETAG ` is a hash value for all the columns' values in one JSON object and is used to detect changes. A column without ` ETAG ` can be changed without this change impacting other operations. By default all columns participate in ` ETAG ` calculation. Using ` NOCHECK ` ` ETAG ` a column can be excluded from ` ETAG ` calculation. 
 
-For brevity, `graphql_query_for_dv` omits the pair of curly brackets of the top-level`selection_set` of a general shorthand query operation. 
+*graphql_query_for DV* 
 
-  * `selection_set` syntax augments the selection set defined in the GraphQL specification with the option of optional square brackets around the selection list. 
-  * `selection` in `selection_list` can be only `field` or `fragment_spread` . 
+*graphql_query_for_DV* is a special kind of shorthand query operation definition in GraphQL. 
 
-  * `field` `directives` : conform to the GraphQL specification. Only supported custom directives are allowed. @skip and @include are NOT supported. 
+  * The *root_query_field* is the single top-level selection field of this shorthand query. 
 
-  * `argument` conforms to the GraphQL specification. 
+For brevity, *graphql_query_for_dv* omits the pair of curly brackets of the top-level *selection_set* of a general shorthand query operation. 
 
-  * `root_query_field_name` corresponds to the root table. 
+  * *selection_set* syntax augments the selection set defined in the GraphQL specification with the option of optional square brackets around the selection list. 
+  * *selection* in *selection_list* can be only *field* or *fragment_spread* . 
 
-  * `name` has the same syntax as the GraphQL specification. 
+  * *field* *directives* : conform to the GraphQL specification. Only supported custom directives are allowed. @skip and @include are NOT supported. 
 
-  * `quoted_name`: The field names in a GraphQL query for DV allow quoted and un-quoted names. As a convention, un-quoted field names are in lower case only. `any_char` is any character allowed in a quoted identifier in SQL . 
+  * *argument* conforms to the GraphQL specification. 
 
-  * `scalar_field_name` corresponds to a column name of a table. 
+  * *root_query_field_name* corresponds to the root table. 
 
-  * `object_field_name` corresponds to a related table name. In addition you can use quoted names, and fully qualified table names with dot-concatenation. 
+  * ` name  ` has the same syntax as the GraphQL specification. 
 
+  * *quoted_name* : The field names in a GraphQL query for DV allow quoted and un-quoted names. As a convention, un-quoted field names are in lower case only. *any_char* is any character allowed in a quoted identifier in SQL . 
 
+  * *scalar_field_name* corresponds to a column name of a table. 
 
+  * *object_field_name* corresponds to a related table name. In addition you can use quoted names, and fully qualified table names with dot-concatenation. 
 
-Examples
 
-See Also:
 
-[Introduction To Car-Racing Duality Views Example](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-8F192730-7885-40CF-96BE-7D6DC094A838) of the JSON-Relational Duality Developer's Guide. 
+
+Examples 
+
+> **note:** See Also: 
+
+[ *Introduction To Car-Racing Duality Views Example* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-8F192730-7885-40CF-96BE-7D6DC094A838) of the *JSON-Relational Duality Developer's Guide.* 
 
 Example 1: Create a Duality View of Orders 
 
-The following example is a view of an orders view object `ORDERS_OV` with the following information: 
+The following example is a view of an orders view object ` ORDERS_OV ` with the following information: 
 
-  * Order information such as order status from the `Orders` table 
+  * Order information such as order status from the ` Orders ` table 
 
-  * A `CustomerInfo` singleton descendant consisting of customer details from the `Customer` table 
+  * A ` CustomerInfo ` singleton descendant consisting of customer details from the ` Customer ` table 
 
-  * An `OrderItems` array descendant consisting of a list of order items from the `OrderItems` table. 
+  * An ` OrderItems ` array descendant consisting of a list of order items from the ` OrderItems ` table. 
 
-  * Each order item, in turn, consists of `ItemInfo` and `ShipmentInfo` singletons from the `Products` and `Shipment` tables respectively. 
+  * Each order item, in turn, consists of ` ItemInfo ` and ` ShipmentInfo ` singletons from the ` Products ` and ` Shipment ` tables respectively. 
 
 
 
     
     
+    ```
     CREATE OR REPLACE JSON RELATIONAL DUALITY VIEW ORDERS_OV AS
     SELECT JSON { 'OrderId'   : ord.order_id, 
                   'OrderTime' : ord.order_datetime,
@@ -428,19 +421,21 @@ The following example is a view of an orders view object `ORDERS_OV` with the fo
                   'OrderItems' : (SELECT JSON_ARRAYAGG(
     					JSON { 'OrderItemId' : oi.line_item_id,
                                            'Quantity'    : oi.quantity, 					  			
-                                           'ProductInfo' : <subquery from product>        
-                                    	 'ShipmentInfo' : <subquery from shipments>)                                                                                           
+                                           'ProductInfo' :         
+                                    	 'ShipmentInfo' : )                                                                                           
                                 }) 
                                 FROM ORDER_ITEMS oi		
                                 WHERE ord.order_id = oi.order_id) 
     }
     FROM ORDERS ord;
+    ```
 
 Example 2: Create an Updatable View 
 
-To make the view updatable, one has to add `INSERT` or `UPDATE` or `DELETE` or any combination of these to either the `FROM` clause or individual column. The following allows to update the order, only read the customer and insert and update (not delete) order items. 
+To make the view updatable, one has to add ` INSERT ` or ` UPDATE ` or ` DELETE ` or any combination of these to either the ` FROM ` clause or individual column. The following allows to update the order, only read the customer and insert and update (not delete) order items. 
     
     
+    ```
     CREATE OR REPLACE JSON RELATIONAL DUALITY VIEW ORDERS_OV AS
     SELECT JSON { 'OrderId'     : ord.order_id, 
                   'OrderTime'.  : ord.order_datetime,
@@ -454,14 +449,11 @@ To make the view updatable, one has to add `INSERT` or `UPDATE` or `DELETE` or a
                   'OrderItems' : (SELECT JSON_ARRAYAGG(
     					JSON { 'OrderItemId' : oi.line_item_id,
                                            'Quantity'    : oi.quantity, 
-                                           'ProductInfo' : <subquery from product>     
-                                           'ShipmentInfo' : <subquery from shipments>)                                                                                           
+                                           'ProductInfo' :      
+                                           'ShipmentInfo' : )                                                                                           
                                 }) 
                                 FROM ORDER_ITEMS oi WITH INSERT, UPDATE		
                                 WHERE ord.order_id = oi.order_id) 
     }
     FROM ORDERS ord WITH INSERT, UPDATE, DELETE;
-
-[← Previous](CREATE-JAVA.md)
-
-[Next →](SQL-Statements-CREATE-LIBRARY-to-CREATE-SCHEMA.md)
+    ```

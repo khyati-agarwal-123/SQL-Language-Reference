@@ -1,52 +1,42 @@
-[Previous](DROP-PLUGGABLE-DATABASE.html) [Next](DROP-PROCEDURE.html) JavaScript must be enabled to correctly display this content 
+##  DROP PMEM FILESTORE {#GUID-BA62AE81-AA2A-444E-BB46-57B7FB526EFC} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: DROP LIBRARY to DROP SYNONYM](SQL-Statements-DROP-LIBRARY-to-DROP-SYNONYM.html)
-  3. DROP PMEM FILESTORE
+Purpose 
 
+You can drop a PMEM file store with this command. 
 
+Syntax 
 
-## DROP PMEM FILESTORE
-
-Purpose
-
-You can drop a PMEM file store with this command.
-
-Syntax
-
-drop_pmem_filestore::= 
+*drop_pmem_filestore* ::= 
 
   
 
 
-![Description of drop_pmem_fs.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_pmem_fs.gif)[Description of the illustration drop_pmem_fs.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_pmem_fs.html)
+![Description of drop_pmem_fs.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_pmem_fs.gif)[ Description of the illustration drop_pmem_fs.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_pmem_fs.md)
 
   
 
 
-Semantics
+Semantics 
 
-INCLUDING CONTENTS
+INCLUDING CONTENTS 
 
-Specify `INCLUDING CONTENTS` to confirm that Oracle should remove all the files in the PMEM file store. 
+Specify ` INCLUDING CONTENTS ` to confirm that Oracle should remove all the files in the PMEM file store. 
 
-EXCLUDING CONTENTS
+EXCLUDING CONTENTS 
 
-Specify `EXCLUDING CONTENTS` to ensure that Oracle drops the PMEM file store only when the file store is empty. 
+Specify ` EXCLUDING CONTENTS ` to ensure that Oracle drops the PMEM file store only when the file store is empty. 
 
-FORCE
+FORCE 
 
-Specify `FORCE` along with `INCLUDING CONTENTS` if you suspect that the file store is corrupt. 
+Specify ` FORCE ` along with ` INCLUDING CONTENTS ` if you suspect that the file store is corrupt. 
 
 Note that this option does not check if the file store has content in it prior to deleting it. 
 
-If you specify neither `INCLUDING CONTENTS` nor `EXCLUDING CONTENTS`, you must ensure that the file store is empty. `EXCLUDING CONTENTS` is the default behavior. 
+If you specify neither ` INCLUDING CONTENTS ` nor ` EXCLUDING CONTENTS ` , you must ensure that the file store is empty. ` EXCLUDING CONTENTS ` is the default behavior. 
 
-Example
+Example 
     
     
+    ```
     DROP PMEM FILESTORE cloud_db_1 EXCLUDING CONTENTS
-
-[← Previous](DROP-PLUGGABLE-DATABASE.md)
-
-[Next →](DROP-PROCEDURE.md)
+    ```

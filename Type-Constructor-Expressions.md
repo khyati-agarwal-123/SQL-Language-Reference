@@ -1,38 +1,31 @@
-[Previous](Scalar-Subquery-Expressions.html) [Next](Expression-Lists.html) JavaScript must be enabled to correctly display this content 
+##  Type Constructor Expressions {#GUID-E8A491DE-18BA-4A1E-8CE2-BBA43E5C52D6} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Expressions](Expressions.html)
-  3. Type Constructor Expressions 
+A type constructor expression specifies a call to a constructor method. The argument to the type constructor is any expression. Type constructors can be invoked anywhere functions are invoked. 
 
+*type_constructor_expression* ::= 
 
+![Description of type_constructor_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/type_constructor_expression.gif)[ Description of the illustration type_constructor_expression.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/type_constructor_expression.md)
 
-## Type Constructor Expressions 
+The ` NEW ` keyword applies to constructors for object types but not for collection types. It instructs Oracle to construct a new object by invoking an appropriate constructor. The use of the ` NEW ` keyword is optional, but it is good practice to specify it. 
 
-A type constructor expression specifies a call to a constructor method. The argument to the type constructor is any expression. Type constructors can be invoked anywhere functions are invoked.
+If *type_name* is an  object type  , then the expressions must be an ordered list, where the first argument  is a value whose type matches the first attribute of the object type, the second argument is a value whose type matches the second attribute of the object type, and so on. The total number of arguments to the constructor must match the total number of attributes of the object type. 
 
-type_constructor_expression::= 
+If *type_name* is a  varray  or  nested table type  , then the expression list can contain zero or more arguments. Zero arguments implies construction of an empty collection. Otherwise, each argument corresponds to an element value whose type is the element type of the collection type. 
 
-![Description of type_constructor_expression.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/type_constructor_expression.gif)[Description of the illustration type_constructor_expression.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/type_constructor_expression.html)
+Restriction on Type Constructor Invocation 
 
-The `NEW` keyword applies to constructors for object types but not for collection types. It instructs Oracle to construct a new object by invoking an appropriate constructor. The use of the `NEW` keyword is optional, but it is good practice to specify it. 
+In an invocation of a type constructor method, the number of parameters ( *expr* ) specified cannot exceed 999, even if the object type has more than 999 attributes. This limitation applies only when the constructor is called from SQL. For calls from PL/SQL, the PL/SQL limitations apply. 
 
-If `type_name` is an object type, then the expressions must be an ordered list, where the first argument is a value whose type matches the first attribute of the object type, the second argument is a value whose type matches the second attribute of the object type, and so on. The total number of arguments to the constructor must match the total number of attributes of the object type. 
+> **note:** See Also: 
 
-If `type_name` is a varray or nested table type, then the expression list can contain zero or more arguments. Zero arguments implies construction of an empty collection. Otherwise, each argument corresponds to an element value whose type is the element type of the collection type. 
+[ *Oracle Database Object-Relational Developer's Guide*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADOBJ002) for additional information on constructor methods and [ *Oracle Database PL/SQL Language Reference*  ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS018) for information on PL/SQL limitations on calls to type constructors 
 
-Restriction on Type Constructor Invocation
+Expression Example 
 
-In an invocation of a type constructor method, the number of parameters (`expr`) specified cannot exceed 999, even if the object type has more than 999 attributes. This limitation applies only when the constructor is called from SQL. For calls from PL/SQL, the PL/SQL limitations apply. 
-
-See Also:
-
-[Oracle Database Object-Relational Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADOBJ002) for additional information on constructor methods and [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS018) for information on PL/SQL limitations on calls to type constructors 
-
-Expression Example
-
-This example uses the `cust_address_typ` type in the sample `oe` schema to show the use of an expression in the call to a constructor method (the PL/SQL is shown in italics): 
+This example uses the ` cust_address_typ ` type in the sample ` oe ` schema to show the use of an expression in the call to a constructor method (the PL/SQL is shown in italics): 
     
     
+    ```
     CREATE TYPE address_book_t AS TABLE OF cust_address_typ; 
     DECLARE 
        myaddr cust_address_typ := cust_address_typ( 
@@ -44,12 +37,14 @@ This example uses the `cust_address_typ` type in the sample `oe` schema to show 
           NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
     END; 
     /
+    ```
 
-Subquery Example
+Subquery Example 
 
-This example uses the `warehouse_typ` type in the sample schema `oe` to illustrate the use of a subquery in the call to the constructor method. 
+This example uses the ` warehouse_typ ` type in the sample schema ` oe ` to illustrate the use of a subquery in the call to the constructor method. 
     
     
+    ```
     CREATE TABLE warehouse_tab OF warehouse_typ;
     
     INSERT INTO warehouse_tab 
@@ -71,7 +66,4 @@ This example uses the `warehouse_typ` type in the sample schema `oe` to illustra
           B_ID     FAC_ID WH(WAREHOUSE_ID, WAREHOUSE_NAME, LOCATION_ID)
     ---------- ---------- ---------------------------------------------
             10        102 WAREHOUSE_TYP(101, 'new_wh', 201)
-
-[← Previous](Scalar-Subquery-Expressions.md)
-
-[Next →](Expression-Lists.md)
+    ```

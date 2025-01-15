@@ -1,15 +1,3 @@
-[Previous](SQL-Standards.html) [Next](Lexical-Conventions.html) JavaScript must be enabled to correctly display this content 
+##  Using Enterprise Manager {#GUID-ABEC85E5-1C69-40EE-BAE5-B693C1F2131C} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Introduction to Oracle SQL](Introduction-to-Oracle-SQL.html)
-  3. Using Enterprise Manager 
-
-
-
-## Using Enterprise Manager 
-
-Many of the operations you can accomplish using SQL syntax can be done much more easily using Enterprise Manager. For more information, see the Oracle Enterprise Manager documentation set, Oracle Database 2 Day DBA, or any of the Oracle Database 2 Day + books. 
-
-[← Previous](SQL-Standards.md)
-
-[Next →](Lexical-Conventions.md)
+Many of the operations you can accomplish using SQL syntax can be done much more easily using Enterprise Manager. For more information, see the Oracle Enterprise Manager documentation set, *Oracle Database 2 Day DBA* , or any of the Oracle Database *2 Day +* books. 

@@ -1,75 +1,72 @@
-[Previous](TO_CHAR-character.html) [Next](TO_CHAR-number.html) JavaScript must be enabled to correctly display this content 
+##  TO_CHAR (datetime) {#GUID-0C3EEFD1-AE3D-452D-BF23-2FC95664E78F} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. TO_CHAR (datetime) 
+Syntax 
 
+*to_char_date* ::= 
 
+![Description of to_char_date.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_char_date.gif)[ Description of the illustration to_char_date.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_char_date.md)
 
-## TO_CHAR (datetime) 
+Purpose 
 
-Syntax
+` TO_CHAR ` (datetime) converts a datetime or interval value of ` DATE ` , ` TIMESTAMP ` , ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` , ` TIMESTAMP ` ` WITH ` ` LOCAL ` ` TIME ` ` ZONE ` , ` INTERVAL ` ` DAY ` ` TO ` ` SECOND ` , or ` INTERVAL ` ` YEAR ` ` TO ` ` MONTH ` data type to a value of ` VARCHAR2 ` data type in the format specified by the date format *fmt* . If you omit *fmt* , then *date* is converted to a ` VARCHAR2 ` value as follows: 
 
-to_char_date::= 
+  * ` DATE ` values are converted to values in the default date format. 
 
-![Description of to_char_date.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/to_char_date.gif)[Description of the illustration to_char_date.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/to_char_date.html)
+  * ` TIMESTAMP ` and ` TIMESTAMP ` ` WITH ` ` LOCAL ` ` TIME ` ` ZONE ` values are converted to values in the default timestamp format. 
 
-Purpose
+  * ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` values are converted to values in the default timestamp with time zone format. 
 
-`TO_CHAR` (datetime) converts a datetime or interval value of `DATE`, `TIMESTAMP`, `TIMESTAMP` `WITH` `TIME` `ZONE`, `TIMESTAMP` `WITH` `LOCAL` `TIME` `ZONE`, `INTERVAL` `DAY` `TO` `SECOND`, or `INTERVAL` `YEAR` `TO` `MONTH` data type to a value of `VARCHAR2` data type in the format specified by the date format `fmt`. If you omit `fmt`, then `date` is converted to a `VARCHAR2` value as follows: 
-
-  * `DATE` values are converted to values in the default date format. 
-
-  * `TIMESTAMP` and `TIMESTAMP` `WITH` `LOCAL` `TIME` `ZONE` values are converted to values in the default timestamp format. 
-
-  * `TIMESTAMP` `WITH` `TIME` `ZONE` values are converted to values in the default timestamp with time zone format. 
-
-  * Interval values are converted to the numeric representation of the interval literal.
+  * Interval values are converted to the numeric representation of the interval literal. 
 
 
 
 
-Refer to "[Format Models](Format-Models.html#GUID-DFB23985-2943-4C6A-96DF-DF0F664CED96)" for information on datetime formats. 
+Refer to  " [ Format Models ](Format-Models.md#GUID-DFB23985-2943-4C6A-96DF-DF0F664CED96) "  for information on datetime formats. 
 
-The `'nlsparam'` argument specifies the language in which month and day names and abbreviations are returned. This argument can have this form: 
+The *'nlsparam'* argument specifies the language in which month and day names and abbreviations are returned. This argument can have this form: 
     
     
+    ```
     'NLS_DATE_LANGUAGE = language' 
     
+    ```
 
-If you omit `'nlsparam'`, then this function uses the default date language for your session. 
+If you omit *'nlsparam'* , then this function uses the default date language for your session. 
 
-See Also:
+> **note:** See Also: 
 
-"[Security Considerations for Data Conversion](Data-Type-Comparison-Rules.html#GUID-6A02902A-1EF1-41E4-9494-381488BD272F)"
+" [ Security Considerations for Data Conversion ](Data-Type-Comparison-Rules.md#GUID-6A02902A-1EF1-41E4-9494-381488BD272F) " 
 
-You can use this function in conjunction with any of the XML functions to generate a date in the database format rather than the XML Schema standard format.
+You can use this function in conjunction with any of the XML functions to generate a date in the database format rather than the XML Schema standard format. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle XML DB Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDB1620) for information about formatting of XML dates and timestamps, including examples 
+  * [ *Oracle XML DB Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADXDB1620) for information about formatting of XML dates and timestamps, including examples 
 
-  * "[XML Functions](Single-Row-Functions.html#GUID-C64CC0DE-0D7C-42C8-B078-92A2984AD953)" for a listing of the XML functions 
+  * " [ XML Functions ](Single-Row-Functions.md#GUID-C64CC0DE-0D7C-42C8-B078-92A2984AD953) "  for a listing of the XML functions 
 
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of this function 
-
-
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of this function 
 
 
-Examples
 
-The following example uses this table:
+
+Examples 
+
+The following example uses this table: 
     
     
+    ```
     CREATE TABLE date_tab (
        ts_col      TIMESTAMP,
        tsltz_col   TIMESTAMP WITH LOCAL TIME ZONE,
        tstz_col    TIMESTAMP WITH TIME ZONE);
     
+    ```
 
-The example shows the results of applying `TO_CHAR` to different `TIMESTAMP` data types. The result for a `TIMESTAMP` `WITH` `LOCAL` `TIME` `ZONE` column is sensitive to session time zone, whereas the results for the `TIMESTAMP` and `TIMESTAMP` `WITH` `TIME` `ZONE` columns are not sensitive to session time zone: 
+The example shows the results of applying ` TO_CHAR ` to different ` TIMESTAMP ` data types. The result for a ` TIMESTAMP ` ` WITH ` ` LOCAL ` ` TIME ` ` ZONE ` column is sensitive to session time zone, whereas the results for the ` TIMESTAMP ` and ` TIMESTAMP ` ` WITH ` ` TIME ` ` ZONE ` columns are not sensitive to session time zone: 
     
     
+    ```
     ALTER SESSION SET TIME_ZONE = '-8:00';
     INSERT INTO date_tab VALUES (  
        TIMESTAMP'1999-12-01 10:00:00',
@@ -121,21 +118,25 @@ The example shows the results of applying `TO_CHAR` to different `TIMESTAMP` dat
     -05:00     01-DEC-1999 13:00:00.000000
     -05:00     02-DEC-1999 13:00:00.000000
     
+    ```
 
-The following example converts an interval literal into a text literal:
+The following example converts an interval literal into a text literal: 
     
     
+    ```
     SELECT TO_CHAR(INTERVAL '123-2' YEAR(3) TO MONTH) FROM DUAL;
     
     TO_CHAR
     -------
     +123-02
+    ```
 
-Using TO_CHAR to Format Dates and Numbers: Example
+Using TO_CHAR to Format Dates and Numbers: Example 
 
-The following statement converts date values to the format specified in the `TO_CHAR` function: 
+The following statement converts date values to the format specified in the ` TO_CHAR ` function: 
     
     
+    ```
     WITH dates AS (  
       SELECT date'2015-01-01' d FROM dual union  
       SELECT date'2015-01-10' d FROM dual union  
@@ -147,10 +148,12 @@ The following statement converts date values to the format specified in the `TO_
            to_char(d, 'iw-iyyy') "ISO Year and Week of Year" 
     FROM dates;
     
+    ```
 
-The following statement converts date and timestamp values to the format specified in the `TO_CHAR` function: 
+The following statement converts date and timestamp values to the format specified in the ` TO_CHAR ` function: 
     
     
+    ```
     WITH dates AS (  
       SELECT date'2015-01-01' d FROM dual union  
       SELECT date'2015-01-10' d FROM dual union  
@@ -166,10 +169,12 @@ The following statement converts date and timestamp values to the format specifi
            to_char(d, 'Year') "Year"  
     FROM dates;
     
+    ```
 
-The following statement extracts the datetime fields specified in the `EXTRACT` function from the input datetime expressions: 
+The following statement extracts the datetime fields specified in the ` EXTRACT ` function from the input datetime expressions: 
     
     
+    ```
     WITH dates AS (   
       SELECT date'2015-01-01' d FROM dual union   
       SELECT date'2015-01-10' d FROM dual union   
@@ -184,10 +189,12 @@ The following statement extracts the datetime fields specified in the `EXTRACT` 
            extract(year from d) years  
     FROM dates;
     
+    ```
 
-The following statement displays the input numbers as per the format specified in the `TO_CHAR` function: 
+The following statement displays the input numbers as per the format specified in the ` TO_CHAR ` function: 
     
     
+    ```
     WITH nums AS (  
       SELECT 10 n FROM dual union  
       SELECT 9.99 n FROM dual union  
@@ -200,10 +207,12 @@ The following statement displays the input numbers as per the format specified i
            to_char(n, '9.9EEEE') "Scientific Notation"  
     FROM nums;
     
+    ```
 
-The following statement converts the input numbers as per the format specified in the `TO_CHAR` function: 
+The following statement converts the input numbers as per the format specified in the ` TO_CHAR ` function: 
     
     
+    ```
     WITH nums AS (  
       SELECT 10 n FROM dual union  
       SELECT 9.99 n FROM dual union  
@@ -219,10 +228,12 @@ The following statement converts the input numbers as per the format specified i
            to_char(n, 'X') "Hexadecimal Value" 
     FROM nums;
     
+    ```
 
-The following statement converts the input numbers as per the format specified in the `TO_CHAR` function: 
+The following statement converts the input numbers as per the format specified in the ` TO_CHAR ` function: 
     
     
+    ```
     WITH nums AS (  
       SELECT 10 n FROM dual union  
       SELECT 9.99 n FROM dual union  
@@ -238,14 +249,16 @@ The following statement converts the input numbers as per the format specified i
            to_char(n, 'XXXXXX') "Hexadecimal Value"  
     FROM nums;
     
+    ```
 
-Live SQL:
+> **note:** Live SQL: 
 
-View and run a related example on Oracle Live SQL at [Using TO_CHAR to Format Dates and Numbers](https://livesql.oracle.com/apex/livesql/docs/sqlrf/to_char/dates-numbers.md)TO_CHAR (datetime) Function: Example
+View and run a related example on Oracle Live SQL at [ *Using TO_CHAR to Format Dates and Numbers* ](https://livesql.oracle.com/apex/livesql/docs/sqlrf/to_char/dates-numbers.md)TO_CHAR (datetime) Function: Example 
 
-The following statements create a table named `empl_temp` and populate it with employee details: 
+The following statements create a table named ` empl_temp ` and populate it with employee details: 
     
     
+    ```
     CREATE TABLE empl_temp 
       ( 
          employee_id NUMBER(6), 
@@ -268,10 +281,12 @@ The following statements create a table named `empl_temp` and populate it with e
     
     INSERT INTO empl_temp
     VALUES(115,'Jane','Doe','example.com','15-JAN-2015','1005','Executive Employee');
+    ```
 
-The following statement displays dates by using the short and long formats:
+The following statement displays dates by using the short and long formats: 
     
     
+    ```
     SELECT hire_date "Default",  
            TO_CHAR(hire_date,'DS') "Short",  
            TO_CHAR(hire_date,'DL') "Long"FROM empl_temp  
@@ -282,11 +297,8 @@ The following statement displays dates by using the short and long formats:
     10-JAN-15  1/10/2015  Saturday, January 10, 2015
     12-JAN-15  1/12/2015  Monday, January 12, 2015
     15-JAN-15  1/15/2015  Thursday, January 15, 2015
+    ```
 
-Live SQL:
+> **note:** Live SQL: 
 
-View and run a related example on Oracle Live SQL at [Using the TO_CHAR Function](https://livesql.oracle.com/apex/livesql/docs/sqlrf/to_char/tochar_basic.md)
-
-[← Previous](TO_CHAR-character.md)
-
-[Next →](TO_CHAR-number.md)
+View and run a related example on Oracle Live SQL at [ *Using the TO_CHAR Function* ](https://livesql.oracle.com/apex/livesql/docs/sqlrf/to_char/tochar_basic.md)

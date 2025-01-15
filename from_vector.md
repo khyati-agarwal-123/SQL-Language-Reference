@@ -1,43 +1,37 @@
-[Previous](FROM_TZ.html) [Next](GREATEST.html) JavaScript must be enabled to correctly display this content 
+##  FROM_VECTOR {#GUID-AA60B3CB-FCB7-4944-9E06-976C272855B1} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. FROM_VECTOR
+` FROM_VECTOR ` takes a vector as input and returns a string of type ` VARCHAR2 ` or ` CLOB ` as output. 
 
-
-
-## FROM_VECTOR
-
-`FROM_VECTOR` takes a vector as input and returns a string of type `VARCHAR2` or `CLOB` as output. 
-
-Syntax
+Syntax 
 
   
 
 
-![Description of from_vector.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/from_vector.gif)[Description of the illustration from_vector.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/from_vector.html)
+![Description of from_vector.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/from_vector.gif)[ Description of the illustration from_vector.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/from_vector.md)
 
   
 
 
-Purpose
+Purpose 
 
-`FROM_VECTOR` optionally takes a `RETURNING` clause to specify the data type of the returned value. 
+` FROM_VECTOR ` optionally takes a ` RETURNING ` clause to specify the data type of the returned value. 
 
-If `VARCHAR2` is specified without size, the size of the returned value size is 32767. 
+If ` VARCHAR2 ` is specified without size, the size of the returned value size is 32767. 
 
-You can optionally specify the text format of the output in the `FORMAT` clause, using the tokens `SPARSE` or `DENSE`. Note that the input vector storage format does not need to match the specified output format. 
+You can optionally specify the text format of the output in the ` FORMAT ` clause, using the tokens ` SPARSE ` or ` DENSE ` . Note that the input vector storage format does not need to match the specified output format. 
 
-There is no support to convert to `CHAR`, `NCHAR`, and `NVARCHAR2`. 
+There is no support to convert to ` CHAR ` , ` NCHAR ` , and ` NVARCHAR2 ` . 
 
-`FROM_VECTOR` is synonymous with `VECTOR_SERIALIZE`. 
+` FROM_VECTOR ` is synonymous with ` VECTOR_SERIALIZE ` . 
 
-Parameters
+Parameters 
 
-`expr` must evaluate to a vector. The function returns NULL if `expr` is NULL. 
+*expr* must evaluate to a vector. The function returns NULL if *expr* is NULL. 
 
-Examples
+Examples 
     
+    
+    ```
     
     SELECT FROM_VECTOR(TO_VECTOR('[1, 2, 3]') );
     
@@ -47,7 +41,10 @@ Examples
     [1.0E+000,2.0E+000,3.0E+000] 
     
     1 row selected.
+    ```
     
+    
+    ```
     
     SELECT FROM_VECTOR(TO_VECTOR('[1.1, 2.2, 3.3]', 3, FLOAT32) );
     
@@ -57,7 +54,10 @@ Examples
     [1.10000002E+000,2.20000005E+000,3.29999995E+000] 
     
     1 row selected.
+    ```
     
+    
+    ```
     
     SELECT FROM_VECTOR( TO_VECTOR('[1.1, 2.2, 3.3]', 3, FLOAT32) RETURNING VARCHAR2(1000));
     
@@ -67,7 +67,10 @@ Examples
     [1.10000002E+000,2.20000005E+000,3.29999995E+000] 
     
     1 row selected.
+    ```
     
+    
+    ```
     
     SELECT FROM_VECTOR(TO_VECTOR('[1.1, 2.2, 3.3]', 3, FLOAT32) RETURNING CLOB );
     
@@ -77,7 +80,10 @@ Examples
     [1.10000002E+000,2.20000005E+000,3.29999995E+000] 
     
     1 row selected.
+    ```
     
+    
+    ```
     
     SELECT FROM_VECTOR(TO_VECTOR('[5,[2,4],[1.0,2.0]]', 5, FLOAT64, SPARSE) RETURNING CLOB FORMAT SPARSE);
     
@@ -86,7 +92,10 @@ Examples
     [5,[2,4],[1.0E+000,2.0E+000]]
     
     1 row selected.
+    ```
     
+    
+    ```
     
     SELECT FROM_VECTOR(TO_VECTOR('[5,[2,4],[1.0,2.0]]', 5, FLOAT64, SPARSE) RETURNING CLOB FORMAT DENSE);
     
@@ -95,20 +104,21 @@ Examples
     [0,1.0E+000,0,2.0E+000,0]
     
     1 row selected.
+    ```
 
-Note:
+> **note:** 
 
-  * Applications using Oracle Client 23ai libraries or Thin mode drivers can fetch vector data directly, as shown in the following example:
+  * Applications using Oracle Client 23ai libraries or Thin mode drivers can fetch vector data directly, as shown in the following example: 
     
-        SELECT dataVec FROM vecTab;
+        ```
+    SELECT dataVec FROM vecTab;
+    ```
 
-  * For applications using Oracle Client 23ai libraries prior to 23ai connected to Oracle Database 23ai, use the `FROM_VECTOR` to fetch vector data, as shown by the following example: 
+  * For applications using Oracle Client 23ai libraries prior to 23ai connected to Oracle Database 23ai, use the ` FROM_VECTOR ` to fetch vector data, as shown by the following example: 
     
-        SELECT FROM_VECTOR(dataVec) FROM vecTab;
+        ```
+    SELECT FROM_VECTOR(dataVec) FROM vecTab;
+    ```
 
 
 
-
-[← Previous](FROM_TZ.md)
-
-[Next →](GREATEST.md)

@@ -1,52 +1,42 @@
-[Previous](SQL-Statements-DROP-LIBRARY-to-DROP-SYNONYM.html) [Next](DROP-LOCKDOWN-PROFILE.html) JavaScript must be enabled to correctly display this content 
+##  DROP LIBRARY {#GUID-82F45872-78AD-4125-8D14-EE6A69E2738D} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: DROP LIBRARY to DROP SYNONYM](SQL-Statements-DROP-LIBRARY-to-DROP-SYNONYM.html)
-  3. DROP LIBRARY 
+Purpose 
 
+Use the ` DROP ` ` LIBRARY ` statement to remove an external procedure library from the database. 
 
+> **note:** See Also: 
 
-## DROP LIBRARY 
+[ CREATE LIBRARY ](CREATE-LIBRARY.md#GUID-F042ABC9-2BF5-4E65-9D52-216D6228B288) for information on creating a library 
 
-Purpose
+Prerequisites 
 
-Use the `DROP` `LIBRARY` statement to remove an external procedure library from the database. 
+You must have the ` DROP ` ` ANY ` ` LIBRARY ` system privilege. 
 
-See Also:
+Syntax 
 
-[CREATE LIBRARY](CREATE-LIBRARY.html#GUID-F042ABC9-2BF5-4E65-9D52-216D6228B288) for information on creating a library 
+*drop_library* ::= 
 
-Prerequisites
+![Description of drop_library.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_library.gif)[ Description of the illustration drop_library.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_library.md)
 
-You must have the `DROP` `ANY` `LIBRARY` system privilege. 
+Semantics 
 
-Syntax
+IF EXISTS 
 
-drop_library::= 
+Specify ` IF EXISTS ` to drop an existing object. 
 
-![Description of drop_library.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_library.gif)[Description of the illustration drop_library.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_library.html)
+Specifying ` IF NOT EXISTS ` with ` DROP ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-Semantics
+*library_name* 
 
-IF EXISTS
+Specify the name of the external procedure library being dropped. 
 
-Specify `IF EXISTS` to drop an existing object. 
+Examples 
 
-Specifying `IF NOT EXISTS` with `DROP` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
+Dropping a Library: Example 
 
-library_name
-
-Specify the name of the external procedure library being dropped.
-
-Examples
-
-Dropping a Library: Example
-
-The following statement drops the `ext_lib` library: 
+The following statement drops the ` ext_lib ` library: 
     
     
+    ```
     DROP LIBRARY ext_lib;
-
-[← Previous](SQL-Statements-DROP-LIBRARY-to-DROP-SYNONYM.md)
-
-[Next →](DROP-LOCKDOWN-PROFILE.md)
+    ```

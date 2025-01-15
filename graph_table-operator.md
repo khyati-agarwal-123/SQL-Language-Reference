@@ -1,62 +1,56 @@
-[Previous](data-quality-operators.html) [Next](graph-reference.html) JavaScript must be enabled to correctly display this content 
+##  GRAPH_TABLE Operator {#GUID-CA6A600E-2087-46F8-A081-C6F3F01CF305} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Operators](Operators.html)
-  3. GRAPH_TABLE Operator
+Purpose 
 
+The ` GRAPH_TABLE ` operator can be used as a table expression in a ` FROM ` clause. It takes a graph as input against which it matches a specified graph pattern. It then outputs a set of solutions in tabular form. 
 
+This topic consists of the following sub-topics: 
 
-## GRAPH_TABLE Operator
+  * [ Graph Reference ](graph-reference.md#GUID-873488F0-58D1-4B9D-94B1-F4967B1785DD)
 
-Purpose
+  * [ Graph Pattern ](graph-pattern.md#GUID-1F1E8BC1-CEBB-43A2-B66A-C7D9BB24D88C)
 
-The `GRAPH_TABLE` operator can be used as a table expression in a `FROM` clause. It takes a graph as input against which it matches a specified graph pattern. It then outputs a set of solutions in tabular form. 
+  * [ Graph Table Shape ](graph-table-shape.md#GUID-93202EC2-D2F3-45B0-869D-4C03057EB1A5)
 
-This topic consists of the following sub-topics:
-
-  * [Graph Reference](graph-reference.html#GUID-873488F0-58D1-4B9D-94B1-F4967B1785DD)
-
-  * [Graph Pattern](graph-pattern.html#GUID-1F1E8BC1-CEBB-43A2-B66A-C7D9BB24D88C)
-
-  * [Graph Table Shape](graph-table-shape.html#GUID-93202EC2-D2F3-45B0-869D-4C03057EB1A5)
-
-  * [Value Expressions for GRAPH_TABLE](value-expressions-graph_table.html#GUID-30B0844D-329B-4A95-BEA1-953AF9F3ED7C)
+  * [ Value Expressions for GRAPH_TABLE ](value-expressions-graph_table.md#GUID-30B0844D-329B-4A95-BEA1-953AF9F3ED7C)
 
 
 
 
-Syntax
+Syntax 
 
-graph_table::= 
+*graph_table* ::= 
 
   
 
 
-![Description of graph_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/graph_table.gif)[Description of the illustration graph_table.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/graph_table.html)([graph_reference ::=](graph-reference.html#GUID-873488F0-58D1-4B9D-94B1-F4967B1785DD__GUID-95FA262E-2E7B-4457-9B62-CBB97ED19E56), [graph_pattern ::=](graph-pattern.html#GUID-1F1E8BC1-CEBB-43A2-B66A-C7D9BB24D88C__GUID-2AE8A195-AE59-491B-B2F2-03C6204D33F0), [graph_table_shape ::=](graph-table-shape.html#GUID-93202EC2-D2F3-45B0-869D-4C03057EB1A5__GUID-25DD691C-4599-47C5-9122-B59ACCD03DBB)) 
+![Description of graph_table.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/graph_table.gif)[ Description of the illustration graph_table.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/graph_table.md)( *graph_reference ::=* , *graph_pattern ::=* , *graph_table_shape ::=* ) 
 
-Semantics
+Semantics 
 
-The` GRAPH_TABLE` operator starts with the keyword `GRAPH_TABLE` and consists of the following three parts that are placed between parentheses: 
+The ` GRAPH_TABLE ` operator starts with the keyword ` GRAPH_TABLE ` and consists of the following three parts that are placed between parentheses: 
 
-  * `graph_reference`: a reference to a graph to perform the pattern matching on. Note that any graph first needs to be created through a `CREATE PROPERTY GRAPH` statement before it can be referenced in a `GRAPH_TABLE`. 
+  * *graph_reference* : a reference to a graph to perform the pattern matching on. Note that any graph first needs to be created through a ` CREATE PROPERTY GRAPH ` statement before it can be referenced in a ` GRAPH_TABLE ` . 
 
-  * `graph_pattern`: a graph pattern consisting of vertex and edge patterns together with search conditions. The pattern is matched against the graph to obtain a set of solutions. 
+  * *graph_pattern* : a graph pattern consisting of vertex and edge patterns together with search conditions. The pattern is matched against the graph to obtain a set of solutions. 
 
-  * `graph_table_shape`: a `COLUMNS` clause that projects the solutions into a tabular form. 
-
-
+  * *graph_table_shape* : a ` COLUMNS ` clause that projects the solutions into a tabular form. 
 
 
-A `FROM` clause in SQL may contain any number of `GRAPH_TABLE` operators as well as other types of table expressions. This allows for joining data from multiple graphs or for joining graph data with tabular, JSON, XML, or other types of data. 
 
-Examples
 
-Setting Up Sample Data
+A ` FROM ` clause in SQL may contain any number of ` GRAPH_TABLE ` operators as well as other types of table expressions. This allows for joining data from multiple graphs or for joining graph data with tabular, JSON, XML, or other types of data. 
 
-This example creates a property graph, `students_graph`, using `persons`,` university`, `friendships`, and `students` as the underlying database tables for the graph. 
+Examples 
 
-The following statements first create the necessary tables and fill them with sample data:
+Setting Up Sample Data 
+
+This example creates a property graph, ` students_graph ` , using ` persons ` , ` university ` , ` friendships ` , and ` students ` as the underlying database tables for the graph. 
+
+The following statements first create the necessary tables and fill them with sample data: 
     
+    
+    ```
     
     CREATE TABLE university (
         id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
@@ -65,7 +59,10 @@ The following statements first create the necessary tables and fill them with sa
     INSERT INTO university (name) VALUES ('ABC');
     INSERT INTO university (name) VALUES ('XYZ');
     
+    ```
     
+    
+    ```
     
     CREATE TABLE persons (
          person_id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT
@@ -88,7 +85,10 @@ The following statements first create the necessary tables and fill them with sa
     
     INSERT INTO persons (name, height, birthdate, person_data)
            VALUES ('Alice', 1.70, to_date('01/02/1987', 'DD/MM/YYYY'), '{"department":"HR","role":"HR Assistant"}');
+    ```
     
+    
+    ```
     
     CREATE TABLE students (
           s_id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
@@ -107,7 +107,10 @@ The following statements first create the necessary tables and fill them with sa
     INSERT INTO students(s_univ_id, s_person_id,subject, height) VALUES (2,2,'Math');
     INSERT INTO students(s_univ_id, s_person_id,subject, height) VALUES (2,4,'Science');
     
+    ```
     
+    
+    ```
     
     CREATE TABLE friendships (
         friendship_id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
@@ -124,9 +127,12 @@ The following statements first create the necessary tables and fill them with sa
     INSERT INTO friendships (person_a, person_b, meeting_date) VALUES (2, 1, to_date('19/09/2000', 'DD/MM/YYYY'));
     INSERT INTO friendships (person_a, person_b, meeting_date) VALUES (3, 2, to_date('10/07/2001', 'DD/MM/YYYY'));
     
+    ```
 
-The following statement creates a graph on top of the tables:
+The following statement creates a graph on top of the tables: 
     
+    
+    ```
     
     CREATE PROPERTY GRAPH students_graph
       VERTEX TABLES (
@@ -148,21 +154,24 @@ The following statement creates a graph on top of the tables:
           DESTINATION KEY (s_univ_id) REFERENCES university(id)
           PROPERTIES (subject)
       );
+    ```
 
-This creates the following graph:
-
-  
-
-
-![Description of student_graph.png follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/student_graph.png)[Description of the illustration student_graph.png](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/student_graph.html)
+This creates the following graph: 
 
   
 
 
-Example: GRAPH_TABLE Query
+![Description of student_graph.png follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/student_graph.png)[ Description of the illustration student_graph.png ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/student_graph.md)
 
-The following query matches a pattern on graph `students_graph` to find friends of a person named John: 
+  
+
+
+Example: GRAPH_TABLE Query 
+
+The following query matches a pattern on graph ` students_graph ` to find friends of a person named John: 
     
+    
+    ```
     
     SELECT *
     FROM GRAPH_TABLE ( students_graph
@@ -171,40 +180,40 @@ The following query matches a pattern on graph `students_graph` to find friends 
       COLUMNS (b.name)
     );
     
+    ```
 
-In the query:
+In the query: 
 
-  * `(a IS person)` is a vertex pattern that matches vertices labeled person and binds the solutions to a variable `a`. 
+  * ` (a IS person) ` is a vertex pattern that matches vertices labeled person and binds the solutions to a variable ` a ` . 
 
-  * `-[e IS friends]-` is an edge pattern that matches either incoming or outgoing edges labeled friends and binds the solutions to a variable `e`. 
+  * ` -[e IS friends]- ` is an edge pattern that matches either incoming or outgoing edges labeled friends and binds the solutions to a variable ` e ` . 
 
-  * `(b IS person)` is another vertex pattern that matches vertices labeled person and binds the solutions to a variable `b`. 
+  * ` (b IS person) ` is another vertex pattern that matches vertices labeled person and binds the solutions to a variable ` b ` . 
 
-  * `WHERE a.name = 'John'` is a search condition that accesses the property `name` from vertices bound to variable a to compare against the value `John`. 
+  * ` WHERE a.name = 'John' ` is a search condition that accesses the property ` name ` from vertices bound to variable a to compare against the value ` John ` . 
 
-  * `COLUMNS (b.name)` specifies to return the property `name` of vertex `b` as part of the output table. 
-
-
+  * ` COLUMNS (b.name) ` specifies to return the property ` name ` of vertex ` b ` as part of the output table. 
 
 
-The output is:
+
+
+The output is: 
     
+    
+    ```
     
     NAME
     ----------
     Mary
     Bob
     
+    ```
 
-See Also:
+> **note:** See Also: 
 
-  * [SQL Property Graph](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=SPGDG-GUID-B813BA1B-AEA0-4C70-8094-739FFC0E805B)
+  * [ *SQL Property Graph* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=SPGDG-GUID-B813BA1B-AEA0-4C70-8094-739FFC0E805B)
 
-  * For property graph definitions and terminology , see [CREATE PROPERTY GRAPH](create-property-graph.html#GUID-37364ADB-E89C-4D92-A431-F2544FEDB218). 
-
-
+  * For property graph definitions and terminology , see [ *CREATE PROPERTY GRAPH* ](create-property-graph.md#GUID-37364ADB-E89C-4D92-A431-F2544FEDB218) . 
 
 
-[← Previous](data-quality-operators.md)
 
-[Next →](graph-reference.md)

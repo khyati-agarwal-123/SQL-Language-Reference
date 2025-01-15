@@ -1,36 +1,24 @@
-[Previous](Placeholder-Expressions.html) [Next](Type-Constructor-Expressions.html) JavaScript must be enabled to correctly display this content 
+##  Scalar Subquery Expressions {#GUID-475D80C3-C873-4475-AB1A-8837C5CF8CE4} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ Expressions](Expressions.html)
-  3. Scalar Subquery Expressions 
+A scalar subquery expression is a subquery that returns exactly one column value from one row. The value of the scalar subquery expression is the value of the select list item of the subquery. If the subquery returns 0 rows, then the value of the scalar subquery expression is ` NULL ` . If the subquery returns more than one row, then Oracle returns an error. 
 
+You can use a scalar subquery expression in most syntax that calls for an expression ( *expr* ). In all cases, a scalar subquery must be enclosed in its own parentheses, even if its syntactic location already positions it within parentheses (for example, when the scalar subquery is used as the argument to a built-in function). 
 
+Scalar subqueries are not valid expressions in the following places: 
 
-## Scalar Subquery Expressions 
+  * As default values for columns 
 
-A scalar subquery expression is a subquery that returns exactly one column value from one row. The value of the scalar subquery expression is the value of the select list item of the subquery. If the subquery returns 0 rows, then the value of the scalar subquery expression is `NULL`. If the subquery returns more than one row, then Oracle returns an error. 
+  * As hash expressions for clusters 
 
-You can use a scalar subquery expression in most syntax that calls for an expression (`expr`). In all cases, a scalar subquery must be enclosed in its own parentheses, even if its syntactic location already positions it within parentheses (for example, when the scalar subquery is used as the argument to a built-in function). 
+  * In the ` RETURNING ` clause of DML statements 
 
-Scalar subqueries are not valid expressions in the following places:
+  * As the basis of a function-based index 
 
-  * As default values for columns
+  * In ` CHECK ` constraints 
 
-  * As hash expressions for clusters
+  * In ` GROUP ` ` BY ` clauses 
 
-  * In the `RETURNING` clause of DML statements 
-
-  * As the basis of a function-based index
-
-  * In `CHECK` constraints 
-
-  * In `GROUP` `BY` clauses 
-
-  * In statements that are unrelated to queries, such as `CREATE` `PROFILE`
+  * In statements that are unrelated to queries, such as ` CREATE ` ` PROFILE `
 
 
 
-
-[← Previous](Placeholder-Expressions.md)
-
-[Next →](Type-Constructor-Expressions.md)

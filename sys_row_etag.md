@@ -1,34 +1,27 @@
-[Previous](SYS_OP_ZONE_ID.html) [Next](SYS_TYPEID.html) JavaScript must be enabled to correctly display this content 
+##  SYS_ROW_ETAG {#GUID-46D84F68-2E6E-40B9-81CD-2701E300E417} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. SYS_ROW_ETAG
-
-
-
-## SYS_ROW_ETAG
-
-Syntax
+Syntax 
 
   
 
 
-![Description of sys_row_etag.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sys_row_etag.gif)[Description of the illustration sys_row_etag.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sys_row_etag.html)
+![Description of sys_row_etag.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sys_row_etag.gif)[ Description of the illustration sys_row_etag.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sys_row_etag.md)
 
   
 
 
-Purpose
+Purpose 
 
-You can use `ETAG`s with table data, for lock-free row updates using SQL. To do that, use function `SYS_ROW_ETAG`, to obtain the current state of a given set of columns in a table row as an `ETAG` hash value. Function `SYS_ROW_ETAG` calculates an etag (128 bits hash value) for a row using the values of a set of columns in the row that you want the etag to be computed on. You can pass the function the names of the columns in any order. 
+You can use ` ETAG ` s with table data, for lock-free row updates using SQL. To do that, use function ` SYS_ROW_ETAG ` , to obtain the current state of a given set of columns in a table row as an ` ETAG ` hash value. Function ` SYS_ROW_ETAG ` calculates an etag (128 bits hash value) for a row using the values of a set of columns in the row that you want the etag to be computed on. You can pass the function the names of the columns in any order. 
 
-Function `SYS_ROW_ETAG` calculates the `ETAG` value for a row using only the values of those columns in the row: you pass it the names of all columns that you want to be sure no other session tries to update concurrently. This includes the columns that the current session intends to update, but also any other columns on whose value that updating operation logically depends for your application. (The order in which you pass the columns to `SYS_ROW_ETAG` as arguments is irrelevant.) 
+Function ` SYS_ROW_ETAG ` calculates the ` ETAG ` value for a row using only the values of those columns in the row: you pass it the names of all columns that you want to be sure no other session tries to update concurrently. This includes the columns that the current session intends to update, but also any other columns on whose value that updating operation logically depends for your application. (The order in which you pass the columns to ` SYS_ROW_ETAG ` as arguments is irrelevant.) 
 
-Example
+Example 
 
-The example below creates table `foo` with columns `c1`, `c2`, and `c3` of type `NUMBER`, and inserts values into the table. It then passes columns `c2` and `c1` to `SYS_ROW_ETAG` to get the etag for `c2` and `c1`: 
+The example below creates table ` foo ` with columns ` c1 ` , ` c2 ` , and ` c3 ` of type ` NUMBER ` , and inserts values into the table. It then passes columns ` c2 ` and ` c1 ` to ` SYS_ROW_ETAG ` to get the etag for ` c2 ` and ` c1 ` : 
     
     
+    ```
     CREATE TABLE foo (c1 NUMBER, c2 NUMBER, c3 NUMBER);
     
     Table created.
@@ -44,11 +37,8 @@ The example below creates table `foo` with columns `c1`, `c2`, and `c3` of type 
     3B978191AD0C828DA0E6A53EDF0B278A
     
     ---------------
+    ```
 
-See Also:
+> **note:** See Also: 
 
-Example 4.18 in the JSON-Relational Duality Developer's Guide [Using Function SYS_ROW_ETAG To Optimistically Control Concurrent Table Updates](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-17DF3DA2-0302-43FC-AF49-78B417E09806)
-
-[← Previous](SYS_OP_ZONE_ID.md)
-
-[Next →](SYS_TYPEID.md)
+Example 4.18 in the JSON-Relational Duality Developer's Guide [ *Using Function SYS_ROW_ETAG To Optimistically Control Concurrent Table Updates* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=JSNVU-GUID-17DF3DA2-0302-43FC-AF49-78B417E09806)

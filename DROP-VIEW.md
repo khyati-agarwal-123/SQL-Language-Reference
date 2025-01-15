@@ -1,73 +1,63 @@
-[Previous](DROP-USER.html) [Next](EXPLAIN-PLAN.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [SQL Statements: DROP TABLE to LOCK TABLE](SQL-Statements-DROP-TABLE-to-LOCK-TABLE.html)
-  3. DROP VIEW 
-
-
-
-## DROP VIEW 
+##  DROP VIEW {#GUID-1A1BD841-66B9-47E4-896F-D36E075AE296} 
 
 Purpose 
 
-Use the `DROP` `VIEW` statement to remove a view or an object view from the database. You can change the definition of a view by dropping and re-creating it. 
+Use the ` DROP ` ` VIEW ` statement to remove a view or an object view from the database. You can change the definition of a view by dropping and re-creating it. 
 
-See Also:
+> **note:** See Also: 
 
-[CREATE VIEW](CREATE-VIEW.html#GUID-61D2D2B4-DACC-4C7C-89EB-7E50D9594D30) and [ALTER VIEW](ALTER-VIEW.html#GUID-0DEDE960-B481-4B55-8027-EA9E4C863625) for information on creating and modifying a view 
+[ CREATE VIEW ](CREATE-VIEW.md#GUID-61D2D2B4-DACC-4C7C-89EB-7E50D9594D30) and [ ALTER VIEW ](ALTER-VIEW.md#GUID-0DEDE960-B481-4B55-8027-EA9E4C863625) for information on creating and modifying a view 
 
 Prerequisites 
 
-The view must be in your own schema or you must have the `DROP` `ANY` `VIEW` system privilege. 
+The view must be in your own schema or you must have the ` DROP ` ` ANY ` ` VIEW ` system privilege. 
 
-Syntax
+Syntax 
 
-drop_view::= 
+*drop_view* ::= 
 
-![Description of drop_view.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_view.gif)[Description of the illustration drop_view.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_view.html)
+![Description of drop_view.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_view.gif)[ Description of the illustration drop_view.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_view.md)
 
 Semantics 
 
-IF EXISTS
+IF EXISTS 
 
-Specify `IF EXISTS` to drop an existing object. 
+Specify ` IF EXISTS ` to drop an existing object. 
 
-Specifying `IF NOT EXISTS` with `DROP` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
+Specifying ` IF NOT EXISTS ` with ` DROP ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-schema
+*schema* 
 
-Specify the schema containing the view. If you omit `schema`, then Oracle Database assumes the view is in your own schema. 
+Specify the schema containing the view. If you omit *schema* , then Oracle Database assumes the view is in your own schema. 
 
-view
+*view* 
 
 Specify the name of the view to be dropped. 
 
-Oracle Database does not drop views, materialized views, and synonyms that are dependent on the view but marks them `INVALID`. You can drop them or redefine views and synonyms, or you can define other views in such a way that the invalid views and synonyms become valid again. 
+Oracle Database does not drop views, materialized views, and synonyms that are dependent on the view but marks them ` INVALID ` . You can drop them or redefine views and synonyms, or you can define other views in such a way that the invalid views and synonyms become valid again. 
 
-If any subviews have been defined on `view`, then the database invalidates the subviews as well. To determine whether the view has any subviews, query the `SUPERVIEW_NAME` column of the `USER_`, `ALL_`, or `DBA_VIEWS` data dictionary views. 
+If any subviews have been defined on *view* , then the database invalidates the subviews as well. To determine whether the view has any subviews, query the ` SUPERVIEW_NAME ` column of the ` USER_ ` , ` ALL_ ` , or ` DBA_VIEWS ` data dictionary views. 
 
-See Also:
+> **note:** See Also: 
 
-  * [CREATE TABLE](CREATE-TABLE.html#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6) and [CREATE SYNONYM](CREATE-SYNONYM.html#GUID-A806C82F-1171-478E-A910-F9C6C42739B2)
+  * [ CREATE TABLE ](CREATE-TABLE.md#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6) and [ CREATE SYNONYM ](CREATE-SYNONYM.md#GUID-A806C82F-1171-478E-A910-F9C6C42739B2)
 
-  * [ALTER MATERIALIZED VIEW](ALTER-MATERIALIZED-VIEW.html#GUID-29EE5682-AE42-4879-ABAD-E34E66ADD233) for information on revalidating invalid materialized views 
-
-
+  * [ ALTER MATERIALIZED VIEW ](ALTER-MATERIALIZED-VIEW.md#GUID-29EE5682-AE42-4879-ABAD-E34E66ADD233) for information on revalidating invalid materialized views 
 
 
-CASCADE CONSTRAINTS
 
-Specify `CASCADE` `CONSTRAINTS` to drop all referential integrity constraints that refer to primary and unique keys in the view to be dropped. If you omit this clause, and such constraints exist, then the `DROP` statement fails. 
 
-Examples
+CASCADE CONSTRAINTS 
 
-Dropping a View: Example
+Specify ` CASCADE ` ` CONSTRAINTS ` to drop all referential integrity constraints that refer to primary and unique keys in the view to be dropped. If you omit this clause, and such constraints exist, then the ` DROP ` statement fails. 
 
-The following statement drops the `emp_view` view, which was created in "[Creating a View: Example](CREATE-VIEW.html#GUID-61D2D2B4-DACC-4C7C-89EB-7E50D9594D30__I2102873)": 
+Examples 
+
+Dropping a View: Example 
+
+The following statement drops the ` emp_view ` view, which was created in  " [ Creating a View: Example ](CREATE-VIEW.md#GUID-61D2D2B4-DACC-4C7C-89EB-7E50D9594D30__I2102873) "  : 
     
     
+    ```
     DROP VIEW emp_view; 
-
-[← Previous](DROP-USER.md)
-
-[Next →](EXPLAIN-PLAN.md)
+    ```

@@ -1,57 +1,59 @@
-[Previous](domain_display.html) [Next](domain_order.html) JavaScript must be enabled to correctly display this content 
+##  DOMAIN_NAME {#GUID-BFF71A4E-8FF2-407A-8661-C0A24D4E5487} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. DOMAIN_NAME
-
-
-
-## DOMAIN_NAME
-
-Syntax
+Syntax 
 
   
 
 
-![Description of domain_name_function.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/domain_name_function.gif)[Description of the illustration domain_name_function.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/domain_name_function.html)
+![Description of domain_name_function.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/domain_name_function.gif)[ Description of the illustration domain_name_function.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/domain_name_function.md)
 
   
 
 
-Purpose
+Purpose 
 
-`DOMAIN_NAME` returns the fully qualified name of the domain associated with `expr`. This returns `NULL` if expr is associated with a domain. 
+` DOMAIN_NAME ` returns the fully qualified name of the domain associated with *expr* . This returns ` NULL ` if expr is associated with a domain. 
 
-When calling `DOMAIN_NAME` for multicolumn domains, all values of `expr` should be from the same domain. It returns `NULL` if the number of `expr` arguments are different from the number of domain columns or they are in a different order in the domain. 
+When calling ` DOMAIN_NAME ` for multicolumn domains, all values of *expr* should be from the same domain. It returns ` NULL ` if the number of *expr* arguments are different from the number of domain columns or they are in a different order in the domain. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Domain Functions](Single-Row-Functions.html#GUID-AEF8F898-493F-4BE8-86E6-06241BB78AB0)
-
-
+  * *Domain Functions* 
 
 
-Examples
 
-The following example creates the domain `DAY_OF_WEEK` in the schema `HR` and associates it with the column `HR.CALENDAR_DATES.DAY_OF_WEEK_ABBR`. Passing this column to `DOMAIN_NAME` returns the fully qualified name of the domain. 
 
-The query casts the string "`MON`" to `DAY_OF_WEEK` to get the domain name. 
+Examples 
 
-All other calls to `DOMAIN_NAME` return `NULL`. 
+The following example creates the domain ` DAY_OF_WEEK ` in the schema ` HR ` and associates it with the column ` HR.CALENDAR_DATES.DAY_OF_WEEK_ABBR ` . Passing this column to ` DOMAIN_NAME ` returns the fully qualified name of the domain. 
+
+The query casts the string " ` MON ` " to ` DAY_OF_WEEK ` to get the domain name. 
+
+All other calls to ` DOMAIN_NAME ` return ` NULL ` . 
     
     
+    ```
     CREATE DOMAIN hr.day_of_week AS CHAR(3 CHAR);
+    ```
     
+    
+    ```
     
     CREATE TABLE hr.calendar_dates (
       calendar_date    DATE,
       day_of_week_abbr hr.day_of_week
     );
+    ```
     
+    
+    ```
     
     INSERT INTO hr.calendar_dates 
     VALUES(DATE'2023-05-01', 'MON');
+    ```
     
+    
+    ```
     
     SELECT day_of_week_abbr, 
            DOMAIN_NAME(day_of_week_abbr) domain_column, 
@@ -62,18 +64,24 @@ All other calls to `DOMAIN_NAME` return `NULL`.
       
     DAY_OF_WEEK_ABBR DOMAIN_COLUMN  NONDOMAIN_COLUMN DOMAIN_VALUE   NONDOMAIN_VALUE    
     ---------------- -------------- ---------------- -------------- ---------------
-    MON              HR.DAY_OF_WEEK <null>           HR.DAY_OF_WEEK <null> 
+    MON              HR.DAY_OF_WEEK            HR.DAY_OF_WEEK  
+    ```
 
-The following example creates the multicolumn domain `CURRENCY` in the schema `CO`. The columns `AMOUNT` and `CURRENCY_CODE` in `CO.ORDER_ITEMS` are associated with this domain. 
+The following example creates the multicolumn domain ` CURRENCY ` in the schema ` CO ` . The columns ` AMOUNT ` and ` CURRENCY_CODE ` in ` CO.ORDER_ITEMS ` are associated with this domain. 
 
-In the query, the arguments for `DOMAIN_NAME` only match the domain definition for the domain_cols expression. This returns the fully qualified name of the domain. All other calls to `DOMAIN_NAME` have a mismatch between its arguments and the domain columns so return `NULL`: 
+In the query, the arguments for ` DOMAIN_NAME ` only match the domain definition for the domain_cols expression. This returns the fully qualified name of the domain. All other calls to ` DOMAIN_NAME ` have a mismatch between its arguments and the domain columns so return ` NULL ` : 
     
+    
+    ```
     
     CREATE DOMAIN co.currency AS (
       amount        AS NUMBER(10, 2)
       currency_code AS CHAR(3 CHAR)
     );
+    ```
     
+    
+    ```
     
     CREATE TABLE co.order_items (
       order_id      INTEGER,
@@ -82,11 +90,17 @@ In the query, the arguments for `DOMAIN_NAME` only match the domain definition f
       currency_code CHAR(3 CHAR),
       DOMAIN co.currency(amount, currency_code)
     );
+    ```
     
+    
+    ```
     
     INSERT INTO co.order_items
     VALUES (1, 1, 9.99, 'USD');
+    ```
     
+    
+    ```
     
     SELECT order_id,
            product_id,
@@ -99,8 +113,5 @@ In the query, the arguments for `DOMAIN_NAME` only match the domain definition f
       
       ORDER_ID PRODUCT_ID DOMAIN_COLS     DOMAIN_COLS_WRONG_ORDER   NONDOMAIN_COLS  DOMAIN_COLS_SUBSET  
     ---------- ---------- --------------- ------------------------- --------------- --------------------
-             1          1 CO.CURRENCY     <null>                    <null>          <null> 
-
-[← Previous](domain_display.md)
-
-[Next →](domain_order.md)
+             1          1 CO.CURRENCY                                    
+    ```

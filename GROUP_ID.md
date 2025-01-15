@@ -1,28 +1,21 @@
-[Previous](GREATEST.html) [Next](GROUPING.html) JavaScript must be enabled to correctly display this content 
+##  GROUP_ID {#GUID-3A5A9C15-1B67-4FD7-AC41-EE8349B2E834} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. GROUP_ID 
+Syntax 
 
+![Description of group_id.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/group_id.gif)[ Description of the illustration group_id.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/group_id.md)
 
+Purpose 
 
-## GROUP_ID 
+` GROUP_ID ` distinguishes duplicate groups resulting from a ` GROUP ` ` BY ` specification. It is useful in filtering out duplicate groupings from the query result. It returns an Oracle ` NUMBER ` to uniquely identify duplicate groups. This function is applicable only in a ` SELECT ` statement that contains a ` GROUP ` ` BY ` clause. 
 
-Syntax
+If *n* duplicates exist for a particular grouping, then ` GROUP_ID ` returns numbers in the range 0 to *n* -1. 
 
-![Description of group_id.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/group_id.gif)[Description of the illustration group_id.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/group_id.html)
+Examples 
 
-Purpose
-
-`GROUP_ID` distinguishes duplicate groups resulting from a `GROUP` `BY` specification. It is useful in filtering out duplicate groupings from the query result. It returns an Oracle `NUMBER` to uniquely identify duplicate groups. This function is applicable only in a `SELECT` statement that contains a `GROUP` `BY` clause. 
-
-If `n` duplicates exist for a particular grouping, then `GROUP_ID` returns numbers in the range 0 to `n`-1. 
-
-Examples
-
-The following example assigns the value `1` to the duplicate `co.country_region` grouping from a query on the sample tables `sh.countries` and `sh.sales`: 
+The following example assigns the value ` 1 ` to the duplicate ` co.country_region ` grouping from a query on the sample tables ` sh.countries ` and ` sh.sales ` : 
     
     
+    ```
     SELECT co.country_region, co.country_subregion,
            SUM(s.amount_sold) "Revenue", GROUP_ID() g
       FROM sales s, customers c, countries co
@@ -41,12 +34,11 @@ The following example assigns the value `1` to the duplicate `co.country_region`
     Europe               Western Europe                     566.39          0
     Europe               Western Europe                     566.39          1
     
+    ```
 
-To ensure that only rows with `GROUP_ID` < 1 are returned, add the following `HAVING` clause to the end of the statement : 
+To ensure that only rows with ` GROUP_ID ` < 1 are returned, add the following ` HAVING ` clause to the end of the statement : 
     
     
+    ```
     HAVING GROUP_ID() < 1
-
-[← Previous](GREATEST.md)
-
-[Next →](GROUPING.md)
+    ```

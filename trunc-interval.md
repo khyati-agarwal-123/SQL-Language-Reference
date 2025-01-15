@@ -1,54 +1,51 @@
-[Previous](TRUNC-date.html) [Next](TRUNC-number.html) JavaScript must be enabled to correctly display this content 
+##  TRUNC (interval) {#GUID-7719AF9B-5593-4F2B-9B82-03C51AEA693D} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. TRUNC (interval)
+Syntax 
 
+![Description of trunc_interval.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/trunc_interval.gif)[ Description of the illustration trunc_interval.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/trunc_interval.md)
 
+Purpose 
 
-## TRUNC (interval)
+` TRUNC(interval) ` returns the interval rounded down to the unit specified by the second argument *fmt* , the format model . 
 
-Syntax
+The absolute value of ` TRUNC(interval) ` is never greater than the absolute value of *interval* . The result precision is the same as the input precision, since there is no overflow issue for ` TRUNC(interval) ` . 
 
-![Description of trunc_interval.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/trunc_interval.gif)[Description of the illustration trunc_interval.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/trunc_interval.html)
+For ` INTERVAL YEAR TO MONTH ` , *fmt* can only be year. The default *fmt* is year. 
 
-Purpose
+For ` INTERVAL DAY TO SECOND ` , *fmt* can be day, hour and minute. The default *fmt* is day. Note that *fmt* does not support second. 
 
-`TRUNC(interval)` returns the interval rounded down to the unit specified by the second argument `fmt`, the format model . 
+> **note:** See Also: 
 
-The absolute value of `TRUNC(interval)` is never greater than the absolute value of `interval`. The result precision is the same as the input precision, since there is no overflow issue for `TRUNC(interval)`. 
+Refer to [ CEIL, FLOOR, ROUND, and TRUNC Date Functions ](ROUND-and-TRUNC-Date-Functions.md#GUID-8E10AB76-21DA-490F-A389-023B648DDEF8) for the permitted format models to use in *fmt* . 
 
-For `INTERVAL YEAR TO MONTH`, `fmt` can only be year. The default `fmt` is year. 
-
-For `INTERVAL DAY TO SECOND`, `fmt` can be day, hour and minute. The default `fmt` is day. Note that `fmt` does not support second. 
-
-See Also:
-
-Refer to [CEIL, FLOOR, ROUND, and TRUNC Date Functions](ROUND-and-TRUNC-Date-Functions.html#GUID-8E10AB76-21DA-490F-A389-023B648DDEF8) for the permitted format models to use in `fmt`. 
-
-Examples
+Examples 
     
+    
+    ```
     
     SELECT TRUNC(INTERVAL '+123-06' YEAR(3) TO MONTH) AS year_trunc;
     
     YEAR_TRUNC
     ----------
     +123-00
+    ```
     
+    
+    ```
     
     SELECT TRUNC(INTERVAL '+99-11' YEAR(2) TO MONTH, 'YEAR') AS year_trunc;
     
     YEAR_TRUNC
     ----------
     +99-00
+    ```
     
+    
+    ```
     
     SELECT TRUNC(INTERVAL '+4 12:42:10.222' DAY(2) TO SECOND(3), 'DD') AS day_trunc;
     
     DAY_TRUNC
     -------------------
     +04 00:00:00.000000
-
-[← Previous](TRUNC-date.md)
-
-[Next →](TRUNC-number.md)
+    ```

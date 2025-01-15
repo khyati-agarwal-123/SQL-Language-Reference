@@ -1,62 +1,57 @@
-[Previous](ADD_MONTHS.html) [Next](APPROX_COUNT.html) JavaScript must be enabled to correctly display this content 
+##  ANY_VALUE {#GUID-A3C47D5E-B145-40B2-93D2-CA3BA65C2D81} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. ANY_VALUE
+Syntax 
 
+![Description of any_value.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/any_value.gif)[ Description of the illustration any_value.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/any_value.md)
 
+Purpose 
 
-## ANY_VALUE
+` ANY_VALUE ` returns a single non-deterministic value of ` expr ` . You can use it as an aggregate function. 
 
-Syntax
+Use ` ANY_VALUE ` to optimize a query that has a ` GROUP BY ` clause. ` ANY_VALUE ` returns a value of an expression in a group. It is optimized to return the first value. 
 
-![Description of any_value.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/any_value.gif)[Description of the illustration any_value.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/any_value.html)
+It ensures that there are no comparisons for any incoming row and also eliminates the necessity to specify every column as part of the ` GROUP BY ` clause. Because it does not compare values, ` ANY_VALUE ` returns a value more quickly than ` MIN ` or ` MAX ` in a ` GROUP BY ` query. 
 
-Purpose
+Semantics 
 
-`ANY_VALUE` returns a single non-deterministic value of `expr`. You can use it as an aggregate function. 
+` ALL ` , ` DISTINCT ` : These keywords are supported by ` ANY_VALUE ` although they have no effect on the result of the query. 
 
-Use `ANY_VALUE` to optimize a query that has a `GROUP BY` clause. `ANY_VALUE` returns a value of an expression in a group. It is optimized to return the first value. 
+` expr ` : The expression can be a column, constant, bind variable, or an expression involving them. 
 
-It ensures that there are no comparisons for any incoming row and also eliminates the necessity to specify every column as part of the `GROUP BY` clause. Because it does not compare values, `ANY_VALUE` returns a value more quickly than `MIN` or `MAX` in a `GROUP BY` query. 
+NULL values in the expression are ignored. 
 
-Semantics
+Supports all of the data types, except for ` LONG ` , ` LOB ` , ` FILE ` , or ` COLLECTION ` . 
 
-`ALL`, `DISTINCT`: These keywords are supported by `ANY_VALUE` although they have no effect on the result of the query. 
+If you use ` LONG ` , ` ORA-00997 ` is raised. 
 
-`expr`: The expression can be a column, constant, bind variable, or an expression involving them. 
+If you use ` LOB ` , ` FILE ` , or ` COLLECTION ` data types, ` ORA-00932 ` is raised. 
 
-NULL values in the expression are ignored.
+` ANY_VALUE ` follows the same rules as ` MIN ` and ` MAX ` . 
 
-Supports all of the data types, except for `LONG`, `LOB`, `FILE`, or `COLLECTION`. 
+Returns any value within each group based on the ` GROUP BY ` specification. Returns NULL if all rows in the group have NULL expression values. 
 
-If you use `LONG`, `ORA-00997` is raised. 
+The result of ` ANY_VALUE ` is not deterministic. 
 
-If you use `LOB`, `FILE`, or `COLLECTION` data types, `ORA-00932` is raised. 
+Restrictions 
 
-`ANY_VALUE` follows the same rules as `MIN` and `MAX`. 
+` XMLType ` and ` ANYDATA ` are not supported. 
 
-Returns any value within each group based on the `GROUP BY` specification. Returns NULL if all rows in the group have NULL expression values. 
+Example 7-1 Using ANY_VALUE As an Aggregate Function 
 
-The result of `ANY_VALUE` is not deterministic. 
-
-Restrictions
-
-`XMLType` and `ANYDATA` are not supported. 
-
-Example 7-1 Using ANY_VALUE As an Aggregate Function
-
-This example uses `ANY_VALUE` as an aggregate function in a `GROUP BY` query of the SH schema. 
+This example uses ` ANY_VALUE ` as an aggregate function in a ` GROUP BY ` query of the SH schema. 
     
     
+    ```
     SELECT c.cust_id, ANY_VALUE(cust_last_name), SUM(amount_sold)
       FROM customers c, sales s
       WHERE s.cust_id = c.cust_id
       GROUP BY c.cust_id;
+    ```
 
-In the following result of the query, only the first eleven rows are shown.
+In the following result of the query, only the first eleven rows are shown. 
     
     
+    ```
     CUST_ID  ANY_VALUE(CUST_LAST_NAME) SUM(AMOUNT_SOLD)
     ------- -------------------------- ----------------
        6950 Sandburg                                 78
@@ -72,7 +67,4 @@ In the following result of the query, only the first eleven rows are shown.
       42780 Zanis                                   182
     ...
     630 rows selected.
-
-[← Previous](ADD_MONTHS.md)
-
-[Next →](APPROX_COUNT.md)
+    ```

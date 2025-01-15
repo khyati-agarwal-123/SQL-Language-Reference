@@ -1,58 +1,48 @@
-[Previous](ALTER-ANALYTIC-VIEW.html) [Next](ALTER-AUDIT-POLICY-Unified-Auditing.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: ADMINISTER KEY MANAGEMENT to ALTER JSON RELATIONAL DUALITY VIEW](SQL-Statements-ADMINISTER-KEY-MANAGEMENT-to-ALTER-JAVA.html)
-  3. ALTER ATTRIBUTE DIMENSION
-
-
-
-## ALTER ATTRIBUTE DIMENSION
+##  ALTER ATTRIBUTE DIMENSION {#GUID-F345D0F9-8133-4257-9A07-EDCE558A1332} 
 
 Purpose 
 
-Use the `ALTER` `ATTRIBUTE` `DIMENSION` statement to rename or compile an attribute dimension. For other alterations, use `CREATE` `OR` `REPLACE` `ATTRIBUTE` `DIMENSION`. 
+Use the ` ALTER ` ` ATTRIBUTE ` ` DIMENSION ` statement to rename or compile an attribute dimension. For other alterations, use ` CREATE ` ` OR ` ` REPLACE ` ` ATTRIBUTE ` ` DIMENSION ` . 
 
-Prerequisites
+Prerequisites 
 
-To alter an attribute dimension in your own schema, you must have the `ALTER` `ATTRIBUTE` `DIMENSION` system privilege. To alter an attribute dimension in another user's schema, you must have the `ALTER` `ANY` `ATTRIBUTE` `DIMENSION` system privilege or have been granted `ALTER` on the attribute dimension directly. 
+To alter an attribute dimension in your own schema, you must have the ` ALTER ` ` ATTRIBUTE ` ` DIMENSION ` system privilege. To alter an attribute dimension in another user's schema, you must have the ` ALTER ` ` ANY ` ` ATTRIBUTE ` ` DIMENSION ` system privilege or have been granted ` ALTER ` on the attribute dimension directly. 
 
-Syntax
+Syntax 
 
-alter_attribute_dimension::= 
+*alter_attribute_dimension* ::= 
 
-![Description of alter_attribute_dimension.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_attribute_dimension.gif)[Description of the illustration alter_attribute_dimension.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_attribute_dimension.html)
+![Description of alter_attribute_dimension.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/alter_attribute_dimension.gif)[ Description of the illustration alter_attribute_dimension.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/alter_attribute_dimension.md)
 
-Semantics
+Semantics 
 
-IF EXISTS
+IF EXISTS 
 
-Specify `IF EXISTS` to alter an existing table. 
+Specify ` IF EXISTS ` to alter an existing table. 
 
-Specifying `IF NOT EXISTS` with `ALTER VIEW` results in `ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement`. 
+Specifying ` IF NOT EXISTS ` with ` ALTER VIEW ` results in ` ORA-11544: Incorrect IF EXISTS clause for ALTER/DROP statement ` . 
 
-schema
+*schema* 
 
-Specify the schema in which the attribute dimension exists. If you do not specify a schema, then Oracle Database looks for the attribute dimension in your own schema.
+Specify the schema in which the attribute dimension exists. If you do not specify a schema, then Oracle Database looks for the attribute dimension in your own schema. 
 
-attr_dim_name
+*attr_dim_name* 
 
-Specify the name of the attribute dimension.
+Specify the name of the attribute dimension. 
 
-RENAME TO
+RENAME TO 
 
-Specify `RENAME` `TO` to change the name of the attribute dimension. For `new_attr_dim_name`, specify a new name for the attribute dimension. 
+Specify ` RENAME ` ` TO ` to change the name of the attribute dimension. For *new_attr_dim_name* , specify a new name for the attribute dimension. 
 
-COMPILE
+COMPILE 
 
-Specify `COMPILE` to compile the attribute dimension. 
+Specify ` COMPILE ` to compile the attribute dimension. 
 
-Example
+Example 
 
-The following statement changes the name of an attribute dimension:
+The following statement changes the name of an attribute dimension: 
     
     
+    ```
     ALTER ATTRIBUTE DIMENSION product_attr_dim RENAME TO my_product_attr_dim;
-
-[← Previous](ALTER-ANALYTIC-VIEW.md)
-
-[Next →](ALTER-AUDIT-POLICY-Unified-Auditing.md)
+    ```

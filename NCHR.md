@@ -1,36 +1,29 @@
-[Previous](NANVL.html) [Next](NEW_TIME.html) JavaScript must be enabled to correctly display this content 
+##  NCHR {#GUID-3A1BDD54-6C0B-4067-99C5-A439C0F8D561} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. NCHR 
+Syntax 
 
+![Description of nchr.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/nchr.gif)[ Description of the illustration nchr.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/nchr.md)
 
+Purpose 
 
-## NCHR 
+` NCHR ` returns the character having the binary equivalent to *number* in the national character set. The value returned is always ` NVARCHAR2 ` . This function is equivalent to using the ` CHR ` function with the ` USING ` ` NCHAR_CS ` clause. 
 
-Syntax
+This function takes as an argument a ` NUMBER ` value, or any value that can be implicitly converted to ` NUMBER ` , and returns a character. 
 
-![Description of nchr.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/nchr.gif)[Description of the illustration nchr.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/nchr.html)
+> **note:** See Also: 
 
-Purpose
+  * [ CHR ](CHR.md#GUID-35FEE007-D49C-4562-A904-041186AC8928)
 
-`NCHR` returns the character having the binary equivalent to `number` in the national character set. The value returned is always `NVARCHAR2`. This function is equivalent to using the `CHR` function with the `USING` `NCHAR_CS` clause. 
-
-This function takes as an argument a `NUMBER` value, or any value that can be implicitly converted to `NUMBER`, and returns a character. 
-
-See Also:
-
-  * [CHR](CHR.html#GUID-35FEE007-D49C-4562-A904-041186AC8928)
-
-  * Appendix C in [Oracle Database Globalization Support Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of `NCHR`
+  * Appendix C in [ *Oracle Database Globalization Support Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=NLSPG-GUID-AFCE41ED-775B-4A00-AF38-C436776AE0C5) for the collation derivation rules, which define the collation assigned to the character return value of ` NCHR `
 
 
 
-Examples
+Examples 
 
-The following examples return the nchar character 187:
+The following examples return the nchar character 187: 
     
     
+    ```
     SELECT NCHR(187)
       FROM DUAL;
     
@@ -44,7 +37,4 @@ The following examples return the nchar character 187:
     C
     -
     > 
-
-[← Previous](NANVL.md)
-
-[Next →](NEW_TIME.md)
+    ```

@@ -1,49 +1,44 @@
-[Previous](POWER.html) [Next](POWERMULTISET_BY_CARDINALITY.html) JavaScript must be enabled to correctly display this content 
+##  POWERMULTISET {#GUID-34F3B1D1-4089-4A5B-AA2C-9C69A5C36E6D} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. POWERMULTISET 
+Syntax 
 
+![Description of powermultiset.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/powermultiset.gif)[ Description of the illustration powermultiset.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/powermultiset.md)
 
+Purpose 
 
-## POWERMULTISET 
+` POWERMULTISET ` takes as input a nested table and returns a nested table of nested tables containing all nonempty subsets (called submultisets) of the input nested table. 
 
-Syntax
+  * *expr* can be any expression that evaluates to a nested table. 
 
-![Description of powermultiset.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/powermultiset.gif)[Description of the illustration powermultiset.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/powermultiset.html)
+  * If *expr* resolves to null, then Oracle Database returns ` NULL ` . 
 
-Purpose
+  * If *expr* resolves to a nested table that is empty, then Oracle returns an error. 
 
-`POWERMULTISET` takes as input a nested table and returns a nested table of nested tables containing all nonempty subsets (called submultisets) of the input nested table. 
+  * The element types of the nested table must be comparable. Refer to  " [ Comparison Conditions ](Comparison-Conditions.md#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927) "  for information on the comparability of nonscalar types. 
 
-  * `expr` can be any expression that evaluates to a nested table. 
+> **note:** 
 
-  * If `expr` resolves to null, then Oracle Database returns `NULL`. 
-
-  * If `expr` resolves to a nested table that is empty, then Oracle returns an error. 
-
-  * The element types of the nested table must be comparable. Refer to "[Comparison Conditions](Comparison-Conditions.html#GUID-828576BF-E606-4EA6-B94B-BFF48B67F927)" for information on the comparability of nonscalar types. 
-
-Note:
-
-This function is not supported in PL/SQL.
+This function is not supported in PL/SQL. 
 
 
 
 
-Examples
+Examples 
 
-First, create a data type that is a nested table of the `cust_address_tab_type` data type: 
+First, create a data type that is a nested table of the ` cust_address_tab_type ` data type: 
     
     
+    ```
     CREATE TYPE cust_address_tab_tab_typ
       AS TABLE OF cust_address_tab_typ;
     /
     
+    ```
 
-Now, select the nested table column `cust_address_ntab` from the `customers_demo` table using the `POWERMULTISET` function: 
+Now, select the nested table column ` cust_address_ntab ` from the ` customers_demo ` table using the ` POWERMULTISET ` function: 
     
     
+    ```
     SELECT CAST(POWERMULTISET(cust_address_ntab) AS cust_address_tab_tab_typ)
       FROM customers_demo;
     
@@ -60,9 +55,6 @@ Now, select the nested table column `cust_address_ntab` from the `customers_demo
       ('6445 Bay Harbor Ln', '46254', 'Indianapolis', 'IN', 'US')))
     . . .
     
+    ```
 
-The preceding example requires the `customers_demo` table and a nested table column containing data. Refer to "[Multiset Operators](Multiset-Operators.html#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B)" to create this table and nested table columns. 
-
-[← Previous](POWER.md)
-
-[Next →](POWERMULTISET_BY_CARDINALITY.md)
+The preceding example requires the ` customers_demo ` table and a nested table column containing data. Refer to  " [ Multiset Operators ](Multiset-Operators.md#GUID-793FCBB0-A97C-4884-BCAC-DD0542EA746B) "  to create this table and nested table columns. 

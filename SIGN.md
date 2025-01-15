@@ -1,52 +1,42 @@
-[Previous](SET.html) [Next](SIN.html) JavaScript must be enabled to correctly display this content 
+##  SIGN {#GUID-08B75521-B5F5-4658-A005-4B4441C82945} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [Functions](Functions.html)
-  3. SIGN 
+Syntax 
 
+![Description of sign.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sign.gif)[ Description of the illustration sign.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sign.md)
 
+Purpose 
 
-## SIGN 
+` SIGN ` returns the sign of *n* . This function takes as an argument any numeric data type, or any nonnumeric data type that can be implicitly converted to ` NUMBER ` , and returns ` NUMBER ` . 
 
-Syntax
+For value of ` NUMBER ` type, the sign is: 
 
-![Description of sign.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/sign.gif)[Description of the illustration sign.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/sign.html)
+  * -1 if *n* <0 
 
-Purpose
+  * 0 if *n* =0 
 
-`SIGN` returns the sign of `n`. This function takes as an argument any numeric data type, or any nonnumeric data type that can be implicitly converted to `NUMBER`, and returns `NUMBER`. 
-
-For value of `NUMBER` type, the sign is: 
-
-  * -1 if `n`<0 
-
-  * 0 if `n`=0 
-
-  * 1 if `n`>0 
+  * 1 if *n* >0 
 
 
 
 
-For binary floating-point numbers (`BINARY_FLOAT` and `BINARY_DOUBLE`), this function returns the sign bit of the number. The sign bit is: 
+For binary floating-point numbers ( ` BINARY_FLOAT ` and ` BINARY_DOUBLE ` ), this function returns the sign bit of the number. The sign bit is: 
 
-  * -1 if `n`<0 
+  * -1 if *n* <0 
 
-  * +1 if `n`>=0 or `n`=`NaN`
-
-
+  * +1 if *n* >=0 or *n* = ` NaN `
 
 
-Examples
 
-The following example indicates that the argument of the function (`-15`) is <0: 
+
+Examples 
+
+The following example indicates that the argument of the function ( ` -15 ` ) is <0: 
     
     
+    ```
     SELECT SIGN(-15) "Sign" FROM DUAL;
     
           Sign
     ----------
             -1
-
-[← Previous](SET.md)
-
-[Next →](SIN.md)
+    ```

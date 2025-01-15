@@ -1,61 +1,51 @@
-[Previous](DROP-DATABASE-LINK.html) [Next](DROP-DIRECTORY.html) JavaScript must be enabled to correctly display this content 
+##  DROP DIMENSION {#GUID-658FB451-6759-4777-ACDB-614CFDEFDF80} 
 
-  1. [SQL Language Reference ](index.html)
-  2. [ SQL Statements: DROP CONTEXT to DROP JAVA](SQL-Statements-DROP-CONTEXT-to-DROP-JAVA.html)
-  3. DROP DIMENSION 
+Purpose 
 
+Use the ` DROP ` ` DIMENSION ` statement to remove the named dimension. 
 
+This statement does not invalidate materialized views that use relationships specified in dimensions. However, requests that have been rewritten by query rewrite may be invalidated, and subsequent operations on such views may execute more slowly. 
 
-## DROP DIMENSION 
+> **note:** See Also: 
 
-Purpose
+  * [ CREATE DIMENSION ](CREATE-DIMENSION.md#GUID-E6CD4CFC-5D06-4A8F-9DF1-C609A7EB8413) and [ ALTER DIMENSION ](ALTER-DIMENSION.md#GUID-16B451F9-FF21-4E44-ACCA-2CFFA6F3F0F9) for information on creating and modifying a dimension 
 
-Use the `DROP` `DIMENSION` statement to remove the named dimension. 
-
-This statement does not invalidate materialized views that use relationships specified in dimensions. However, requests that have been rewritten by query rewrite may be invalidated, and subsequent operations on such views may execute more slowly.
-
-See Also:
-
-  * [CREATE DIMENSION](CREATE-DIMENSION.html#GUID-E6CD4CFC-5D06-4A8F-9DF1-C609A7EB8413) and [ALTER DIMENSION](ALTER-DIMENSION.html#GUID-16B451F9-FF21-4E44-ACCA-2CFFA6F3F0F9) for information on creating and modifying a dimension 
-
-  * [Oracle Database Concepts](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT511) for general information about dimensions 
+  * [ *Oracle Database Concepts* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=CNCPT511) for general information about dimensions 
 
 
 
 
-Prerequisites
+Prerequisites 
 
-The dimension must be in your own schema or you must have the `DROP` `ANY` `DIMENSION` system privilege to use this statement. 
+The dimension must be in your own schema or you must have the ` DROP ` ` ANY ` ` DIMENSION ` system privilege to use this statement. 
 
-Syntax
+Syntax 
 
-drop_dimension::= 
+*drop_dimension* ::= 
 
-![Description of drop_dimension.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_dimension.gif)[Description of the illustration drop_dimension.eps](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_dimension.html)
+![Description of drop_dimension.eps follows](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img/drop_dimension.gif)[ Description of the illustration drop_dimension.eps ](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/img_text/drop_dimension.md)
 
-Semantics
+Semantics 
 
-schema
+*schema* 
 
-Specify the name of the schema in which the dimension is located. If you omit `schema`, then Oracle Database assumes the dimension is in your own schema. 
+Specify the name of the schema in which the dimension is located. If you omit *schema* , then Oracle Database assumes the dimension is in your own schema. 
 
-dimension
+*dimension* 
 
-Specify the name of the dimension you want to drop. The dimension must already exist.
+Specify the name of the dimension you want to drop. The dimension must already exist. 
 
-Examples
+Examples 
 
-Dropping a Dimension: Example
+Dropping a Dimension: Example 
 
-This example drops the `sh.customers_dim` dimension: 
+This example drops the ` sh.customers_dim ` dimension: 
     
     
+    ```
     DROP DIMENSION customers_dim;
+    ```
 
-See Also:
+> **note:** See Also: 
 
-"[Creating a Dimension: Examples](CREATE-DIMENSION.html#GUID-E6CD4CFC-5D06-4A8F-9DF1-C609A7EB8413__I2092402)" and "[Modifying a Dimension: Examples](ALTER-DIMENSION.html#GUID-16B451F9-FF21-4E44-ACCA-2CFFA6F3F0F9__I2091224)" for examples of creating and modifying this dimension 
-
-[← Previous](DROP-DATABASE-LINK.md)
-
-[Next →](DROP-DIRECTORY.md)
+" [ Creating a Dimension: Examples ](CREATE-DIMENSION.md#GUID-E6CD4CFC-5D06-4A8F-9DF1-C609A7EB8413__I2092402) "  and  " [ Modifying a Dimension: Examples ](ALTER-DIMENSION.md#GUID-16B451F9-FF21-4E44-ACCA-2CFFA6F3F0F9__I2091224) "  for examples of creating and modifying this dimension 

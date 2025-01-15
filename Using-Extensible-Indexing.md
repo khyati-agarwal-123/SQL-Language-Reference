@@ -1,43 +1,38 @@
-[Previous](Extended-Examples.html) [Next](Using-XML-in-SQL-Statements.html) JavaScript must be enabled to correctly display this content 
-
-  1. [SQL Language Reference ](index.html)
-  2. [ Extended Examples](Extended-Examples.html)
-  3. Using Extensible Indexing 
-
-
-
-## Using Extensible Indexing 
+##  Using Extensible Indexing {#GUID-BEAC690B-1FA4-4B31-9B28-FEAF45A01665} 
 
 This section provides examples of the steps entailed in a simple but realistic extensible indexing scenario. 
 
-Suppose you want to rank the salaries in the `HR.employees` table and then find those that rank between 10 and 20. You could use the `DENSE_RANK` function, as follows: 
+Suppose you want to rank the salaries in the ` HR.employees ` table and then find those that rank between 10 and 20. You could use the ` DENSE_RANK ` function, as follows: 
     
     
+    ```
     SELECT last_name, salary FROM
        (SELECT last_name, DENSE_RANK() OVER
           (ORDER BY salary DESC) rank_val, salary FROM employees)
        WHERE rank_val BETWEEN 10 AND 20;
+    ```
 
-See Also:
+> **note:** See Also: 
 
-[DENSE_RANK](DENSE_RANK.html#GUID-BB66F574-09DF-4594-87A4-ABD83E8DC3FE)
+[ DENSE_RANK ](DENSE_RANK.md#GUID-BB66F574-09DF-4594-87A4-ABD83E8DC3FE)
 
-This nested query is somewhat complex, and it requires a full scan of the `employees` table as well as a sort. An alternative would be to use extensible indexing to achieve the same goal. The resulting query will be simpler. The query will require only an index scan and a table access by rowid, and will therefore perform much more efficiently. 
+This nested query is somewhat complex, and it requires a full scan of the ` employees ` table as well as a sort. An alternative would be to use extensible indexing to achieve the same goal. The resulting query will be simpler. The query will require only an index scan and a table access by rowid, and will therefore perform much more efficiently. 
 
-The first step is to create the implementation type `position_im`, including method headers for index definition, maintenance, and creation. Most of the type body uses PL/SQL, which is shown in italics. 
+The first step is to create the implementation type ` position_im ` , including method headers for index definition, maintenance, and creation. Most of the type body uses PL/SQL, which is shown in italics. 
 
-The type must created with the `AUTHID` `CURRENT_USER` clause because of the `EXECUTE` `IMMEDIATE` statement inside the function `ODCIINDEXCREATE()`. By default that function runs with the definer rights. When the function is called in the subsequent creation of the domain index, the invoker does not have the same rights. 
+The type must created with the ` AUTHID ` ` CURRENT_USER ` clause because of the ` EXECUTE ` ` IMMEDIATE ` statement inside the function ` ODCIINDEXCREATE() ` . By default that function runs with the definer rights. When the function is called in the subsequent creation of the domain index, the invoker does not have the same rights. 
 
-See Also:
+> **note:** See Also: 
 
-  * [CREATE TYPE](CREATE-TYPE.html#GUID-E72E3EE6-DE95-4F58-8941-E2F76D0EAE80) and [CREATE TYPE BODY](CREATE-TYPE-BODY.html#GUID-C4F1591A-6F62-4897-9039-2C3F066F1E9D)
+  * [ CREATE TYPE ](CREATE-TYPE.md#GUID-E72E3EE6-DE95-4F58-8941-E2F76D0EAE80) and [ CREATE TYPE BODY ](CREATE-TYPE-BODY.md#GUID-C4F1591A-6F62-4897-9039-2C3F066F1E9D)
 
-  * [Oracle Database Data Cartridge Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI4200) for complete information on the ODCI routines in this statement 
+  * [ *Oracle Database Data Cartridge Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI4200) for complete information on the ODCI routines in this statement 
 
 
 
     
     
+    ```
     CREATE OR REPLACE TYPE position_im AUTHID CURRENT_USER AS OBJECT
     (
       curnum  NUMBER,
@@ -248,21 +243,23 @@ See Also:
       END;
     END;
     /
+    ```
 
-The next step is to create the functional implementation `function_for_position_between` for the operator that will be associated with the indextype. (The PL/SQL blocks are shown in parentheses.) 
+The next step is to create the functional implementation ` function_for_position_between ` for the operator that will be associated with the indextype. (The PL/SQL blocks are shown in parentheses.) 
 
-This function is for use with an index-based function evaluation. Therefore, it takes an index context and scan context as parameters.
+This function is for use with an index-based function evaluation. Therefore, it takes an index context and scan context as parameters. 
 
-See Also:
+> **note:** See Also: 
 
-  * [Oracle Database Data Cartridge Developer's Guide](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI4200) for information on creating index-based functional implementation 
+  * [ *Oracle Database Data Cartridge Developer's Guide* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=ADDCI4200) for information on creating index-based functional implementation 
 
-  * [CREATE FUNCTION](CREATE-FUNCTION.html#GUID-156AEDAC-ADD0-4E46-AA56-6D1F7CA63306) and [Oracle Database PL/SQL Language Reference](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01322)
+  * [ CREATE FUNCTION ](CREATE-FUNCTION.md#GUID-156AEDAC-ADD0-4E46-AA56-6D1F7CA63306) and [ *Oracle Database PL/SQL Language Reference* ](https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/sqlrf&id=LNPLS01322)
 
 
 
     
     
+    ```
     CREATE OR REPLACE FUNCTION function_for_position_between
                                (col NUMBER, lower_pos NUMBER, upper_pos NUMBER,
                                 indexctx IN SYS.ODCIIndexCtx,
@@ -339,48 +336,64 @@ See Also:
     END;
     /
     
+    ```
 
-Next, create the `position_between` operator, which uses the `function_for_position_between` function. The operator takes an indexed `NUMBER` column as the first argument, followed by a `NUMBER` lower and upper bound as the second and third arguments. 
+Next, create the ` position_between ` operator, which uses the ` function_for_position_between ` function. The operator takes an indexed ` NUMBER ` column as the first argument, followed by a ` NUMBER ` lower and upper bound as the second and third arguments. 
 
-See Also:
+> **note:** See Also: 
 
-[CREATE OPERATOR](CREATE-OPERATOR.html#GUID-62676C58-6F57-4572-8C09-7984A8E3EE9F)
+[ CREATE OPERATOR ](CREATE-OPERATOR.md#GUID-62676C58-6F57-4572-8C09-7984A8E3EE9F)
     
     
+    ```
     CREATE OR REPLACE OPERATOR position_between
        BINDING (NUMBER, NUMBER, NUMBER) RETURN NUMBER 
        WITH INDEX CONTEXT, SCAN CONTEXT position_im
        USING function_for_position_between;
     
+    ```
 
-In this `CREATE` `OPERATOR` statement, the `WITH` `INDEX` `CONTEXT`, `SCAN` `CONTEXT` `position_im` clause is included so that the index context and scan context are passed in to the functional evaluation, which is index based. 
+In this ` CREATE ` ` OPERATOR ` statement, the ` WITH ` ` INDEX ` ` CONTEXT ` , ` SCAN ` ` CONTEXT ` ` position_im ` clause is included so that the index context and scan context are passed in to the functional evaluation, which is index based. 
 
-Now create the `position_indextype` indextype for the `position_operator`: 
+Now create the ` position_indextype ` indextype for the ` position_operator ` : 
 
-See Also:
+> **note:** See Also: 
 
-[CREATE INDEXTYPE](CREATE-INDEXTYPE.html#GUID-4A7BD0EC-B3E5-4D1D-95C5-C8B52D01D8CE)
+[ CREATE INDEXTYPE ](CREATE-INDEXTYPE.md#GUID-4A7BD0EC-B3E5-4D1D-95C5-C8B52D01D8CE)
     
     
+    ```
     CREATE INDEXTYPE position_indextype
        FOR position_between(NUMBER, NUMBER, NUMBER)
        USING position_im;
-
-
-The operator `position_between` uses an index-based functional implementation. Therefore, a domain index must be defined on the referenced column so that the index information can be passed into the functional evaluation. So the final step is to create the domain index `salary_index` using the `position_indextype` indextype: 
-
-See Also:
-
-[CREATE INDEX](CREATE-INDEX.html#GUID-1F89BBC0-825F-4215-AF71-7588E31D8BFE)
+    ```
     
     
+    ```
+    
+    ```
+
+The operator ` position_between ` uses an index-based functional implementation. Therefore, a domain index must be defined on the referenced column so that the index information can be passed into the functional evaluation. So the final step is to create the domain index ` salary_index ` using the ` position_indextype ` indextype: 
+
+> **note:** See Also: 
+
+[ CREATE INDEX ](CREATE-INDEX.md#GUID-1F89BBC0-825F-4215-AF71-7588E31D8BFE)
+    
+    
+    ```
     CREATE INDEX salary_index ON employees(salary) 
        INDEXTYPE IS position_indextype;
-
-
-Now you can use the `position_between` operator function to rewrite the original query as follows: 
+    ```
     
     
+    ```
+    
+    ```
+
+Now you can use the ` position_between ` operator function to rewrite the original query as follows: 
+    
+    
+    ```
     SELECT last_name, salary FROM employees
        WHERE position_between(salary, 10, 20)=1
        ORDER BY salary DESC, last_name;
@@ -409,7 +422,4 @@ Now you can use the `position_between` operator function to rewrite the original
     Olsen                           8000
     Smith                           8000
     Kaufling                        7900
-
-[← Previous](Extended-Examples.md)
-
-[Next →](Using-XML-in-SQL-Statements.md)
+    ```
